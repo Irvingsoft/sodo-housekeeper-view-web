@@ -3,7 +3,7 @@
  */
 export default {
   title: "saber",
-  indexTitle: 'Saber Admin',
+  indexTitle: 'Sodo HouseKeeper',
   clientId: 'saber', // 客户端id
   clientSecret: 'saber_secret', // 客户端密钥
   tenantMode: true, // 是否开启租户模式
