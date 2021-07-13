@@ -69,13 +69,13 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import website from '@/config/website';
-  import {getCaptcha} from "@/api/user";
-  import {getTopUrl} from "@/util/util";
-  import {info} from "@/api/system/tenant";
+import {mapGetters} from "vuex";
+import website from '@/config/website';
+import {getCaptcha} from "@/api/auth";
+import {getTopUrl} from "@/util/util";
+import {info} from "@/api/system/tenant";
 
-  export default {
+export default {
     name: "userlogin",
     data() {
       return {
@@ -125,9 +125,8 @@
     methods: {
       refreshCode() {
         getCaptcha().then(res => {
-          const data = res.data.data;
-          this.loginForm.key = data.key;
-          this.loginForm.image = data.image;
+          // this.loginForm.key = data.key;
+          this.loginForm.image = res.data.data;
         })
       },
       showPassword() {
