@@ -31,7 +31,7 @@ export const loginBySocial = (tenantId, source, code, state) => request({
     state,
     grantType: "social",
     scope: "all",
-  }
+  },
 });
 
 export const getButtons = () => request({

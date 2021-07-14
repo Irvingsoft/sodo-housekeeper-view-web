@@ -74,7 +74,7 @@ export default {
     github: 'github',
     gitee: 'gitee',
     phone: 'Please input a phone',
-    code: 'Please input a code',
+    captcha: 'Please input the captcha',
     submit: 'Login',
     userLogin: 'userLogin',
     phoneLogin: 'phoneLogin',

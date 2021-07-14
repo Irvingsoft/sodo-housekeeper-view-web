@@ -1,14 +1,14 @@
 <template>
   <el-form class="login-form"
            status-icon
-           :rules="loginRules"
+           :rules="authRules"
            ref="loginForm"
-           :model="loginForm"
+           :model="authForm"
            label-width="0">
     <el-form-item v-if="tenantMode" prop="tenantId">
       <el-input size="small"
                 @keyup.enter.native="handleLogin"
-                v-model="loginForm.tenantId"
+                v-model="authForm.tenantId"
                 auto-complete="off"
                 :placeholder="$t('login.tenantId')">
         <i slot="prefix"
@@ -17,8 +17,9 @@
     </el-form-item>
     <el-form-item prop="username">
       <el-input size="small"
+                clearable
                 @keyup.enter.native="handleLogin"
-                v-model="loginForm.username"
+                v-model="authForm.username"
                 auto-complete="off"
                 :placeholder="$t('login.username')">
         <i slot="prefix"
@@ -27,33 +28,34 @@
     </el-form-item>
     <el-form-item prop="password">
       <el-input size="small"
+                clearable
                 @keyup.enter.native="handleLogin"
                 :type="passwordType"
-                v-model="loginForm.password"
+                v-model="authForm.password"
                 auto-complete="off"
                 :placeholder="$t('login.password')">
+        <i slot="prefix"
+           class="icon-mima"></i>
         <i class="el-icon-view el-input__icon"
            slot="suffix"
            @click="showPassword"></i>
-        <i slot="prefix"
-           class="icon-mima"></i>
       </el-input>
     </el-form-item>
-    <el-form-item v-if="captchaMode" prop="code">
+    <el-form-item v-if="captchaMode" prop="captcha">
       <el-row :span="24">
         <el-col :span="16">
           <el-input size="small"
+                    clearable
                     @keyup.enter.native="handleLogin"
-                    v-model="loginForm.code"
+                    v-model="authForm.captcha"
                     auto-complete="off"
-                    :placeholder="$t('login.code')">
+                    :placeholder="$t('login.captcha')">
             <i slot="prefix" class="icon-yanzhengma"/>
           </el-input>
         </el-col>
         <el-col :span="8">
           <div class="login-code">
-            <img :src="loginForm.image" class="login-code-img" @click="refreshCode"
-            />
+            <img alt="图形验证码" :src="authForm.captchaImage.content" class="login-code-img" @click="refreshCode();refreshPublicKey()"/>
           </div>
         </el-col>
       </el-row>
@@ -71,7 +73,7 @@
 <script>
 import {mapGetters} from "vuex";
 import website from '@/config/website';
-import {getCaptcha} from "@/api/auth";
+import {getCaptcha, getPublicKey} from "@/api/auth";
 import {getTopUrl} from "@/util/util";
 import {info} from "@/api/system/tenant";
 
@@ -81,40 +83,50 @@ export default {
       return {
         tenantMode: website.tenantMode,
         captchaMode: website.captchaMode,
-        loginForm: {
+        authForm: {
           //租户ID
-          tenantId: "000000",
+          // tenantId: "000000",
           //用户名
-          username: "admin",
+          username: "",
           //密码
-          password: "admin",
+          password: "",
           //账户类型
-          type: "account",
+          authType: "BASIC",
           //验证码的值
-          code: "",
-          //验证码的索引
-          key: "",
-          //预加载白色背景
-          image: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7",
+          captcha: "",
+          captchaImage: {
+            id: "",
+            //预加载白色背景
+            content: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"
+          },
+          publicKey: {
+            id: "",
+            content: ""
+          },
         },
-        loginRules: {
+        authRules: {
           tenantId: [
-            {required: false, message: "请输入租户ID", trigger: "blur"}
+            {required: this.tenantMode, message: "请输入租户 ID", trigger: "blur"}
           ],
           username: [
             {required: true, message: "请输入用户名", trigger: "blur"}
           ],
           password: [
             {required: true, message: "请输入密码", trigger: "blur"},
-            {min: 1, message: "密码长度最少为6位", trigger: "blur"}
+            {min: 1, message: "密码长度最少为 6 位", trigger: "blur"}
+          ],
+          captcha: [
+            {required: website.captchaMode, message: "请输入验证码", trigger: "blur"},
+            {len: 5, message: "验证码长度为 5 位", trigger: "blur"}
           ]
         },
         passwordType: "password"
       };
     },
     created() {
-      this.getTenant();
+      // this.getTenant();
       this.refreshCode();
+      this.refreshPublicKey();
     },
     mounted() {
     },
@@ -126,7 +138,12 @@ export default {
       refreshCode() {
         getCaptcha().then(res => {
           // this.loginForm.key = data.key;
-          this.loginForm.image = res.data.data;
+          this.authForm.captchaImage = res.data.data;
+        })
+      },
+      refreshPublicKey() {
+        getPublicKey().then(res => {
+          this.authForm.publicKey = res.data.data;
         })
       },
       showPassword() {
@@ -142,12 +159,15 @@ export default {
               text: '登录中,请稍后。。。',
               spinner: "el-icon-loading"
             });
-            this.$store.dispatch("LoginByUsername", this.loginForm).then(() => {
+
+            this.$store.dispatch("AuthorizeByUsername", this.authForm).then(() => {
               this.$router.push({path: this.tagWel.value});
               loading.close();
             }).catch(() => {
               loading.close()
             });
+            this.refreshCode();
+            this.refreshPublicKey();
           }
         });
       },
@@ -159,7 +179,7 @@ export default {
           const data = res.data;
           if (data.success && data.data.tenantId) {
             this.tenantMode = false;
-            this.loginForm.tenantId = data.data.tenantId;
+            this.authForm.tenantId = data.data.tenantId;
           }
         })
       }

@@ -74,7 +74,7 @@ export default {
     github: 'github',
     gitee: '码云',
     phone: '请输入手机号',
-    code: '请输入验证码',
+    captcha: '请输入验证码',
     submit: '登录',
     userLogin: '账号密码',
     phoneLogin: '手机号登录',
