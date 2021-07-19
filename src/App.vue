@@ -13,7 +13,9 @@ export default {
   watch: {},
   created() {
   },
-  methods: {},
+  methods: {
+
+  },
   computed: {}
 };
 </script>

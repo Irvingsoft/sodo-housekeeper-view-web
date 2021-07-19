@@ -33,9 +33,12 @@ axios.interceptors.request.use(config => {
   const meta = (config.meta || {});
   const isToken = meta.isToken === false;
   config.headers['Client_ID'] = `${website.clientId}`;
-  // config.headers['Authorization'] = `Basic ${Base64.encode(`${website.clientId}:${website.clientSecret}`)}`;
+  config.headers['Timestamp'] = new Date().getTime();
+  config.headers['Nonce'] = ""
+  config.headers['Signature'] = "";
+
   if (getToken() && !isToken) {
-    config.headers['Blade-Auth'] = 'bearer ' + getToken() // 让每个请求携带token--['Authorization']为自定义key 请根据实际情况自行修改
+    config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带token--['Authorization']为自定义key 请根据实际情况自行修改
   }
   //headers中配置serialize为true开启序列化
   if (config.method === 'post' && meta.isSerialize === true) {
@@ -48,8 +51,7 @@ axios.interceptors.request.use(config => {
 //HTTP response拦截
 axios.interceptors.response.use(res => {
   NProgress.done();
-
-  const status = res.data.code || res.data.status || 200
+  const status = res.data.code || res.status || 200
   const statusWhiteList = website.statusWhiteList || [];
   const message = res.data.detail || res.data.desc || "服务器走丢了，正在紧急找回！";
   //如果在白名单里则自行catch逻辑处理
@@ -57,6 +59,8 @@ axios.interceptors.response.use(res => {
   //如果是401则跳转到登录页面
   if (status === 401) store.dispatch('FedLogOut').then(() => router.push({path: '/login'}));
   // 如果请求为非200否者默认统一处理
+  console.log(res.headers['Set-Cookie'])
+  console.log(status)
   if (status !== 200) {
     Message({
       message: message,

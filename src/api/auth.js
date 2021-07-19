@@ -32,7 +32,7 @@ export const authorize = (authType, username, password, captcha, code, encrypted
 export const access = (grantType, code) => request({
   url: baseUrl + '/auth/access',
   method: 'post',
-  params: {
+  data: {
     grantType,
     code
   }
