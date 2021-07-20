@@ -6,7 +6,7 @@ export const getCaptcha = () => request({
   method: 'get'
 });
 
-export const getPublicKey = () => request({
+export const getPasswordPublicKey = () => request({
   url: baseUrl + '/auth/authorize/key',
   method: 'get'
 });
@@ -15,8 +15,8 @@ export const authorize = (authType, username, password, captcha, code, encrypted
   url: baseUrl + '/auth/authorize',
   method: 'post',
   headers: {
-    "Captcha_Key": captchaKey,
-    "Password_Key": passwordKey
+    Captcha_Key: captchaKey,
+    Password_Key: passwordKey
   },
   data: {
     authType,
@@ -37,3 +37,19 @@ export const access = (grantType, code) => request({
     code
   }
 });
+
+export const getSignaturePublicKey = () => request({
+  url: baseUrl + '/auth/signature/key',
+  method: 'get'
+});
+
+export const insertSignatureKey = (publicKey, data) => request({
+  url: baseUrl + '/auth/signature/key',
+  method: 'post',
+  headers: {
+    Rsa_Private_Key: publicKey
+  },
+  data: {
+    content: data
+  }
+})

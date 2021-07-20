@@ -13,14 +13,14 @@ import {Message} from "element-ui";
 import {removeToken, setToken} from "@/util/auth";
 import {deepClone} from "@/util/util";
 import {validatenull} from "@/util/validate";
-import {access, authorize} from "@/api/auth";
-import {Base64} from 'js-base64';
+import {access, authorize, insertSignatureKey} from "@/api/auth";
 import {JSEncrypt} from 'jsencrypt'
 
 const auth = {
   state: {
-    userInfo: getStore({name: 'userInfo'}) || [],
-    permission: getStore({name: 'permission'}) || {},
+    userInfo: getStore({name: 'userInfo'}) || {},
+    permission: getStore({name: 'permission'}) || [],
+    signatureInfo: getStore({name: 'signatureInfo'}) || {},
     roles: [],
     menu: getStore({name: 'menu'}) || [],
     menuAll: [],
@@ -30,10 +30,8 @@ const auth = {
     //根据用户名登录
     AuthorizeByUsername({commit}, authInfo) {
       return new Promise((resolve, reject) => {
-        let encryptor= new JSEncrypt();
+        let encryptor = new JSEncrypt();
         encryptor.setPublicKey(authInfo.publicKey.content);
-        let params = {}
-        params
         authorize(authInfo.authType, authInfo.username, encryptor.encrypt(authInfo.password), authInfo.captcha,
           null, null, null,
           authInfo.captchaImage.id, authInfo.publicKey.id).then(res => {
@@ -41,6 +39,16 @@ const auth = {
         }).catch(error => {
           reject(error);
         })
+        // TODO
+      })
+    },
+    InsertSignatureKey({commit}, signatureInfo) {
+      let encryptor = new JSEncrypt();
+      encryptor.setPublicKey(signatureInfo.content);
+      insertSignatureKey(signatureInfo.id, encryptor.encrypt(signatureInfo.signatureKey)).then(res => {
+        if (res.data.code === 200) {
+          commit('SET_SIGNATURE_INFO', signatureInfo);
+        }
       })
     },
     //根据第三方信息登录
@@ -181,6 +189,10 @@ const auth = {
     SET_USER_INFO: (state, userInfo) => {
       state.userInfo = userInfo;
       setStore({name: 'userInfo', content: state.userInfo})
+    },
+    SET_SIGNATURE_INFO: (state, signatureInfo) => {
+      state.signatureInfo = signatureInfo;
+      setStore({name: 'signatureInfo', content: state.signatureInfo})
     },
     SET_MENU_ALL: (state, menuAll) => {
       state.menuAll = menuAll

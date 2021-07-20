@@ -73,7 +73,7 @@
 <script>
 import {mapGetters} from "vuex";
 import website from '@/config/website';
-import {getCaptcha, getPublicKey} from "@/api/auth";
+import {getCaptcha, getPasswordPublicKey} from "@/api/auth";
 import {getTopUrl} from "@/util/util";
 import {info} from "@/api/system/tenant";
 
@@ -142,7 +142,7 @@ export default {
         })
       },
       refreshPublicKey() {
-        getPublicKey().then(res => {
+        getPasswordPublicKey().then(res => {
           this.authForm.publicKey = res.data.data;
         })
       },

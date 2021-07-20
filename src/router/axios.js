@@ -8,13 +8,13 @@
 import axios from 'axios'
 import store from '@/store/';
 import router from '@/router/router'
-import {serialize} from '@/util/util'
+import {getSignature, serialize, uuid} from '@/util/util'
 import {getToken} from '@/util/auth'
 import {Message} from 'element-ui'
 import website from '@/config/website';
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
-import {Base64} from 'js-base64';
+import auth from "@/store/modules/auth";
 
 axios.defaults.timeout = 10000;
 //返回其他状态吗
@@ -32,18 +32,27 @@ axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
   const meta = (config.meta || {});
   const isToken = meta.isToken === false;
-  config.headers['Client_ID'] = `${website.clientId}`;
-  config.headers['Timestamp'] = new Date().getTime();
-  config.headers['Nonce'] = ""
-  config.headers['Signature'] = "";
 
   if (getToken() && !isToken) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带token--['Authorization']为自定义key 请根据实际情况自行修改
   }
+
   //headers中配置serialize为true开启序列化
   if (config.method === 'post' && meta.isSerialize === true) {
     config.data = serialize(config.data);
   }
+
+  config.headers['Client_ID'] = `${website.clientId}`;
+  config.headers['Nonce'] = uuid();
+  config.headers['Timestamp'] = new Date().getTime();
+  config.headers['Signature_Key'] = auth.state.signatureInfo.id;
+  config.headers['Signature'] = getSignature(
+    config.headers['Client_ID'],
+    config.headers['Nonce'],
+    config.headers['Timestamp'],
+    config.data ? JSON.stringify(config.data) : "",
+    auth.state.signatureInfo.signatureKey
+  );
   return config
 }, error => {
   return Promise.reject(error)
