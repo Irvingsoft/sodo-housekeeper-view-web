@@ -30,7 +30,7 @@ const auth = {
     //根据用户名登录
     AuthorizeByUsername({commit}, authInfo) {
       return new Promise((resolve, reject) => {
-        let encryptor = new JSEncrypt();
+        let encryptor = new JSEncrypt({'log': true});
         encryptor.setPublicKey(authInfo.publicKey.content);
         authorize(authInfo.authType, authInfo.username, encryptor.encrypt(authInfo.password), authInfo.captcha,
           null, null, null,
@@ -43,7 +43,7 @@ const auth = {
       })
     },
     InsertSignatureKey({commit}, signatureInfo) {
-      let encryptor = new JSEncrypt();
+      let encryptor = new JSEncrypt({'log': true});
       encryptor.setPublicKey(signatureInfo.content);
       insertSignatureKey(signatureInfo.id, encryptor.encrypt(signatureInfo.signatureKey)).then(res => {
         if (res.data.code === 200) {

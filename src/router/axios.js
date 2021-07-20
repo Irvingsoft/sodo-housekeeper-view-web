@@ -68,8 +68,6 @@ axios.interceptors.response.use(res => {
   //如果是401则跳转到登录页面
   if (status === 401) store.dispatch('FedLogOut').then(() => router.push({path: '/login'}));
   // 如果请求为非200否者默认统一处理
-  console.log(res.headers['Set-Cookie'])
-  console.log(status)
   if (status !== 200) {
     Message({
       message: message,

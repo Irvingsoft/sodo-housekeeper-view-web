@@ -5,10 +5,8 @@
 </template>
 
 <script>
-import {getSignaturePublicKey, insertSignatureKey} from "@/api/auth";
-import {JSEncrypt} from 'jsencrypt'
+import {getSignaturePublicKey, validateSignaturePublicKey} from "@/api/auth";
 import {uuid} from "@/util/util";
-import auth from "@/store/modules/auth";
 
 export default {
   name: "app",
@@ -21,23 +19,35 @@ export default {
       },
     };
   },
-  watch: {},
+  watch: {
+  },
   created() {
-    this.getSignaturePublicKey();
-    // this.insertSignatureKey();
+    this.validateSignatureKey();
   },
   methods: {
-    getSignaturePublicKey() {
-      getSignaturePublicKey().then(res => {
-        this.publicKey = res.data.data;
+    async getSignaturePublicKey() {
+      if (!this.validate) {
+        console.log(this.validate)
+        await getSignaturePublicKey().then(res => {
+          this.publicKey = res.data.data;
+          if (res.data.code === 200) {
+            this.insertSignatureKey();
+          }
+        })
+      }
+    },
+    async insertSignatureKey() {
+      this.publicKey.signatureKey = uuid();
+      await this.$store.dispatch("InsertSignatureKey", this.publicKey)
+    },
+    async validateSignatureKey() {
+      await validateSignaturePublicKey().then(res => {
         if (res.data.code === 200) {
-          this.insertSignatureKey();
+          if (!res.data.data) {
+            this.getSignaturePublicKey();
+          }
         }
       })
-    },
-    insertSignatureKey() {
-      this.publicKey.signatureKey = uuid();
-      this.$store.dispatch("InsertSignatureKey", this.publicKey)
     }
   },
   computed: {}

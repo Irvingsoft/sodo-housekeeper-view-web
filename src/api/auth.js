@@ -53,3 +53,8 @@ export const insertSignatureKey = (publicKey, data) => request({
     content: data
   }
 })
+
+export const validateSignaturePublicKey = () => request({
+  url: baseUrl + '/auth/signature/key/validate',
+  method: 'get'
+});
