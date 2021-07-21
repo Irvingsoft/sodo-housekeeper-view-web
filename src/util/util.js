@@ -1,5 +1,6 @@
 import { validatenull } from './validate'
 import md5 from 'js-md5';
+import {JSEncrypt} from "jsencrypt";
 
 //表单序列化
 export const serialize = data => {
@@ -323,4 +324,11 @@ export const uuid = () => {
 
 export const getSignature = (clientId, nonce, timestamp, body, signatureKey) => {
   return md5(clientId + nonce + timestamp + body + signatureKey);
+}
+
+export const getEncryptor = (publicKey) => {
+
+  let encryptor = new JSEncrypt({'log': true});
+  encryptor.setPublicKey(publicKey);
+  return encryptor;
 }

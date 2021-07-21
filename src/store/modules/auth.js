@@ -11,7 +11,7 @@ import {
 } from "@/api/user";
 import {Message} from "element-ui";
 import {removeToken, setToken} from "@/util/auth";
-import {deepClone} from "@/util/util";
+import {deepClone, getEncryptor} from "@/util/util";
 import {validatenull} from "@/util/validate";
 import {access, authorize, insertSignatureKey} from "@/api/auth";
 import {JSEncrypt} from 'jsencrypt'
@@ -29,17 +29,29 @@ const auth = {
   actions: {
     //根据用户名登录
     AuthorizeByUsername({commit}, authInfo) {
-      return new Promise((resolve, reject) => {
-        let encryptor = new JSEncrypt({'log': true});
-        encryptor.setPublicKey(authInfo.publicKey.content);
-        authorize(authInfo.authType, authInfo.username, encryptor.encrypt(authInfo.password), authInfo.captcha,
+      return new Promise(async (resolve, reject) => {
+        await authorize(
+          authInfo.authType, authInfo.username, getEncryptor(authInfo.publicKey.content).encrypt(authInfo.password), authInfo.captcha,
           null, null, null,
           authInfo.captchaImage.id, authInfo.publicKey.id).then(res => {
+          authInfo.authCode = res.data.data;
           resolve();
         }).catch(error => {
           reject(error);
         })
-        // TODO
+      })
+    },
+    AccessByAuthCode({commit}, authInfo) {
+      return new Promise(async (resolve, reject) => {
+        await access(authInfo.grantType, authInfo.authCode).then(res => {
+          if (res.data.code === 200) {
+            commit('SET_TOKEN', res.data.data)
+          }
+          resolve();
+        }).catch(error => {
+          reject(error);
+        })
+        console.log(this.state.token)
       })
     },
     InsertSignatureKey({commit}, signatureInfo) {

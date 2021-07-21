@@ -1,18 +1,17 @@
 import request from "@/router/axios";
-import {baseUrl} from "@/config/env";
 
 export const getCaptcha = () => request({
-  url: baseUrl + '/auth/authorize/captcha',
+  url: '/api/auth/authorize/captcha',
   method: 'get'
 });
 
 export const getPasswordPublicKey = () => request({
-  url: baseUrl + '/auth/authorize/key',
+  url: '/api/auth/authorize/key',
   method: 'get'
 });
 
 export const authorize = (authType, username, password, captcha, code, encryptedData, iv, captchaKey, passwordKey) => request({
-  url: baseUrl + '/auth/authorize',
+  url: '/api/auth/authorize',
   method: 'post',
   headers: {
     Captcha_Key: captchaKey,
@@ -30,7 +29,7 @@ export const authorize = (authType, username, password, captcha, code, encrypted
 });
 
 export const access = (grantType, code) => request({
-  url: baseUrl + '/auth/access',
+  url: '/api/auth/access',
   method: 'post',
   data: {
     grantType,
@@ -39,12 +38,12 @@ export const access = (grantType, code) => request({
 });
 
 export const getSignaturePublicKey = () => request({
-  url: baseUrl + '/auth/signature/key',
+  url: '/api/auth/signature/key',
   method: 'get'
 });
 
 export const insertSignatureKey = (publicKey, data) => request({
-  url: baseUrl + '/auth/signature/key',
+  url: '/api/auth/signature/key',
   method: 'post',
   headers: {
     Rsa_Private_Key: publicKey
@@ -55,6 +54,6 @@ export const insertSignatureKey = (publicKey, data) => request({
 })
 
 export const validateSignaturePublicKey = () => request({
-  url: baseUrl + '/auth/signature/key/validate',
+  url: '/api/auth/signature/key/validate',
   method: 'get'
 });

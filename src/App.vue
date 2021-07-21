@@ -19,8 +19,7 @@ export default {
       },
     };
   },
-  watch: {
-  },
+  watch: {},
   created() {
     this.validateSignatureKey();
   },
