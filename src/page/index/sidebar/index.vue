@@ -30,7 +30,7 @@ export default {
     return {};
   },
   created() {
-    this.$store.dispatch("GetMenu").then(data => {
+    this.$store.dispatch("GetRoute").then(data => {
       if (data.length === 0) return;
       this.$router.$avueRouter.formatRoutes(data, true);
     });

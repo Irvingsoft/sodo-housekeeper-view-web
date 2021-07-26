@@ -58,11 +58,11 @@
     mounted() {
       console.log(this.userInfo)
       // 若未登录则弹出框进行绑定
-      if (validatenull(this.userInfo.userId) || this.userInfo.userId < 0) {
+/*      if (validatenull(this.userInfo.userId) || this.userInfo.userId < 0) {
         this.form.name = this.userInfo.account;
         this.form.account = this.userInfo.account;
         this.accountBox = true;
-      }
+      }*/
     },
     methods: {
       handleRegister() {

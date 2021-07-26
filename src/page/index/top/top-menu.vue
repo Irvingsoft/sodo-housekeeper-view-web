@@ -46,7 +46,7 @@ export default {
       );
     },
     openMenu(item) {
-      this.$store.dispatch("GetMenu", item.parentId).then(data => {
+      this.$store.dispatch("GetRoute", item.parentId).then(data => {
         if (data.length !== 0) {
           this.$router.$avueRouter.formatRoutes(data, true);
         }
@@ -55,7 +55,7 @@ export default {
         if (item.path) {
           itemActive = item;
         } else {
-          if (this.menu[childItemActive].length == 0) {
+          if (this.menu[childItemActive].length === 0) {
             itemActive = this.menu[childItemActive];
           } else {
             itemActive = this.menu[childItemActive].children[childItemActive];

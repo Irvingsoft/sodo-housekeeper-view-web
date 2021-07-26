@@ -1,19 +1,9 @@
 import {getStore, setStore} from "@/util/store";
-import {
-  getButtons,
-  getMenu,
-  getTopMenu,
-  getUserInfo,
-  loginBySocial,
-  loginByUsername,
-  logout,
-  refreshToken
-} from "@/api/user";
 import {Message} from "element-ui";
 import {removeToken, setToken} from "@/util/auth";
 import {deepClone, getEncryptor} from "@/util/util";
 import {validatenull} from "@/util/validate";
-import {access, authorize, insertSignatureKey} from "@/api/auth";
+import {access, authorize, insertSignatureKey, logout} from "@/api/auth";
 import {JSEncrypt} from 'jsencrypt'
 
 const auth = {
@@ -41,17 +31,17 @@ const auth = {
         })
       })
     },
-    AccessByAuthCode({commit}, authInfo) {
+    AccessByAuthCode({commit, dispatch}, authInfo) {
       return new Promise(async (resolve, reject) => {
         await access(authInfo.grantType, authInfo.authCode).then(res => {
           if (res.data.code === 200) {
             commit('SET_TOKEN', res.data.data)
+            dispatch('GetUserInfo')
           }
           resolve();
         }).catch(error => {
           reject(error);
         })
-        console.log(this.state.token)
       })
     },
     InsertSignatureKey({commit}, signatureInfo) {
@@ -61,71 +51,6 @@ const auth = {
         if (res.data.code === 200) {
           commit('SET_SIGNATURE_INFO', signatureInfo);
         }
-      })
-    },
-    //根据第三方信息登录
-    LoginBySocial({commit}, userInfo) {
-      return new Promise((resolve) => {
-        loginBySocial(userInfo.tenantId, userInfo.source, userInfo.code, userInfo.state).then(res => {
-          const data = res.data;
-          if (data.success) {
-            commit('SET_TOKEN', data.data.accessToken);
-            commit('SET_REFRESH_TOKEN', data.data.refreshToken);
-            commit('SET_USER_INFO', data.data);
-            commit('DEL_ALL_TAG');
-            commit('CLEAR_LOCK');
-          } else {
-            Message({
-              message: data.msg,
-              type: 'error'
-            })
-          }
-          resolve();
-        })
-      })
-    },
-    //根据手机号登录
-    LoginByPhone({commit}, userInfo) {
-      return new Promise((resolve) => {
-        loginByUsername(userInfo.phone, userInfo.code).then(res => {
-          const data = res.data.data;
-          commit('SET_TOKEN', data);
-          commit('DEL_ALL_TAG');
-          commit('CLEAR_LOCK');
-          resolve();
-        })
-      })
-    },
-    GetUserInfo({commit}) {
-      return new Promise((resolve, reject) => {
-        getUserInfo().then((res) => {
-          const data = res.data.data;
-          commit('SET_ROLES', data.roles);
-          resolve(data);
-        }).catch(err => {
-          reject(err);
-        })
-      })
-    },
-    Access({commit}, authCode) {
-      return new Promise((resolve, reject) => {
-        access(authCode).then((res) => {
-          const data = res.data.data;
-          commit('SET_TOKEN', data);
-          resolve();
-        })
-      })
-    },
-    //刷新token
-    RefreshToken({state, commit}) {
-      return new Promise((resolve, reject) => {
-        refreshToken(state.refreshToken).then(res => {
-          const data = res.data.data;
-          commit('SET_TOKEN', data);
-          resolve(data);
-        }).catch(error => {
-          reject(error)
-        })
       })
     },
     // 登出
@@ -158,49 +83,13 @@ const auth = {
         resolve()
       })
     },
-    GetTopMenu() {
-      return new Promise(resolve => {
-        getTopMenu().then((res) => {
-          const data = res.data.data || []
-          resolve(data)
-        })
-      })
-    },
-    //获取系统菜单
-    GetMenu({commit, dispatch}, parentId) {
-      return new Promise(resolve => {
-        getMenu(parentId).then((res) => {
-          const data = res.data.data
-          let menu = deepClone(data);
-          menu.forEach(ele => {
-            addPath(ele, true);
-          })
-          commit('SET_MENU', menu);
-          commit('SET_MENU_ALL', menu);
-          dispatch('GetButtons');
-          resolve(menu)
-        })
-      })
-    },
-    GetButtons({commit}) {
-      return new Promise((resolve) => {
-        getButtons().then(res => {
-          const data = res.data.data;
-          commit('SET_PERMISSION', data);
-          resolve();
-        })
-      })
-    },
   },
   mutations: {
     SET_TOKEN: (state, token) => {
+      console.log("aaa" + token)
       setToken(token)
       state.token = token;
       setStore({name: 'token', content: state.token, type: 'session'})
-    },
-    SET_USER_INFO: (state, userInfo) => {
-      state.userInfo = userInfo;
-      setStore({name: 'userInfo', content: state.userInfo})
     },
     SET_SIGNATURE_INFO: (state, signatureInfo) => {
       state.signatureInfo = signatureInfo;
