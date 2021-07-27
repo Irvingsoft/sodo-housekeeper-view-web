@@ -10,7 +10,7 @@ const common = {
   state: {
     language: getStore({name: 'language'}) || 'zh',
     isCollapse: false,
-    isFullScren: false,
+    isFullScreen: false,
     isMenu: true,
     isShade: false,
     screen: -1,
@@ -20,7 +20,7 @@ const common = {
     showCollapse: true,
     showSearch: true,
     showLock: true,
-    showFullScren: true,
+    showFullScreen: true,
     showTheme: true,
     showMenu: true,
     showColor: true,
@@ -43,8 +43,8 @@ const common = {
     SET_COLLAPSE: (state) => {
       state.isCollapse = !state.isCollapse;
     },
-    SET_FULLSCREN: (state) => {
-      state.isFullScren = !state.isFullScren;
+    SET_FULLSCREEN: (state) => {
+      state.isFullScreen = !state.isFullScreen;
     },
     SET_IS_MENU: (state, menu) => {
       state.isMenu = menu;

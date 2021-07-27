@@ -117,7 +117,7 @@ export default {
         ],
         password: [
           {required: true, message: "请输入密码", trigger: "blur"},
-          {min: 1, message: "密码长度最少为 6 位", trigger: "blur"}
+          {min: 6, max: 20, message: "密码长度在 6 到 20 个字符", trigger: "blur"}
         ],
         captcha: [
           {required: website.captchaMode, message: "请输入验证码", trigger: "blur"},

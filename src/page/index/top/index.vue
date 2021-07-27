@@ -58,7 +58,7 @@
           <top-lang></top-lang>
         </div>
       </el-tooltip>
-      <el-tooltip v-if="showFullScren"
+      <el-tooltip v-if="showFullScreen"
                   effect="dark"
                   :content="isFullScren?$t('navbar.screenfullF'):$t('navbar.screenfull')"
                   placement="bottom">
@@ -68,10 +68,10 @@
         </div>
       </el-tooltip>
       <img class="top-bar__img"
-           :src="userInfo.avatar">
+           :src="userInfo.avatarUrl">
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{userInfo.userName}}
+          {{userInfo.nickname}}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -122,7 +122,7 @@ export default {
       showDebug: state => state.common.showDebug,
       showTheme: state => state.common.showTheme,
       showLock: state => state.common.showLock,
-      showFullScren: state => state.common.showFullScren,
+      showFullScreen: state => state.common.showFullScreen,
       showCollapse: state => state.common.showCollapse,
       showSearch: state => state.common.showSearch,
       showMenu: state => state.common.showMenu,
@@ -130,7 +130,7 @@ export default {
     }),
     ...mapGetters([
       "userInfo",
-      "isFullScren",
+      "isFullScreen",
       "tagWel",
       "tagList",
       "isCollapse",

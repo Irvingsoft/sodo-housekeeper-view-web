@@ -26,7 +26,6 @@ export default {
   methods: {
     async getSignaturePublicKey() {
       if (!this.validate) {
-        console.log(this.validate)
         await getSignaturePublicKey().then(res => {
           this.publicKey = res.data.data;
           if (res.data.code === 200) {

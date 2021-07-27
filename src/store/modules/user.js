@@ -4,7 +4,7 @@ import {deepClone} from '@/util/util'
 import website from '@/config/website'
 import {
   getUserInfo,
-  top, route, button
+  top, route, button, getUser
 } from '@/api/user'
 
 
@@ -38,14 +38,12 @@ const user = {
     roles: [],
     menu: getStore({name: 'menu'}) || [],
     menuAll: [],
-    token: getStore({name: 'token'}) || '',
   },
   actions: {
-    GetUserInfo({commit}) {
+    GetUser({commit}) {
       return new Promise((resolve, reject) => {
-        getUserInfo().then((res) => {
-          const data = res.data.data;
-          commit('SET_ROLES', data.roles);
+        getUser().then((res) => {
+          commit('SET_USER_INFO', res.data.data);
           resolve(data);
         }).catch(err => {
           reject(err);
@@ -81,7 +79,7 @@ const user = {
         button().then(res => {
           const data = res.data.data;
           commit('SET_PERMISSION', data);
-          resolve();
+          resolve(data);
         })
       })
     },
@@ -91,6 +89,58 @@ const user = {
       state.userInfo = userInfo;
       setStore({name: 'userInfo', content: state.userInfo})
     },
+    SET_MENU_ALL: (state, menuAll) => {
+      state.menuAll = menuAll
+      setStore({name: 'menuAll', content: state.menuAll, type: 'session'})
+    },
+    SET_MENU: (state, menu) => {
+      state.menu = menu
+      setStore({name: 'menu', content: state.menu, type: 'session'})
+      if (validatenull(menu)) return;
+      //合并动态路由去重
+      let menuAll = state.menuAll;
+      menuAll = menuAll.concat(menu).reverse();
+      let newMenu = [];
+      for (let item1 of menuAll) {
+        let flag = true;
+        for (let item2 of newMenu) {
+          if (item1.name === item2.name || item1.path === item2.path) {
+            flag = false;
+          }
+        }
+        if (flag) newMenu.push(item1);
+      }
+      state.menuAll = newMenu;
+      setStore({name: 'menuAll', content: state.menuAll, type: 'session'})
+    },
+    SET_ROLES: (state, roles) => {
+      state.roles = roles;
+    },
+    SET_PERMISSION: (state, permission) => {
+      let result = [];
+
+      function getCode(list) {
+        list.forEach(ele => {
+          if (typeof (ele) === 'object') {
+            const children = ele.children;
+            const code = ele.code;
+            if (children && children.length !== 0) {
+              getCode(children)
+            } else {
+              result.push(code);
+            }
+          }
+
+        })
+      }
+
+      getCode(permission);
+      state.permission = {};
+      result.forEach(ele => {
+        state.permission[ele] = true;
+      });
+      setStore({name: 'permission', content: state.permission, type: 'session'})
+    }
   }
 
 }
