@@ -1,5 +1,13 @@
 import request from '@/router/axios';
 
+export const pageOauthClientInfo = (data) => {
+  return request({
+    url: '/api/housekeeper/client/page',
+    method: 'post',
+    data: data
+  })
+}
+
 export const getList = (current, size, params) => {
   return request({
     url: '/api/blade-system/client/list',

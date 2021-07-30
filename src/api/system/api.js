@@ -7,3 +7,19 @@ export const pageOauthApiInfo = (data) => {
     data: data
   })
 }
+
+export const insertOauthApi = (data) => {
+  return request({
+    url: '/api/housekeeper/api',
+    method: 'post',
+    data: data
+  })
+}
+
+export const updateOauthApi = (data) => {
+  return request({
+    url: '/api/housekeeper/api',
+    method: 'patch',
+    data: data
+  })
+}

@@ -31,9 +31,8 @@ NProgress.configure({
 axios.interceptors.request.use(config => {
   NProgress.start() // start progress bar
   const meta = (config.meta || {});
-  const isToken = meta.isToken === false;
 
-  if (getToken() && !isToken) {
+  if (getToken()) {
     config.headers['Authorization'] = 'Bearer ' + getToken() // 让每个请求携带token--['Authorization']为自定义key 请根据实际情况自行修改
   }
 

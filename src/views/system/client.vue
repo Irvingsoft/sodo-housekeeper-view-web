@@ -2,8 +2,8 @@
   <basic-container>
     <avue-crud :option="option"
                :table-loading="loading"
-               :data="data"
-               :page="page"
+               :data="data.records"
+               :page="data"
                @row-del="rowDel"
                v-model="form"
                :permission="permissionList"
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-  import {getList, getDetail, add, update, remove} from "@/api/system/client";
+import {getList, getDetail, add, update, remove, pageOauthClientInfo} from "@/api/system/client";
   import {mapGetters} from "vuex";
 
   export default {
@@ -39,10 +39,11 @@
         form: {},
         query: {},
         loading: true,
-        page: {
+        pageRequest: {
+          pageNum: 1,
           pageSize: 10,
-          currentPage: 1,
-          total: 0
+          content: "",
+          inUse: "",
         },
         selectionList: [],
         option: {
@@ -190,10 +191,22 @@
       }
     },
     methods: {
+      async onLoad(page, params = {}) {
+        this.loading = true;
+        await this.pageOauthClientInfo();
+        this.loading = false;
+      },
+      pageOauthClientInfo() {
+        pageOauthClientInfo(this.pageRequest).then(res => {
+          if (res.data.code === 200) {
+            this.data = res.data.data;
+          }
+        })
+      },
       rowSave(row, done, loading) {
         add(row).then(() => {
           done();
-          this.onLoad(this.page);
+          this.onLoad(this.pageRequest);
           this.$message({
             type: "success",
             message: "操作成功!"
@@ -206,7 +219,7 @@
       rowUpdate(row, index, done, loading) {
         update(row).then(() => {
           done();
-          this.onLoad(this.page);
+          this.onLoad(this.pageRequest);
           this.$message({
             type: "success",
             message: "操作成功!"
@@ -226,7 +239,7 @@
             return remove(row.id);
           })
           .then(() => {
-            this.onLoad(this.page);
+            this.onLoad(this.pageRequest);
             this.$message({
               type: "success",
               message: "操作成功!"
@@ -235,12 +248,12 @@
       },
       searchReset() {
         this.query = {};
-        this.onLoad(this.page);
+        this.onLoad(this.pageRequest);
       },
       searchChange(params, done) {
         this.query = params;
-        this.page.currentPage = 1;
-        this.onLoad(this.page, params);
+        this.pageRequest.currentPage = 1;
+        this.onLoad(this.pageRequest, params);
         done();
       },
       selectionChange(list) {
@@ -260,7 +273,7 @@
             return remove(this.ids);
           })
           .then(() => {
-            this.onLoad(this.page);
+            this.onLoad(this.pageRequest);
             this.$message({
               type: "success",
               message: "操作成功!"
@@ -277,20 +290,11 @@
         done();
       },
       currentChange(currentPage){
-        this.page.currentPage = currentPage;
+        this.pageRequest.currentPage = currentPage;
       },
       sizeChange(pageSize){
-        this.page.pageSize = pageSize;
+        this.pageRequest.pageSize = pageSize;
       },
-      onLoad(page, params = {}) {
-        this.loading = true;
-        getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
-          const data = res.data.data;
-          this.page.total = data.total;
-          this.data = data.records;
-          this.loading = false;
-        });
-      }
     }
   };
 </script>
