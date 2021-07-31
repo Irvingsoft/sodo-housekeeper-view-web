@@ -67,9 +67,9 @@
 </template>
 
 <script>
-import {getDetail, remove} from "@/api/system/client";
+import {getDetail, listOauthClientBaseUse, remove} from "@/api/system/client";
 import {mapGetters} from "vuex";
-import {insertOauthApi, pageOauthApiInfo, updateOauthApi} from "@/api/system/api";
+import {getOauthApiInfoDetail, insertOauthApi, pageOauthApiInfo, updateOauthApi} from "@/api/system/api";
 import func from "@/util/func";
 
 export default {
@@ -261,6 +261,7 @@ export default {
           }, {
             label: "限流次数",
             prop: "limitNum",
+            type: "number",
             sortable: true,
             width: 95,
             align: "center",
@@ -269,6 +270,7 @@ export default {
           {
             label: "限流时间",
             prop: "limitPeriod",
+            type: "number",
             sortable: true,
             width: 95,
             align: "center",
@@ -311,6 +313,19 @@ export default {
             align: "center",
           },
           {
+            label: "客户端",
+            prop: "clientIdList",
+            span: 24,
+            showColumn: false,
+            dicData: [],
+            type: "tree",
+            multiple: true,
+            props: {
+              label: "name",
+              value: "clientId"
+            },
+          },
+          {
             label: "创建时间",
             prop: "createAt",
             editDisabled: true,
@@ -351,6 +366,9 @@ export default {
       return ids.join(",");
     }
   },
+  created() {
+    this.listOauthClientBaseUse();
+  },
   methods: {
     async onLoad() {
       this.loading = true;
@@ -362,6 +380,11 @@ export default {
         if (res.data.code === 200) {
           this.data = res.data.data;
         }
+      })
+    },
+    listOauthClientBaseUse() {
+      listOauthClientBaseUse().then(res => {
+        this.findObject(this.option.column, "clientIdList").dicData = res.data.data;
       })
     },
     rowSave(row, done, loading) {
@@ -444,7 +467,7 @@ export default {
     },
     beforeOpen(done, type) {
       if (["edit", "view"].includes(type)) {
-        getDetail(this.form.id).then(res => {
+        getOauthApiInfoDetail(this.form.apiId).then(res => {
           this.form = res.data.data;
         });
       }

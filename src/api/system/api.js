@@ -23,3 +23,10 @@ export const updateOauthApi = (data) => {
     data: data
   })
 }
+
+export const getOauthApiInfoDetail = (id) => {
+  return request({
+    url: '/api/housekeeper/api/' + id,
+    method: 'get',
+  })
+}

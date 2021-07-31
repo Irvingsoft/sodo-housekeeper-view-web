@@ -8,6 +8,13 @@ export const pageOauthClientInfo = (data) => {
   })
 }
 
+export const listOauthClientBaseUse = () => {
+  return request({
+    url: '/api/housekeeper/client/list/use',
+    method: 'get',
+  })
+}
+
 export const getList = (current, size, params) => {
   return request({
     url: '/api/blade-system/client/list',
