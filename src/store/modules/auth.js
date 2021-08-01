@@ -36,9 +36,9 @@ const auth = {
     },
     AccessByAuthCode({commit, dispatch}, authInfo) {
       return new Promise(async (resolve, reject) => {
-        await access(authInfo.grantType, authInfo.authCode).then(res => {
+        await access(authInfo.grantType, authInfo.authCode).then(async res => {
           if (res.data.code === 200) {
-            commit('SET_TOKEN', res.data.data)
+            await commit('SET_TOKEN', res.data.data)
             dispatch('GetUser')
           }
           resolve();

@@ -1,5 +1,87 @@
 <template>
   <basic-container>
+    <el-form :inline="true" class="demo-form-inline">
+      <el-row>
+        <el-col :xs="24" :sm="12" :md="6">
+          <el-form-item label="关键字">
+            <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="6">
+          <el-form-item label="客户端">
+            <el-select v-model="pageRequest.clientId" placeholder="请选择客户端">
+              <el-option label="全部" value=""></el-option>
+              <el-option v-for="client in clientList" :label="client.name" :value="client.clientId"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="6">
+          <el-form-item label="方法">
+            <el-select v-model="pageRequest.method" placeholder="请选择方法">
+              <el-option label="全部" value=""></el-option>
+              <el-option label="GET" value="GET"></el-option>
+              <el-option label="POST" value="POST"></el-option>
+              <el-option label="PUT" value="PUT"></el-option>
+              <el-option label="PATCH" value="PATCH"></el-option>
+              <el-option label="DELETE" value="DELETE"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="12" :md="6">
+          <el-col span="18">
+            <el-form-item>
+              <el-button type="primary" @click="searchChange">查询</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col span="6">
+            <el-form-item>
+              <i v-if="status.fold" class="el-icon-arrow-left foldIcon" @click="foldStatusChange(false)"></i>
+              <i v-if="!status.fold" class="el-icon-arrow-down foldIcon" @click="foldStatusChange(true)"></i>
+            </el-form-item>
+          </el-col>
+        </el-col>
+      </el-row>
+      <el-collapse-transition>
+        <el-row v-if="!status.fold">
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item label="启用" class="foldItemFirst">
+              <el-radio-group v-model="pageRequest.inUse">
+                <el-radio label>全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item label="认证" class="foldItem">
+              <el-radio-group v-model="pageRequest.auth">
+                <el-radio label>全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item label="日志" class="foldItem">
+              <el-radio-group v-model="pageRequest.log">
+                <el-radio label>全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item label="限流" class="foldItem">
+              <el-radio-group v-model="pageRequest.requestLimit">
+                <el-radio label>全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-collapse-transition>
+    </el-form>
     <avue-crud :option="option"
                :table-loading="loading"
                :data="data.records"
@@ -10,8 +92,6 @@
                @row-update="rowUpdate"
                @row-save="rowSave"
                :before-open="beforeOpen"
-               @search-change="searchChange"
-               @search-reset="searchReset"
                @selection-change="selectionChange"
                @current-change="currentChange"
                @size-change="sizeChange"
@@ -89,8 +169,10 @@ export default {
       }
     };
     return {
+      status: {
+        fold: true,
+      },
       form: {},
-      query: {},
       loading: true,
       page: {
         pageSize: 10,
@@ -102,8 +184,11 @@ export default {
         pageSize: 10,
         clientId: "",
         content: "",
-        use: "",
-        auth: ""
+        method: "",
+        inUse: "",
+        auth: "",
+        log: "",
+        requestLimit: "",
       },
       selectionList: [],
       option: {
@@ -120,7 +205,6 @@ export default {
           {
             label: "名称",
             prop: "name",
-            search: true,
             width: 150,
             rules: [{
               required: true,
@@ -166,7 +250,6 @@ export default {
           {
             label: "路径",
             prop: "path",
-            search: true,
             width: 180,
             rules: [{
               required: true,
@@ -345,7 +428,8 @@ export default {
           },
         ]
       },
-      data: []
+      data: [],
+      clientList: []
     };
   },
   computed: {
@@ -385,6 +469,7 @@ export default {
     listOauthClientBaseUse() {
       listOauthClientBaseUse().then(res => {
         this.findObject(this.option.column, "clientIdList").dicData = res.data.data;
+        this.clientList = res.data.data;
       })
     },
     rowSave(row, done, loading) {
@@ -430,14 +515,18 @@ export default {
           });
         });
     },
-    searchReset() {
-      this.query = {};
-      this.onLoad(this.page);
+    foldStatusChange(fold) {
+      this.status.fold = fold;
+      if (fold) {
+        this.pageRequest.inUse = "";
+        this.pageRequest.auth = "";
+        this.pageRequest.log = "";
+        this.pageRequest.requestLimit = "";
+      }
     },
-    searchChange(params, done) {
-      this.query = params;
-      this.page.currentPage = 1;
-      this.onLoad(this.page, params);
+    searchChange(done) {
+      this.pageRequest.pageNum = 1;
+      this.pageOauthApiInfo();
       done();
     },
     selectionChange(list) {
@@ -487,5 +576,17 @@ export default {
 .icon {
   width: 1.3em;
   height: 1.3em;
+}
+
+.foldItemFirst {
+  margin-right: 80px;
+}
+
+.foldItemFirst, .foldItem {
+  width: 250px;
+}
+
+.foldIcon {
+  font-size: 18px;
 }
 </style>

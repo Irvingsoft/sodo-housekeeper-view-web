@@ -1,7 +1,7 @@
 <template>
   <div>
     <basic-container>
-      <el-tabs class="tabs" v-model="activeName" @tab-click="handleTabClick">
+      <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="个人信息" name="userInfo">
           <avue-form class="form"
                      :option="userInfo"
@@ -184,10 +184,6 @@ export default {
 </script>
 
 <style>
-
-.tabs {
-  padding: 20px;
-}
 
 .form {
   padding: 15px;
