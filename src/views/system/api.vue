@@ -33,7 +33,7 @@
               <el-button type="primary" @click="searchChange">查询</el-button>
             </el-form-item>
           </el-col>
-          <el-col span="6">
+          <el-col span="2" offset="4">
             <el-form-item>
               <i v-if="status.fold" class="el-icon-arrow-left foldIcon" @click="foldStatusChange(false)"></i>
               <i v-if="!status.fold" class="el-icon-arrow-down foldIcon" @click="foldStatusChange(true)"></i>
@@ -149,8 +149,15 @@
 <script>
 import {getDetail, listOauthClientBaseUse, remove} from "@/api/system/client";
 import {mapGetters} from "vuex";
-import {getOauthApiInfoDetail, insertOauthApi, pageOauthApiInfo, updateOauthApi} from "@/api/system/api";
+import {
+  deleteOauthApi,
+  getOauthApiInfoDetail,
+  insertOauthApi,
+  pageOauthApiInfo,
+  updateOauthApi
+} from "@/api/system/api";
 import func from "@/util/func";
+import api from "@/views/monitor/log/api";
 
 export default {
   data() {
@@ -442,12 +449,13 @@ export default {
         editBtn: this.vaildData(this.permission.client_edit)
       };
     },
-    ids() {
-      let ids = [];
-      this.selectionList.forEach(ele => {
-        ids.push(ele.id);
-      });
-      return ids.join(",");
+    selectionApiIdList() {
+      let apiIdList = [];
+      this.selectionList.forEach(oauthApi => {
+          apiIdList.push(oauthApi.apiId)
+        }
+      )
+      return apiIdList;
     }
   },
   created() {
@@ -475,7 +483,7 @@ export default {
     rowSave(row, done, loading) {
       insertOauthApi(row).then(() => {
         done();
-        this.onLoad(this.page);
+        this.onLoad();
         this.$message({
           type: "success",
           message: "操作成功!"
@@ -543,7 +551,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(this.ids);
+          return deleteOauthApi(this.selectionApiIdList);
         })
         .then(() => {
           this.onLoad(this.page);

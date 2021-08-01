@@ -1,13 +1,5 @@
 import request from '@/router/axios';
 
-export const pageOauthApiInfo = (data) => {
-  return request({
-    url: '/api/housekeeper/api/page',
-    method: 'post',
-    data: data
-  })
-}
-
 export const insertOauthApi = (data) => {
   return request({
     url: '/api/housekeeper/api',
@@ -20,6 +12,22 @@ export const updateOauthApi = (data) => {
   return request({
     url: '/api/housekeeper/api',
     method: 'patch',
+    data: data
+  })
+}
+
+export const deleteOauthApi = (data) => {
+  return request({
+    url: '/api/housekeeper/api',
+    method: 'delete',
+    data: data
+  })
+}
+
+export const pageOauthApiInfo = (data) => {
+  return request({
+    url: '/api/housekeeper/api/page',
+    method: 'post',
     data: data
   })
 }
