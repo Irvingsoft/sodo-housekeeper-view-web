@@ -1,5 +1,58 @@
 <template>
   <basic-container>
+    <el-form :inline="true" class="demo-form-inline">
+      <el-row>
+        <el-col :xs="24" :sm="12" :md="5">
+          <el-form-item label="关键字">
+            <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="4" :offset="15">
+          <el-col :span="20">
+            <el-form-item>
+              <el-button type="primary" @click="searchChange">查询</el-button>
+            </el-form-item>
+          </el-col>
+          <el-col :span="4">
+            <el-form-item>
+              <i v-if="status.fold" class="el-icon-arrow-left foldIcon" @click="foldStatusChange(false)"></i>
+              <i v-if="!status.fold" class="el-icon-arrow-down foldIcon" @click="foldStatusChange(true)"></i>
+            </el-form-item>
+          </el-col>
+        </el-col>
+      </el-row>
+      <el-collapse-transition>
+        <el-row v-if="!status.fold">
+          <el-col :xs="24" :sm="12" :md="5">
+            <el-form-item label="启用" class="foldItemFirst">
+              <el-radio-group v-model="pageRequest.inUse">
+                <el-radio label="">全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="5">
+            <el-form-item label="注册" class="foldItem">
+              <el-radio-group v-model="pageRequest.register">
+                <el-radio label="">全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="7">
+            <el-form-item label="Captcha" class="foldItem">
+              <el-radio-group v-model="pageRequest.captcha">
+                <el-radio label="">全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-collapse-transition>
+    </el-form>
     <avue-crud :option="option"
                :table-loading="loading"
                :data="data.records"
@@ -16,15 +69,6 @@
                @current-change="currentChange"
                @size-change="sizeChange"
                @on-load="onLoad">
-      <template slot="menuLeft">
-        <el-button type="danger"
-                   size="small"
-                   icon="el-icon-delete"
-                   plain
-                   v-if="permission.client_delete"
-                   @click="handleDelete">删 除
-        </el-button>
-      </template>
       <template slot="inUse" slot-scope="scope">
         <svg v-if="scope.row.inUse" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
@@ -54,12 +98,15 @@
 </template>
 
 <script>
-import {getList, getDetail, add, update, remove, pageOauthClientInfo} from "@/api/system/client";
+import {getDetail, add, update, remove, pageOauthClientInfo} from "@/api/system/client";
 import {mapGetters} from "vuex";
 
 export default {
   data() {
     return {
+      status: {
+        fold: true,
+      },
       form: {},
       query: {},
       loading: true,
@@ -68,6 +115,8 @@ export default {
         pageSize: 10,
         content: "",
         inUse: "",
+        register: "",
+        captcha: "",
       },
       selectionList: [],
       option: {
@@ -79,12 +128,11 @@ export default {
         border: true,
         index: true,
         viewBtn: true,
-        selection: true,
+        selection: false,
         column: [
           {
             label: "ID",
             prop: "clientId",
-            search: true,
             rules: [{
               required: true,
               message: "请输入客户端id",
@@ -94,7 +142,6 @@ export default {
           {
             label: "密钥",
             prop: "clientSecret",
-            search: true,
             rules: [{
               required: true,
               message: "请输入客户端密钥",
@@ -260,22 +307,22 @@ export default {
     }
   },
   methods: {
-    async onLoad(page, params = {}) {
+    onLoad() {
       this.loading = true;
-      await this.pageOauthClientInfo();
-      this.loading = false;
+      this.pageOauthClientInfo();
     },
     pageOauthClientInfo() {
       pageOauthClientInfo(this.pageRequest).then(res => {
         if (res.data.code === 200) {
           this.data = res.data.data;
+          this.loading = false;
         }
       })
     },
     rowSave(row, done, loading) {
       add(row).then(() => {
         done();
-        this.onLoad(this.pageRequest);
+        this.onLoad();
         this.$message({
           type: "success",
           message: "操作成功!"
@@ -288,7 +335,7 @@ export default {
     rowUpdate(row, index, done, loading) {
       update(row).then(() => {
         done();
-        this.onLoad(this.pageRequest);
+        this.onLoad();
         this.$message({
           type: "success",
           message: "操作成功!"
@@ -308,21 +355,25 @@ export default {
           return remove(row.id);
         })
         .then(() => {
-          this.onLoad(this.pageRequest);
+          this.onLoad();
           this.$message({
             type: "success",
             message: "操作成功!"
           });
         });
     },
-    searchReset() {
-      this.query = {};
-      this.onLoad(this.pageRequest);
+    foldStatusChange(fold) {
+      this.status.fold = fold;
+      if (fold) {
+        this.pageRequest.inUse = "";
+        this.pageRequest.register = "";
+        this.pageRequest.captcha = "";
+      }
     },
     searchChange(params, done) {
       this.query = params;
       this.pageRequest.currentPage = 1;
-      this.onLoad(this.pageRequest, params);
+      this.onLoad();
       done();
     },
     selectionChange(list) {
