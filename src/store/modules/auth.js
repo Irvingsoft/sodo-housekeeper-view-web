@@ -1,14 +1,11 @@
 import {getStore, setStore} from "@/util/store";
-import {Message} from "element-ui";
 import {removeToken, setToken} from "@/util/auth";
-import {deepClone, getEncryptor} from "@/util/util";
-import {validatenull} from "@/util/validate";
+import {getEncryptor} from "@/util/util";
 import {access, authorize, insertSignatureKey, logout} from "@/api/auth";
-import {JSEncrypt} from 'jsencrypt'
 
 const auth = {
   state: {
-    token: getStore({name: 'token'}) || '',
+    token: getStore({name: 'token'}) || {},
     signatureInfo: getStore({name: 'signatureInfo'}) || {},
   },
   actions: {
@@ -24,10 +21,10 @@ const auth = {
           null,
           authInfo.captchaImage.id,
           authInfo.publicKey.id).then(res => {
-            authInfo.authCode = "";
-            if (res.data.code === 200) {
-              authInfo.authCode = res.data.data;
-            }
+          authInfo.authCode = "";
+          if (res.data.code === 200) {
+            authInfo.authCode = res.data.data;
+          }
           resolve();
         }).catch(error => {
           reject(error);
@@ -87,7 +84,7 @@ const auth = {
   },
   mutations: {
     SET_TOKEN: (state, token) => {
-      setToken(token)
+      setToken(token.token, token.expireAt);
       state.token = token;
       setStore({name: 'token', content: state.token, type: 'session'})
     },
@@ -95,7 +92,6 @@ const auth = {
       state.signatureInfo = signatureInfo;
       setStore({name: 'signatureInfo', content: state.signatureInfo})
     },
-  }
-
+  },
 }
 export default auth

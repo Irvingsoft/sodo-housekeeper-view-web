@@ -3,7 +3,8 @@ import store from './store'
 import {validatenull} from '@/util/validate'
 import {getToken} from '@/util/auth'
 import NProgress from 'nprogress' // progress bar
-import 'nprogress/nprogress.css' // progress bar style
+import 'nprogress/nprogress.css'
+import func from "@/util/func"; // progress bar style
 NProgress.configure({showSpinner: false});
 const lockPage = store.getters.website.lockPage; //锁屏页
 router.beforeEach((to, from, next) => {
@@ -17,7 +18,8 @@ router.beforeEach((to, from, next) => {
       next({path: '/'})
     } else {
       //如果用户信息为空则获取用户信息，获取用户信息失败，跳转到登录页
-      if (store.getters.token.length === 0) {
+      if (func.isEmpty(store.getters.token) ||
+        new Date(store.getters.token.expireAt) < new Date()) {
         store.dispatch('FedLogOut').then(() => {
           next({path: '/login'})
         })

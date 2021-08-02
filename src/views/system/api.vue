@@ -2,12 +2,12 @@
   <basic-container>
     <el-form :inline="true" class="demo-form-inline">
       <el-row>
-        <el-col :xs="24" :sm="12" :md="6">
+        <el-col :xs="24" :sm="12" :md="5">
           <el-form-item label="关键字">
             <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
+        <el-col :xs="24" :sm="12" :md="5">
           <el-form-item label="客户端">
             <el-select v-model="pageRequest.clientId" placeholder="请选择客户端">
               <el-option label="全部" value=""></el-option>
@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
+        <el-col :xs="24" :sm="12" :md="5">
           <el-form-item label="方法">
             <el-select v-model="pageRequest.method" placeholder="请选择方法">
               <el-option label="全部" value=""></el-option>
@@ -27,13 +27,24 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="6">
-          <el-col span="18">
+        <el-col :xs="24" :sm="12" :md="5">
+          <el-form-item label="服务">
+            <el-select v-model="pageRequest.service" placeholder="请选择服务">
+              <el-option label="全部" value=""></el-option>
+              <el-option label="auth" value="auth"></el-option>
+              <el-option label="housekeeper" value="housekeeper"></el-option>
+              <el-option label="user" value="user"></el-option>
+              <el-option label="zuul" value="zuul"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :xs="24" :sm="24" :md="4">
+          <el-col :span="20">
             <el-form-item>
               <el-button type="primary" @click="searchChange">查询</el-button>
             </el-form-item>
           </el-col>
-          <el-col span="2" offset="4">
+          <el-col :span="4">
             <el-form-item>
               <i v-if="status.fold" class="el-icon-arrow-left foldIcon" @click="foldStatusChange(false)"></i>
               <i v-if="!status.fold" class="el-icon-arrow-down foldIcon" @click="foldStatusChange(true)"></i>
@@ -43,7 +54,7 @@
       </el-row>
       <el-collapse-transition>
         <el-row v-if="!status.fold">
-          <el-col :xs="24" :sm="12" :md="6">
+          <el-col :xs="24" :sm="12" :md="5">
             <el-form-item label="启用" class="foldItemFirst">
               <el-radio-group v-model="pageRequest.inUse">
                 <el-radio label>全部</el-radio>
@@ -52,7 +63,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
+          <el-col :xs="24" :sm="12" :md="5">
             <el-form-item label="认证" class="foldItem">
               <el-radio-group v-model="pageRequest.auth">
                 <el-radio label>全部</el-radio>
@@ -61,7 +72,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
+          <el-col :xs="24" :sm="12" :md="5">
             <el-form-item label="日志" class="foldItem">
               <el-radio-group v-model="pageRequest.log">
                 <el-radio label>全部</el-radio>
@@ -70,7 +81,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
+          <el-col :xs="24" :sm="12" :md="5">
             <el-form-item label="限流" class="foldItem">
               <el-radio-group v-model="pageRequest.requestLimit">
                 <el-radio label>全部</el-radio>
@@ -95,7 +106,8 @@
                @selection-change="selectionChange"
                @current-change="currentChange"
                @size-change="sizeChange"
-               @on-load="onLoad">
+               @on-load="onLoad"
+               @refresh-change="onLoad">
       <template slot="menuLeft">
         <el-button type="danger"
                    size="small"
@@ -106,8 +118,13 @@
         </el-button>
       </template>
       <template slot="method" slot-scope="scope">
-        <el-tag>
+        <el-tag type="success">
           {{ scope.row.method }}
+        </el-tag>
+      </template>
+      <template slot="service" slot-scope="scope">
+        <el-tag v-if="!func.isEmpty(scope.row.service)">
+          {{ scope.row.service }}
         </el-tag>
       </template>
       <template slot="inUse" slot-scope="scope">
@@ -147,17 +164,16 @@
 </template>
 
 <script>
-import {getDetail, listOauthClientBaseUse, remove} from "@/api/system/client";
+import {listOauthClientBaseUse} from "@/api/system/client";
 import {mapGetters} from "vuex";
 import {
-  deleteOauthApi,
+  deleteOauthApiList, deleteOauthApi,
   getOauthApiInfoDetail,
   insertOauthApi,
   pageOauthApiInfo,
   updateOauthApi
 } from "@/api/system/api";
 import func from "@/util/func";
-import api from "@/views/monitor/log/api";
 
 export default {
   data() {
@@ -179,6 +195,7 @@ export default {
       status: {
         fold: true,
       },
+      func,
       form: {},
       loading: true,
       page: {
@@ -191,6 +208,7 @@ export default {
         pageSize: 10,
         clientId: "",
         content: "",
+        service: "",
         method: "",
         inUse: "",
         auth: "",
@@ -223,7 +241,7 @@ export default {
             label: "方法",
             prop: "method",
             sortable: true,
-            width: 80,
+            width: 85,
             align: "center",
             type: "select",
             dicData: [
@@ -265,9 +283,30 @@ export default {
             }]
           },
           {
-            label: "备注",
-            prop: "description",
-            width: 180,
+            label: "服务",
+            prop: "service",
+            sortable: true,
+            width: 115,
+            align: "center",
+            type: "select",
+            dicData: [
+              {
+                label: "auth",
+                value: "auth"
+              },
+              {
+                label: "housekeeper",
+                value: "housekeeper"
+              },
+              {
+                label: "user",
+                value: "user"
+              },
+              {
+                label: "zuul",
+                value: "zuul"
+              },
+            ],
           },
           {
             label: "启用",
@@ -352,6 +391,7 @@ export default {
             label: "限流次数",
             prop: "limitNum",
             type: "number",
+            hide: true,
             sortable: true,
             width: 95,
             align: "center",
@@ -361,6 +401,7 @@ export default {
             label: "限流时间",
             prop: "limitPeriod",
             type: "number",
+            hide: true,
             sortable: true,
             width: 95,
             align: "center",
@@ -369,6 +410,7 @@ export default {
           {
             label: "日请求量",
             prop: "requestDay",
+            hide: true,
             editDisabled: true,
             addDisabled: true,
             sortable: true,
@@ -378,6 +420,7 @@ export default {
           {
             label: "周请求量",
             prop: "requestWeek",
+            hide: true,
             editDisabled: true,
             addDisabled: true,
             sortable: true,
@@ -387,6 +430,7 @@ export default {
           {
             label: "月请求量",
             prop: "requestMonth",
+            hide: true,
             editDisabled: true,
             addDisabled: true,
             sortable: true,
@@ -396,6 +440,7 @@ export default {
           {
             label: "总请求量",
             prop: "requestAll",
+            hide: true,
             editDisabled: true,
             addDisabled: true,
             sortable: true,
@@ -414,6 +459,12 @@ export default {
               label: "name",
               value: "clientId"
             },
+          },
+          {
+            label: "备注",
+            prop: "description",
+            width: 180,
+            span: 24,
           },
           {
             label: "创建时间",
@@ -462,15 +513,15 @@ export default {
     this.listOauthClientBaseUse();
   },
   methods: {
-    async onLoad() {
+    onLoad() {
       this.loading = true;
-      await this.pageOauthApiInfo();
-      this.loading = false;
+      this.pageOauthApiInfo();
     },
     pageOauthApiInfo() {
       pageOauthApiInfo(this.pageRequest).then(res => {
         if (res.data.code === 200) {
           this.data = res.data.data;
+          this.loading = false;
         }
       })
     },
@@ -513,10 +564,10 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(row.id);
+          return deleteOauthApi(row.apiId);
         })
         .then(() => {
-          this.onLoad(this.page);
+          this.onLoad();
           this.$message({
             type: "success",
             message: "操作成功!"
@@ -532,10 +583,9 @@ export default {
         this.pageRequest.requestLimit = "";
       }
     },
-    searchChange(done) {
+    searchChange() {
       this.pageRequest.pageNum = 1;
-      this.pageOauthApiInfo();
-      done();
+      this.onLoad();
     },
     selectionChange(list) {
       this.selectionList = list;
@@ -551,10 +601,10 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return deleteOauthApi(this.selectionApiIdList);
+          return deleteOauthApiList(this.selectionApiIdList);
         })
         .then(() => {
-          this.onLoad(this.page);
+          this.onLoad();
           this.$message({
             type: "success",
             message: "操作成功!"

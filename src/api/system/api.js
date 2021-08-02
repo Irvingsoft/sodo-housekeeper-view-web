@@ -16,9 +16,16 @@ export const updateOauthApi = (data) => {
   })
 }
 
-export const deleteOauthApi = (data) => {
+export const deleteOauthApi = (id) => {
   return request({
-    url: '/api/housekeeper/api',
+    url: '/api/housekeeper/api/' + id,
+    method: 'delete',
+  })
+}
+
+export const deleteOauthApiList = (data) => {
+  return request({
+    url: '/api/housekeeper/api/list',
     method: 'delete',
     data: data
   })

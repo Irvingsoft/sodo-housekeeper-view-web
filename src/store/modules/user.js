@@ -59,9 +59,9 @@ const user = {
       })
     },
     //获取系统菜单
-    GetRoute({commit, dispatch}, parentId) {
+    GetRoute({commit, dispatch}) {
       return new Promise(resolve => {
-        route(parentId).then((res) => {
+        route().then((res) => {
           const data = res.data.data
           let menu = deepClone(data);
           menu.forEach(ele => {
