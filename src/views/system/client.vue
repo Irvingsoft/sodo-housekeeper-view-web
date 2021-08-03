@@ -2,12 +2,13 @@
   <basic-container>
     <el-form :inline="true" class="demo-form-inline">
       <el-row>
-        <el-col :xs="24" :sm="12" :md="5">
+        <el-col :xs="24" :sm="12" :md="6">
           <el-form-item label="关键字">
             <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="4" :offset="15">
+        <el-col :xs="0" :sm="12" :md="14">&nbsp;</el-col>
+        <el-col :xs="24" :sm="24" :md="4">
           <el-col :span="20">
             <el-form-item>
               <el-button type="primary" @click="searchChange">查询</el-button>
@@ -23,7 +24,7 @@
       </el-row>
       <el-collapse-transition>
         <el-row v-if="!status.fold">
-          <el-col :xs="24" :sm="12" :md="5">
+          <el-col :xs="24" :sm="12" :md="6">
             <el-form-item label="启用" class="foldItemFirst">
               <el-radio-group v-model="pageRequest.inUse">
                 <el-radio label="">全部</el-radio>
@@ -32,7 +33,7 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="5">
+          <el-col :xs="24" :sm="12" :md="6">
             <el-form-item label="注册" class="foldItem">
               <el-radio-group v-model="pageRequest.register">
                 <el-radio label="">全部</el-radio>
@@ -41,8 +42,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="7">
-            <el-form-item label="Captcha" class="foldItem">
+          <el-col :xs="24" :sm="12" :md="12">
+            <el-form-item label="Captcha" class="foldItem" label-width="60px">
               <el-radio-group v-model="pageRequest.captcha">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -63,12 +64,10 @@
                @row-update="rowUpdate"
                @row-save="rowSave"
                :before-open="beforeOpen"
-               @search-change="searchChange"
-               @search-reset="searchReset"
-               @selection-change="selectionChange"
                @current-change="currentChange"
                @size-change="sizeChange"
-               @on-load="onLoad">
+               @on-load="onLoad"
+               @refresh-change="onLoad">
       <template slot="inUse" slot-scope="scope">
         <svg v-if="scope.row.inUse" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
@@ -98,8 +97,15 @@
 </template>
 
 <script>
-import {getDetail, add, update, remove, pageOauthClientInfo} from "@/api/system/client";
+import {
+  pageOauthClientInfo,
+  getOauthClientInfoDetail,
+  insertOauthClient,
+  updateOauthClient,
+  deleteOauthClient
+} from "@/api/system/client";
 import {mapGetters} from "vuex";
+import {listOauthApiBaseUse} from "@/api/system/api";
 
 export default {
   data() {
@@ -108,7 +114,6 @@ export default {
         fold: true,
       },
       form: {},
-      query: {},
       loading: true,
       pageRequest: {
         pageNum: 1,
@@ -118,7 +123,6 @@ export default {
         register: "",
         captcha: "",
       },
-      selectionList: [],
       option: {
         height: 'auto',
         calcHeight: 210,
@@ -133,6 +137,7 @@ export default {
           {
             label: "ID",
             prop: "clientId",
+            editDisabled: true,
             rules: [{
               required: true,
               message: "请输入客户端id",
@@ -157,6 +162,12 @@ export default {
               message: "请输入授权名称",
               trigger: "blur"
             }]
+          },
+          {
+            label: "令牌秒数",
+            prop: "tokenExpire",
+            type: "number",
+            valueDefault: 3600,
           },
           {
             label: "启用",
@@ -245,15 +256,17 @@ export default {
             }]
           },
           {
-            label: "令牌秒数",
-            prop: "tokenExpire",
-            type: "number",
-            valueDefault: 3600,
-            rules: [{
-              required: true,
-              message: "请输入令牌过期秒数",
-              trigger: "blur"
-            }]
+            label: "接口",
+            prop: "apiIdList",
+            span: 24,
+            showColumn: false,
+            dicData: [],
+            type: "tree",
+            multiple: true,
+            props: {
+              label: "name",
+              value: "apiId"
+            },
           },
           {
             label: "回调地址",
@@ -263,7 +276,6 @@ export default {
             label: "备注",
             prop: "description",
             width: 180,
-            span: 24,
           },
           {
             label: "创建时间",
@@ -285,7 +297,8 @@ export default {
           },
         ]
       },
-      data: []
+      data: [],
+      apiList: []
     };
   },
   computed: {
@@ -298,13 +311,9 @@ export default {
         editBtn: this.vaildData(this.permission.client_edit)
       };
     },
-    ids() {
-      let ids = [];
-      this.selectionList.forEach(ele => {
-        ids.push(ele.id);
-      });
-      return ids.join(",");
-    }
+  },
+  created() {
+    this.listOauthApiBaseUse();
   },
   methods: {
     onLoad() {
@@ -319,8 +328,14 @@ export default {
         }
       })
     },
+    listOauthApiBaseUse() {
+      listOauthApiBaseUse().then(res => {
+        this.findObject(this.option.column, "apiIdList").dicData = res.data.data;
+        this.apiList = res.data.data;
+      })
+    },
     rowSave(row, done, loading) {
-      add(row).then(() => {
+      insertOauthClient(row).then(() => {
         done();
         this.onLoad();
         this.$message({
@@ -333,7 +348,7 @@ export default {
       });
     },
     rowUpdate(row, index, done, loading) {
-      update(row).then(() => {
+      updateOauthClient(row).then(() => {
         done();
         this.onLoad();
         this.$message({
@@ -352,7 +367,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(row.id);
+          return deleteOauthClient(row.clientId);
         })
         .then(() => {
           this.onLoad();
@@ -370,44 +385,17 @@ export default {
         this.pageRequest.captcha = "";
       }
     },
-    searchChange(params, done) {
-      this.query = params;
+    searchChange() {
       this.pageRequest.currentPage = 1;
       this.onLoad();
-      done();
-    },
-    selectionChange(list) {
-      this.selectionList = list;
-    },
-    handleDelete() {
-      if (this.selectionList.length === 0) {
-        this.$message.warning("请选择至少一条数据");
-        return;
-      }
-      this.$confirm("确定将选择数据删除?", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          return remove(this.ids);
-        })
-        .then(() => {
-          this.onLoad(this.pageRequest);
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-          this.$refs.crud.toggleSelection();
-        });
     },
     beforeOpen(done, type) {
       if (["edit", "view"].includes(type)) {
-        getDetail(this.form.id).then(res => {
+        getOauthClientInfoDetail(this.form.clientId).then(res => {
           this.form = res.data.data;
+          done();
         });
       }
-      done();
     },
     currentChange(currentPage) {
       this.pageRequest.currentPage = currentPage;

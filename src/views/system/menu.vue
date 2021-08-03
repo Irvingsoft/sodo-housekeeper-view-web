@@ -1,47 +1,51 @@
 <template>
   <basic-container>
-    <avue-crud :option="option"
-               :table-loading="loading"
-               :data="data"
-               ref="crud"
-               v-model="form"
-               :permission="permissionList"
-               :before-open="beforeOpen"
-               @row-del="rowDel"
-               @row-update="rowUpdate"
-               @row-save="rowSave"
-               @search-change="searchChange"
-               @search-reset="searchReset"
-               @selection-change="selectionChange"
-               @current-change="currentChange"
-               @size-change="sizeChange"
-               @on-load="onLoad">
-      <template slot="menuLeft">
-        <el-button type="danger"
-                   size="small"
-                   icon="el-icon-delete"
-                   v-if="permission.menu_delete"
-                   plain
-                   @click="handleDelete">删 除
-        </el-button>
-      </template>
-      <template slot-scope="scope" slot="menu">
-        <el-button
-          type="text"
-          icon="el-icon-circle-plus-outline"
-          size="small"
-          @click.stop="handleAdd(scope.row,scope.index)"
-          v-if="userInfo.authority.includes('admin')"
-        >新增子项
-        </el-button>
-      </template>
-      <template slot-scope="{row}"
-                slot="source">
-        <div style="text-align:center">
-          <i :class="row.source"></i>
-        </div>
-      </template>
-    </avue-crud>
+    <el-tabs v-model="activeName">
+      <el-tab-pane v-for="client in clientList" :label="client.name" :name="client.clientId">
+        <avue-crud :option="option"
+                   :table-loading="loading"
+                   :data="data"
+                   ref="crud"
+                   v-model="form"
+                   :permission="permissionList"
+                   :before-open="beforeOpen"
+                   @row-del="rowDel"
+                   @row-update="rowUpdate"
+                   @row-save="rowSave"
+                   @search-change="searchChange"
+                   @search-reset="searchReset"
+                   @selection-change="selectionChange"
+                   @current-change="currentChange"
+                   @size-change="sizeChange"
+                   @on-load="onLoad">
+          <template slot="menuLeft">
+            <el-button type="danger"
+                       size="small"
+                       icon="el-icon-delete"
+                       v-if="permission.menu_delete"
+                       plain
+                       @click="handleDelete">删 除
+            </el-button>
+          </template>
+          <template slot-scope="scope" slot="menu">
+            <el-button
+              type="text"
+              icon="el-icon-circle-plus-outline"
+              size="small"
+              @click.stop="handleAdd(scope.row,scope.index)"
+              v-if="userInfo.authority.includes('admin')"
+            >新增子项
+            </el-button>
+          </template>
+          <template slot-scope="{row}"
+                    slot="source">
+            <div style="text-align:center">
+              <i :class="row.source"></i>
+            </div>
+          </template>
+        </avue-crud>
+      </el-tab-pane>
+    </el-tabs>
   </basic-container>
 </template>
 
@@ -49,6 +53,7 @@
   import {add, getList, getMenu, remove, update} from "@/api/system/menu";
   import {mapGetters} from "vuex";
   import iconList from "@/config/iconList";
+  import {listOauthClientBaseUse} from "@/api/system/client";
 
   export default {
     data() {
@@ -61,6 +66,12 @@
           pageSize: 10,
           currentPage: 1,
           total: 0
+        },
+        pageRequest: {
+          pageNum: 1,
+          pageSize: 10,
+          clientId: "",
+          content: "",
         },
         option: {
           searchShow: true,
@@ -238,10 +249,11 @@
             }
           ]
         },
-        data: []
+        data: [],
+        clientList: [],
+        activeName: "",
       };
     },
-
     computed: {
       ...mapGetters(["userInfo", "permission"]),
       permissionList() {
@@ -260,7 +272,23 @@
         return ids.join(",");
       }
     },
+    created() {
+      this.listOauthClientBaseUse();
+    },
     methods: {
+      onLoad(page, params = {}) {
+        this.loading = true;
+        getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
+          this.loading = false;
+          this.data = res.data.data;
+        });
+      },
+      listOauthClientBaseUse() {
+        listOauthClientBaseUse().then(res => {
+          this.clientList = res.data.data;
+          this.activeName = this.clientList[0].clientId
+        })
+      },
       handleAdd(row) {
         this.$refs.crud.value.parentId = row.id;
         this.$refs.crud.option.column.filter(item => {
@@ -363,13 +391,7 @@
       sizeChange(pageSize){
         this.page.pageSize = pageSize;
       },
-      onLoad(page, params = {}) {
-        this.loading = true;
-        getList(page.currentPage, page.pageSize, Object.assign(params, this.query)).then(res => {
-          this.loading = false;
-          this.data = res.data.data;
-        });
-      }
+
     }
   };
 </script>

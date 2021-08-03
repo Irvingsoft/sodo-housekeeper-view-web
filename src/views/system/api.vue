@@ -198,11 +198,6 @@ export default {
       func,
       form: {},
       loading: true,
-      page: {
-        pageSize: 10,
-        currentPage: 1,
-        total: 0
-      },
       pageRequest: {
         pageNum: 1,
         pageSize: 10,
@@ -616,9 +611,9 @@ export default {
       if (["edit", "view"].includes(type)) {
         getOauthApiInfoDetail(this.form.apiId).then(res => {
           this.form = res.data.data;
+          done();
         });
       }
-      done();
     },
     currentChange(currentPage) {
       this.pageRequest.pageNum = currentPage;

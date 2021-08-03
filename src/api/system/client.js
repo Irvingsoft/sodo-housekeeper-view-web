@@ -15,51 +15,32 @@ export const listOauthClientBaseUse = () => {
   })
 }
 
-export const getList = (current, size, params) => {
+export const getOauthClientInfoDetail = (id) => {
   return request({
-    url: '/api/blade-system/client/list',
+    url: '/api/housekeeper/client/' + id,
     method: 'get',
-    params: {
-      ...params,
-      current,
-      size,
-    }
   })
 }
 
-export const getDetail = (id) => {
+export const insertOauthClient = (data) => {
   return request({
-    url: '/api/blade-system/client/detail',
-    method: 'get',
-    params: {
-      id
-    }
-  })
-}
-
-export const remove = (ids) => {
-  return request({
-    url: '/api/blade-system/client/remove',
+    url: '/api/housekeeper/client',
     method: 'post',
-    params: {
-      ids,
-    }
+    data: data
   })
 }
 
-export const add = (row) => {
+export const updateOauthClient = (data) => {
   return request({
-    url: '/api/blade-system/client/submit',
-    method: 'post',
-    data: row
+    url: '/api/housekeeper/client',
+    method: 'patch',
+    data: data
   })
 }
 
-export const update = (row) => {
+export const deleteOauthClient = (id) => {
   return request({
-    url: '/api/blade-system/client/submit',
-    method: 'post',
-    data: row
+    url: '/api/housekeeper/client/' + id,
+    method: 'delete',
   })
 }
-

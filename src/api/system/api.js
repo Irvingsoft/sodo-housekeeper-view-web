@@ -45,3 +45,10 @@ export const getOauthApiInfoDetail = (id) => {
     method: 'get',
   })
 }
+
+export const listOauthApiBaseUse = () => {
+  return request({
+    url: '/api/housekeeper/api/list/use',
+    method: 'get',
+  })
+}
