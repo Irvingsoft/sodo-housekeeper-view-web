@@ -75,8 +75,6 @@
 import {mapGetters} from "vuex";
 import website from '@/config/website';
 import {getCaptcha, getPasswordPublicKey} from "@/api/auth";
-import {getTopUrl} from "@/util/util";
-import {info} from "@/api/system/tenant";
 import func from "@/util/func";
 
 export default {
@@ -163,12 +161,12 @@ export default {
             spinner: "el-icon-loading"
           });
 
-          await this.$store.dispatch("AuthorizeByUsername", this.authForm).then(() => {
+          await this.$store.dispatch("AuthenticateByUsername", this.authForm).then(() => {
           }).catch(() => {
             loading.close()
           });
           if (!func.isEmpty(this.authForm.authCode)) {
-            await this.$store.dispatch("AccessByAuthCode", this.authForm).then(() => {
+            await this.$store.dispatch("AuthorizeByUsername", this.authForm).then(() => {
               this.$router.push({path: this.tagWel.value});
               loading.close();
             }).catch(() => {

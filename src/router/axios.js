@@ -61,7 +61,7 @@ axios.interceptors.response.use(res => {
   NProgress.done();
   const status = res.data.code || res.status || 200
   const statusWhiteList = website.statusWhiteList || [];
-  const message = res.data.detail || res.data.desc || "服务器走丢了，正在紧急找回！";
+  const message = res.data.detail || res.data.description || "服务器走丢了，正在紧急找回！";
   //如果在白名单里则自行catch逻辑处理
   if (statusWhiteList.includes(status)) return Promise.reject(res);
   //如果是401则跳转到登录页面

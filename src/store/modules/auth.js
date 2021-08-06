@@ -1,7 +1,7 @@
 import {getStore, setStore} from "@/util/store";
 import {removeToken, setToken} from "@/util/auth";
 import {getEncryptor} from "@/util/util";
-import {access, authorize, insertSignatureKey, logout} from "@/api/auth";
+import {authorize, authenticate, insertSignatureKey, logout} from "@/api/auth";
 
 const auth = {
   state: {
@@ -10,9 +10,9 @@ const auth = {
   },
   actions: {
     //根据用户名登录
-    AuthorizeByUsername({commit}, authInfo) {
+    AuthenticateByUsername({commit}, authInfo) {
       return new Promise(async (resolve, reject) => {
-        await authorize(
+        await authenticate(
           authInfo.authType,
           authInfo.username,
           getEncryptor(authInfo.publicKey.content).encrypt(authInfo.password), authInfo.captcha,
@@ -31,9 +31,9 @@ const auth = {
         })
       })
     },
-    AccessByAuthCode({commit, dispatch}, authInfo) {
+    AuthorizeByUsername({commit, dispatch}, authInfo) {
       return new Promise(async (resolve, reject) => {
-        await access(authInfo.grantType, authInfo.authCode).then(async res => {
+        await authorize(authInfo.grantType, authInfo.authCode).then(async res => {
           if (res.data.code === 200) {
             await commit('SET_TOKEN', res.data.data)
             dispatch('GetUser')

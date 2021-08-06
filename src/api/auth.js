@@ -1,17 +1,17 @@
 import request from "@/router/axios";
 
 export const getCaptcha = () => request({
-  url: '/api/auth/authorize/captcha',
+  url: '/api/auth/authenticate/captcha',
   method: 'get'
 });
 
 export const getPasswordPublicKey = () => request({
-  url: '/api/auth/authorize/key',
+  url: '/api/auth/authenticate/key',
   method: 'get'
 });
 
-export const authorize = (authType, username, password, captcha, code, encryptedData, iv, captchaKey, passwordKey) => request({
-  url: '/api/auth/authorize',
+export const authenticate = (authType, username, password, captcha, code, encryptedData, iv, captchaKey, passwordKey) => request({
+  url: '/api/auth/authenticate',
   method: 'post',
   headers: {
     Captcha_Key: captchaKey,
@@ -28,8 +28,8 @@ export const authorize = (authType, username, password, captcha, code, encrypted
   }
 });
 
-export const access = (grantType, code) => request({
-  url: '/api/auth/access',
+export const authorize = (grantType, code) => request({
+  url: '/api/auth/authorize',
   method: 'post',
   data: {
     grantType,
