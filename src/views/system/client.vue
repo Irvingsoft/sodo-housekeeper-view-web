@@ -393,9 +393,9 @@ export default {
       if (["edit", "view"].includes(type)) {
         getOauthClientInfoDetail(this.form.clientId).then(res => {
           this.form = res.data.data;
-          done();
         });
       }
+      done();
     },
     currentChange(currentPage) {
       this.pageRequest.currentPage = currentPage;

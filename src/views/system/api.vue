@@ -464,8 +464,8 @@ export default {
           {
             label: "创建时间",
             prop: "createAt",
-            editDisabled: true,
-            addDisabled: true,
+            editDisplay: false,
+            addDisplay: false,
             sortable: true,
             width: 130,
             align: "center",
@@ -473,8 +473,8 @@ export default {
           {
             label: "更新时间",
             prop: "updateAt",
-            editDisabled: true,
-            addDisabled: true,
+            editDisplay: false,
+            addDisplay: false,
             sortable: true,
             width: 130,
             align: "center",
@@ -611,9 +611,9 @@ export default {
       if (["edit", "view"].includes(type)) {
         getOauthApiInfoDetail(this.form.apiId).then(res => {
           this.form = res.data.data;
-          done();
         });
       }
+      done();
     },
     currentChange(currentPage) {
       this.pageRequest.pageNum = currentPage;
