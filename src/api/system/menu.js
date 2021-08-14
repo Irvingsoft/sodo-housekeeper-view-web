@@ -1,48 +1,46 @@
 import request from '@/router/axios';
 
-export const getList = (current, size, params) => {
+export const tree = (clientId) => {
   return request({
-    url: '/api/blade-system/menu/list',
+    url: '/api/housekeeper/menu/tree/' + clientId,
     method: 'get',
-    params: {
-      ...params,
-      current,
-      size,
-    }
-  })
-}
-export const remove = (ids) => {
-  return request({
-    url: '/api/blade-system/menu/remove',
-    method: 'post',
-    params: {
-      ids,
-    }
   })
 }
 
-export const add = (row) => {
+export const listMenu = (data) => {
   return request({
-    url: '/api/blade-system/menu/submit',
+    url: '/api/housekeeper/menu/list',
     method: 'post',
-    data: row
+    data: data
   })
 }
 
-export const update = (row) => {
+export const insertMenu = (data) => {
   return request({
-    url: '/api/blade-system/menu/submit',
+    url: '/api/housekeeper/menu',
     method: 'post',
-    data: row
+    data: data
   })
 }
 
-export const getMenu = (id) => {
+export const deleteMenu = (menuId) => {
   return request({
-    url: '/api/blade-system/menu/detail',
+    url: '/api/housekeeper/menu/' + menuId,
+    method: 'delete',
+  })
+}
+
+export const updateMenu = (data) => {
+  return request({
+    url: '/api/housekeeper/menu',
+    method: 'patch',
+    data: data
+  })
+}
+
+export const getMenu = (menuId) => {
+  return request({
+    url: '/api/housekeeper/menu/' + menuId,
     method: 'get',
-    params: {
-      id,
-    }
   })
 }

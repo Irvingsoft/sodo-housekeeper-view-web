@@ -33,7 +33,7 @@ export default {
     props: {
       label: 'name',
       path: 'path',
-      icon: 'source',
+      icon: 'icon',
       children: 'children'
     }
   },

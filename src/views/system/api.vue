@@ -382,7 +382,8 @@ export default {
               message: "请选择是否开启限流",
               trigger: "blur"
             }]
-          }, {
+          },
+          {
             label: "限流次数",
             prop: "limitNum",
             type: "number",
@@ -390,7 +391,7 @@ export default {
             sortable: true,
             width: 95,
             align: "center",
-            rules: [{required: true, validator: validateRequestLimitNum, trigger: 'blur'}]
+            rules: [{validator: validateRequestLimitNum, trigger: 'blur'}]
           },
           {
             label: "限流时间",
@@ -400,7 +401,7 @@ export default {
             sortable: true,
             width: 95,
             align: "center",
-            rules: [{required: true, validator: validateRequestLimitPeriod, trigger: 'blur'}]
+            rules: [{validator: validateRequestLimitPeriod, trigger: 'blur'}]
           },
           {
             label: "日请求量",
@@ -491,7 +492,7 @@ export default {
       return {
         addBtn: this.vaildData(this.permission.client_add),
         viewBtn: this.vaildData(this.permission.client_view),
-        delBtn: this.vaildData(this.permission.client_delete),
+        delBtn: this.vaildData(this.permission.api_delete),
         editBtn: this.vaildData(this.permission.client_edit)
       };
     },
