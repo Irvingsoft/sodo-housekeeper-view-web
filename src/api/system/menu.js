@@ -1,4 +1,5 @@
 import request from '@/router/axios';
+import da from "element-ui/src/locale/lang/da";
 
 export const tree = (clientId) => {
   return request({
@@ -27,6 +28,14 @@ export const deleteMenu = (menuId) => {
   return request({
     url: '/api/housekeeper/menu/' + menuId,
     method: 'delete',
+  })
+}
+
+export const deleteMenuList = (data) => {
+  return request({
+    url: '/api/housekeeper/menu',
+    method: 'delete',
+    data: data
   })
 }
 

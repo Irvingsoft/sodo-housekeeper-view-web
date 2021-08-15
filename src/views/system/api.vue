@@ -498,10 +498,7 @@ export default {
     },
     selectionApiIdList() {
       let apiIdList = [];
-      this.selectionList.forEach(oauthApi => {
-          apiIdList.push(oauthApi.apiId)
-        }
-      )
+      this.selectionList.forEach(oauthApi => apiIdList.push(oauthApi.apiId))
       return apiIdList;
     }
   },

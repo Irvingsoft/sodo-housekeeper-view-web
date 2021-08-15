@@ -4,13 +4,13 @@
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
           <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
-            <span>{{client.name}}</span>
+            <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <avue-crud :option="option"
                    :table-loading="loading"
                    :data="data"
-                   ref="crud"
+                   :ref="client.clientId"
                    v-model="form"
                    :permission="permissionList"
                    :before-open="beforeOpen"
@@ -20,6 +20,14 @@
                    @selection-change="selectionChange"
                    @refresh-change="onLoad">
           <template slot="menuLeft">
+            <el-button type="primary"
+                       size="small"
+                       icon="el-icon-plus"
+                       v-if="permission.menu_add"
+                       @click="handleNew">新增
+            </el-button>
+          </template>
+          <template slot="menuLeft">
             <el-button type="danger"
                        size="small"
                        icon="el-icon-delete"
@@ -28,7 +36,7 @@
                        @click="handleDelete">删 除
             </el-button>
           </template>
-<!--      // TODO    v-if="userInfo.authority.includes('admin')"-->
+          <!--      // TODO    v-if="userInfo.authority.includes('admin')"-->
           <template slot-scope="{row}" slot="menu">
             <el-button
               type="text"
@@ -48,13 +56,21 @@
 </template>
 
 <script>
-import {listMenu, tree, insertMenu, deleteMenu, updateMenu, getMenu} from "@/api/system/menu";
+import {listMenu, tree, insertMenu, deleteMenu, updateMenu, getMenu, deleteMenuList} from "@/api/system/menu";
 import {mapGetters} from "vuex";
 import iconList from "@/config/iconList";
 import {listOauthClientBaseUse} from "@/api/system/client";
+import func from "@/util/func";
 
 export default {
   data() {
+    let validateButtonType = (rule, value, callback) => {
+      if (this.form.menuType === 2 && func.isEmpty(this.form.buttonType)) {
+        callback(new Error('请选择按钮功能'));
+      } else {
+        callback();
+      }
+    };
     return {
       form: {},
       loading: true,
@@ -75,6 +91,7 @@ export default {
         border: true,
         selection: true,
         viewBtn: true,
+        addBtn: false,
         menuWidth: 300,
         column: [
           {
@@ -104,17 +121,11 @@ export default {
             prop: "parentId",
             type: "tree",
             hide: true,
+            clearable: true,
             props: {
               label: "name",
               value: "menuId"
             },
-            rules: [
-              {
-                required: false,
-                message: "请选择上级菜单",
-                trigger: "click"
-              }
-            ],
             dicData: [],
           },
           {
@@ -187,8 +198,7 @@ export default {
             hide: true,
             rules: [
               {
-                required: true,
-                message: "请选择按钮功能",
+                validator: validateButtonType,
                 trigger: "blur"
               }
             ]
@@ -244,6 +254,11 @@ export default {
         editBtn: this.vaildData(this.permission.menu_edit, false)
       };
     },
+    selectionMenuIdList() {
+      let menuIdList = [];
+      this.selectionList.forEach(menu => menuIdList.push(menu.menuId))
+      return menuIdList;
+    }
   },
   created() {
     this.listOauthClientBaseUse();
@@ -254,13 +269,13 @@ export default {
       listMenu(this.menuRequest).then(res => {
         this.data = res.data.data;
         this.loading = false;
+        this.tree();
       });
     },
     listOauthClientBaseUse() {
       listOauthClientBaseUse().then(res => {
         this.clientList = res.data.data;
         this.menuRequest.clientId = this.clientList[0].clientId
-        this.tree();
         this.onLoad();
       })
     },
@@ -271,21 +286,32 @@ export default {
     },
     handleSwitch(tab, event) {
       this.menuRequest.clientId = tab.name;
-      this.tree();
       this.onLoad();
     },
     handleAdd(row) {
-      console.log(row);
-      this.$refs.crud.value.parentId = row.menuId;
-      this.$refs.crud.option.column.filter(item => {
+      this.$refs[this.menuRequest.clientId][0].value.parentId = row.menuId;
+      this.$refs[this.menuRequest.clientId][0].option.column.filter(item => {
         if (item.prop === "parentId") {
           item.value = row.menuId;
+          item.clearable = false;
           item.addDisabled = true;
         }
       });
-      this.$refs.crud.rowAdd();
+      this.$refs[this.menuRequest.clientId][0].rowAdd();
+    },
+    handleNew() {
+      this.form = {};
+      this.$refs[this.menuRequest.clientId][0].option.column.filter(item => {
+        item.value = "";
+        if (item.prop === "parentId") {
+          item.clearable = true;
+          item.addDisabled = false;
+        }
+      });
+      this.$refs[this.menuRequest.clientId][0].rowAdd();
     },
     rowSave(row, done, loading) {
+      row.clientId = this.menuRequest.clientId;
       insertMenu(row).then(() => {
         done();
         this.onLoad();
@@ -350,7 +376,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(this.ids);
+          return deleteMenuList(this.selectionMenuIdList);
         })
         .then(() => {
           this.onLoad(this.page);
