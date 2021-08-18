@@ -1,6 +1,6 @@
 <template>
   <basic-container>
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" label-width="60px">
       <el-row>
         <el-col :xs="24" :sm="12" :md="5">
           <el-form-item label="关键字">
@@ -31,10 +31,7 @@
           <el-form-item label="服务">
             <el-select v-model="pageRequest.service" placeholder="请选择服务">
               <el-option label="全部" value=""></el-option>
-              <el-option label="auth" value="auth"></el-option>
-              <el-option label="housekeeper" value="housekeeper"></el-option>
-              <el-option label="user" value="user"></el-option>
-              <el-option label="zuul" value="zuul"></el-option>
+              <el-option v-for="service in serviceList" :label="service.label" :value="service.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -117,42 +114,42 @@
                    @click="handleDelete">删 除
         </el-button>
       </template>
-      <template slot="method" slot-scope="scope">
+      <template slot="method" slot-scope="{row}">
         <el-tag type="success">
-          {{ scope.row.method }}
+          {{ row.method }}
         </el-tag>
       </template>
-      <template slot="service" slot-scope="scope">
-        <el-tag v-if="!func.isEmpty(scope.row.service)">
-          {{ scope.row.service }}
+      <template slot="service" slot-scope="{row}">
+        <el-tag v-if="!func.isEmpty(row.service)">
+          {{ row.service }}
         </el-tag>
       </template>
-      <template slot="inUse" slot-scope="scope">
-        <svg v-if="scope.row.inUse" class="icon" aria-hidden="true">
+      <template slot="inUse" slot-scope="{row}">
+        <svg v-if="row.inUse" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
-      <template slot="auth" slot-scope="scope">
-        <svg v-if="scope.row.auth" class="icon" aria-hidden="true">
+      <template slot="auth" slot-scope="{row}">
+        <svg v-if="row.auth" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
-      <template slot="log" slot-scope="scope">
-        <svg v-if="scope.row.log" class="icon" aria-hidden="true">
+      <template slot="log" slot-scope="{row}">
+        <svg v-if="row.log" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
-      <template slot="requestLimit" slot-scope="scope">
-        <svg v-if="scope.row.requestLimit" class="icon" aria-hidden="true">
+      <template slot="requestLimit" slot-scope="{row}">
+        <svg v-if="row.requestLimit" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
@@ -210,6 +207,28 @@ export default {
         log: "",
         requestLimit: "",
       },
+      serviceList: [
+        {
+          label: "auth",
+          value: "auth"
+        },
+        {
+          label: "housekeeper",
+          value: "housekeeper"
+        },
+        {
+          label: "user",
+          value: "user"
+        },
+        {
+          label: "zuul",
+          value: "zuul"
+        },
+        {
+          label: "log",
+          value: "log"
+        }
+      ],
       selectionList: [],
       option: {
         height: 'auto',
@@ -284,24 +303,7 @@ export default {
             width: 115,
             align: "center",
             type: "select",
-            dicData: [
-              {
-                label: "auth",
-                value: "auth"
-              },
-              {
-                label: "housekeeper",
-                value: "housekeeper"
-              },
-              {
-                label: "user",
-                value: "user"
-              },
-              {
-                label: "zuul",
-                value: "zuul"
-              },
-            ],
+            dicData: []
           },
           {
             label: "启用",
@@ -606,6 +608,7 @@ export default {
         });
     },
     beforeOpen(done, type) {
+      this.findObject(this.option.column, "service").dicData = this.serviceList;
       if (["edit", "view"].includes(type)) {
         getOauthApiInfoDetail(this.form.apiId).then(res => {
           this.form = res.data.data;

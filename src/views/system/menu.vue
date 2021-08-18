@@ -7,6 +7,20 @@
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
+        <el-form :inline="true" label-width="60px">
+          <el-row>
+            <el-col :xs="24" :sm="12" :md="5">
+              <el-form-item label="关键字">
+                <el-input v-model="menuRequest.content" placeholder="请输入关键字" clearable></el-input>
+              </el-form-item>
+            </el-col>
+            <el-col :xs="24" :sm="12" :md="5">
+              <el-form-item>
+                <el-button type="primary" @click="searchChange">查询</el-button>
+              </el-form-item>
+            </el-col>
+          </el-row>
+        </el-form>
         <avue-crud :option="option"
                    :table-loading="loading"
                    :data="data"
@@ -75,12 +89,6 @@ export default {
       form: {},
       loading: true,
       selectionList: [],
-      query: {},
-      page: {
-        pageSize: 10,
-        currentPage: 1,
-        total: 0
-      },
       menuRequest: {
         clientId: "",
         content: "",
@@ -286,6 +294,7 @@ export default {
     },
     handleSwitch(tab, event) {
       this.menuRequest.clientId = tab.name;
+      this.menuRequest.content = "";
       this.onLoad();
     },
     handleAdd(row) {
@@ -355,12 +364,11 @@ export default {
         });
     },
     searchReset() {
-      this.query = {};
-      this.onLoad(this.page);
-    },
-    searchChange(params, done) {
+      this.menuRequest.content = "";
       this.onLoad();
-      done();
+    },
+    searchChange() {
+      this.onLoad();
     },
     selectionChange(list) {
       this.selectionList = list;
@@ -379,7 +387,7 @@ export default {
           return deleteMenuList(this.selectionMenuIdList);
         })
         .then(() => {
-          this.onLoad(this.page);
+          this.onLoad();
           this.$message({
             type: "success",
             message: "操作成功!"
