@@ -31,7 +31,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5" :offset="4">
+            <el-col :xs="24" :sm="12" :md="4" :offset="5">
               <el-col :span="20">
                 <el-form-item>
                   <el-button type="primary" @click="searchChange">查询</el-button>
@@ -90,7 +90,7 @@
               {{ row.env }}
             </el-tag>
           </template>
-          <template slot="requestMethod" slot-scope="{row}">
+          <template slot="requestMethod" slot-scope="{row}" v-if="row.requestMethod !== undefined">
             <el-tag type="success">
               {{ row.requestMethod }}
             </el-tag>
@@ -109,7 +109,7 @@
 <script>
 import requestMethod from "@/const/requestMethod"
 import service from "@/const/service"
-import responseStatus from "@/const/responseStatus";
+import responseStatus from "@/const/responseStatus"
 import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {getLogErrorInfoDetail, pageLogErrorBaseDetail} from "@/api/log/error";
@@ -319,7 +319,7 @@ export default {
     },
     foldStatusChange(fold) {
       this.status.fold = fold;
-      if (fold) {
+      if (!fold) {
         this.logRequest.userId = "";
         this.logRequest.requestId = "";
         this.logRequest.createBegin = "";

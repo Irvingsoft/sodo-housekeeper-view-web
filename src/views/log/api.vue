@@ -127,7 +127,7 @@
               {{ row.env }}
             </el-tag>
           </template>
-          <template slot="requestMethod" slot-scope="{row}">
+          <template slot="requestMethod" slot-scope="{row}" v-if="row.requestMethod !== undefined">
             <el-tag type="success">
               {{ row.requestMethod }}
             </el-tag>
@@ -167,7 +167,7 @@ import responseStatus from "@/const/responseStatus";
 import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {getLogApiInfoDetail, pageLogApiBaseDetail} from "@/api/log/api";
-import {listOauthApiBaseUse} from "@/api/system/api";
+import {listOauthApiBaseUseByClient} from "@/api/system/api";
 
 export default {
   data() {
@@ -359,7 +359,7 @@ export default {
       })
     },
     listOauthApiBaseUse() {
-      listOauthApiBaseUse(this.logRequest.clientId).then(res => {
+      listOauthApiBaseUseByClient(this.logRequest.clientId).then(res => {
         this.apiList = res.data.data;
       })
     },
@@ -384,7 +384,7 @@ export default {
     },
     foldStatusChange(fold) {
       this.status.fold = fold;
-      if (fold) {
+      if (!fold) {
         this.logRequest.userId = "";
         this.logRequest.requestId = "";
         this.logRequest.timeBegin = "";

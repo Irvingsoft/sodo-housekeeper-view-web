@@ -379,7 +379,7 @@ export default {
     },
     foldStatusChange(fold) {
       this.status.fold = fold;
-      if (fold) {
+      if (!fold) {
         this.pageRequest.inUse = "";
         this.pageRequest.register = "";
         this.pageRequest.captcha = "";

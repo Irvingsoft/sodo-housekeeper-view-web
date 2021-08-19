@@ -550,7 +550,7 @@ export default {
     },
     foldStatusChange(fold) {
       this.status.fold = fold;
-      if (fold) {
+      if (!fold) {
         this.pageRequest.inUse = "";
         this.pageRequest.auth = "";
         this.pageRequest.log = "";
