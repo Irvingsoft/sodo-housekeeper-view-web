@@ -37,20 +37,17 @@
               <el-form-item label="方法">
                 <el-select v-model="logRequest.requestMethod" placeholder="请选择方法" style="width: 95px">
                   <el-option label="全部" value=""></el-option>
-                  <el-option label="GET" value="GET"></el-option>
-                  <el-option label="POST" value="POST"></el-option>
-                  <el-option label="PUT" value="PUT"></el-option>
-                  <el-option label="PATCH" value="PATCH"></el-option>
-                  <el-option label="DELETE" value="DELETE"></el-option>
+                  <el-option v-for="requestMethod in requestMethodList" :label="requestMethod.label"
+                             :value="requestMethod.value"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
             <el-col :xs="24" :sm="12" :md="3">
               <el-form-item label="状态">
-                <el-select v-model="logRequest.responseStatus" placeholder="请选择方法" style="width: 70px">
+                <el-select v-model="logRequest.responseStatus" placeholder="请选择方法" style="width: 75px">
                   <el-option label="全部" value=""></el-option>
-                  <el-option label="200" value="200"></el-option>
-                  <el-option label="500" value="500"></el-option>
+                  <el-option v-for="responseStatus in responseStatusList" :label="responseStatus.label"
+                             :value="responseStatus.value"></el-option>
                 </el-select>
               </el-form-item>
             </el-col>
@@ -164,6 +161,9 @@
 </template>
 
 <script>
+import requestMethod from "@/const/requestMethod"
+import service from "@/const/service"
+import responseStatus from "@/const/responseStatus";
 import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {getLogApiInfoDetail, pageLogApiBaseDetail} from "@/api/log/api";
@@ -176,8 +176,8 @@ export default {
         fold: true
       },
       form: {},
-      selectionList: [],
-      query: {},
+      requestMethodList: requestMethod,
+      responseStatusList: responseStatus,
       logRequest: {
         clientId: "",
         apiId: "",
@@ -195,28 +195,7 @@ export default {
         pageNum: 1,
         pageSize: 10
       },
-      serviceList: [
-        {
-          label: "auth",
-          value: "auth"
-        },
-        {
-          label: "housekeeper",
-          value: "housekeeper"
-        },
-        {
-          label: "user",
-          value: "user"
-        },
-        {
-          label: "zuul",
-          value: "zuul"
-        },
-        {
-          label: "log",
-          value: "log"
-        }
-      ],
+      serviceList: service,
       option: {
         height: 'auto',
         calcHeight: 210,
@@ -357,7 +336,6 @@ export default {
   },
   created() {
     this.listOauthClientBaseUse();
-    this.listOauthApiBaseUse();
   },
   methods: {
     onLoad() {
@@ -377,17 +355,32 @@ export default {
         this.clientList = res.data.data;
         this.logRequest.clientId = this.clientList[0].clientId
         this.onLoad();
+        this.listOauthApiBaseUse();
       })
     },
     listOauthApiBaseUse() {
-      listOauthApiBaseUse().then(res => {
+      listOauthApiBaseUse(this.logRequest.clientId).then(res => {
         this.apiList = res.data.data;
       })
     },
     handleSwitch(tab, event) {
       this.logRequest.clientId = tab.name;
+      this.logRequest.apiId = "";
+      this.logRequest.serviceId = "";
+      this.logRequest.userId = "";
+      this.logRequest.requestId = "";
+      this.logRequest.requestMethod = "";
+      this.logRequest.responseStatus = "";
+      this.logRequest.timeBegin = "";
+      this.logRequest.timeEnd = "";
+      this.logRequest.createBegin = "";
+      this.logRequest.createEnd = "";
+      this.logRequest.createInterval = [];
       this.logRequest.content = "";
+      this.logRequest.pageNum = 1;
+      this.logRequest.pageSize = 10;
       this.onLoad();
+      this.listOauthApiBaseUse();
     },
     foldStatusChange(fold) {
       this.status.fold = fold;

@@ -17,7 +17,6 @@
 </template>
 
 <script>
-  import {getUsualList, getUsualLogs} from "@/api/logs";
   import {mapGetters} from "vuex";
 
   export default {

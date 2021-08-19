@@ -19,11 +19,8 @@
           <el-form-item label="方法">
             <el-select v-model="pageRequest.method" placeholder="请选择方法">
               <el-option label="全部" value=""></el-option>
-              <el-option label="GET" value="GET"></el-option>
-              <el-option label="POST" value="POST"></el-option>
-              <el-option label="PUT" value="PUT"></el-option>
-              <el-option label="PATCH" value="PATCH"></el-option>
-              <el-option label="DELETE" value="DELETE"></el-option>
+              <el-option v-for="requestMethod in requestMethodList" :label="requestMethod.label"
+                         :value="requestMethod.value"></el-option>
             </el-select>
           </el-form-item>
         </el-col>
@@ -161,6 +158,8 @@
 </template>
 
 <script>
+import requestMethod from "@/const/requestMethod"
+import service from "@/const/service"
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {mapGetters} from "vuex";
 import {
@@ -194,6 +193,7 @@ export default {
       },
       func,
       form: {},
+      requestMethodList: requestMethod,
       loading: true,
       pageRequest: {
         pageNum: 1,
@@ -207,28 +207,7 @@ export default {
         log: "",
         requestLimit: "",
       },
-      serviceList: [
-        {
-          label: "auth",
-          value: "auth"
-        },
-        {
-          label: "housekeeper",
-          value: "housekeeper"
-        },
-        {
-          label: "user",
-          value: "user"
-        },
-        {
-          label: "zuul",
-          value: "zuul"
-        },
-        {
-          label: "log",
-          value: "log"
-        }
-      ],
+      serviceList: service,
       selectionList: [],
       option: {
         height: 'auto',
