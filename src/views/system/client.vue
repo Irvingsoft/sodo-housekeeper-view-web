@@ -1,14 +1,14 @@
 <template>
   <basic-container>
-    <el-form :inline="true" class="demo-form-inline">
+    <el-form :inline="true" label-width="60px">
       <el-row>
         <el-col :xs="24" :sm="12" :md="6">
           <el-form-item label="关键字">
             <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
           </el-form-item>
         </el-col>
-        <el-col :xs="0" :sm="12" :md="14">&nbsp;</el-col>
-        <el-col :xs="24" :sm="24" :md="4">
+        <el-col :xs="0" :sm="12" :md="12">&nbsp;</el-col>
+        <el-col :xs="24" :sm="12" :md="6">
           <el-col :span="20">
             <el-form-item>
               <el-button type="primary" @click="searchChange">查询</el-button>
@@ -42,9 +42,18 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="12">
+          <el-col :xs="24" :sm="12" :md="6">
             <el-form-item label="Captcha" class="foldItem" label-width="60px">
               <el-radio-group v-model="pageRequest.captcha">
+                <el-radio label="">全部</el-radio>
+                <el-radio :label="true">是</el-radio>
+                <el-radio :label="false">否</el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-col>
+          <el-col :xs="24" :sm="12" :md="6">
+            <el-form-item label="签名" class="foldItem" label-width="60px">
+              <el-radio-group v-model="pageRequest.signature">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
                 <el-radio :label="false">否</el-radio>
@@ -68,24 +77,32 @@
                @size-change="sizeChange"
                @on-load="onLoad"
                @refresh-change="onLoad">
-      <template slot="inUse" slot-scope="scope">
-        <svg v-if="scope.row.inUse" class="icon" aria-hidden="true">
+      <template slot="inUse" slot-scope="{row}">
+        <svg v-if="row.inUse" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
-      <template slot="register" slot-scope="scope">
-        <svg v-if="scope.row.register" class="icon" aria-hidden="true">
+      <template slot="register" slot-scope="{row}">
+        <svg v-if="row.register" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
-      <template slot="captcha" slot-scope="scope">
-        <svg v-if="scope.row.captcha" class="icon" aria-hidden="true">
+      <template slot="captcha" slot-scope="{row}">
+        <svg v-if="row.captcha" class="icon" aria-hidden="true">
+          <use xlink:href="#icon-true"></use>
+        </svg>
+        <svg v-else class="icon" aria-hidden="true">
+          <use xlink:href="#icon-false"></use>
+        </svg>
+      </template>
+      <template slot="signature" slot-scope="{row}">
+        <svg v-if="row.signature" class="icon" aria-hidden="true">
           <use xlink:href="#icon-true"></use>
         </svg>
         <svg v-else class="icon" aria-hidden="true">
@@ -122,6 +139,7 @@ export default {
         inUse: "",
         register: "",
         captcha: "",
+        signature: "",
       },
       option: {
         height: 'auto',
@@ -226,6 +244,26 @@ export default {
             rules: [{
               required: true,
               message: "请选择是否开启图形验证码",
+              trigger: "blur"
+            }]
+          },
+          {
+            label: "签名",
+            prop: "signature",
+            sortable: true,
+            width: 95,
+            align: "center",
+            type: "radio",
+            dicData: [{
+              label: '是',
+              value: true
+            }, {
+              label: '否',
+              value: false
+            }],
+            rules: [{
+              required: true,
+              message: "请选择是否开启接口签名",
               trigger: "blur"
             }]
           },

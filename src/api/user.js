@@ -7,12 +7,12 @@ export const getUser = () => request({
 });
 
 export const route = () => request({
-  url: '/api/user/menu/route/' + `${website.clientId}`,
+  url: '/api/user/menu/route',
   method: 'get'
 });
 
 export const button = () => request({
-  url: '/api/user/menu/button/' + `${website.clientId}`,
+  url: '/api/user/menu/button',
   method: 'get'
 });
 

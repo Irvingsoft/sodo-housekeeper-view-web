@@ -24,22 +24,20 @@ export default {
     this.validateSignatureKey();
   },
   methods: {
-    async getSignaturePublicKey() {
-      if (!this.validate) {
-        await getSignaturePublicKey().then(res => {
-          this.publicKey = res.data.data;
-          if (res.data.code === 200) {
-            this.insertSignatureKey();
-          }
-        })
-      }
+    getSignaturePublicKey() {
+      getSignaturePublicKey().then(res => {
+        this.publicKey = res.data.data;
+        if (res.data.code === 200) {
+          this.insertSignatureKey();
+        }
+      })
     },
-    async insertSignatureKey() {
+    insertSignatureKey() {
       this.publicKey.signatureKey = uuid();
-      await this.$store.dispatch("InsertSignatureKey", this.publicKey)
+      this.$store.dispatch("InsertSignatureKey", this.publicKey);
     },
-    async validateSignatureKey() {
-      await validateSignaturePublicKey().then(res => {
+    validateSignatureKey() {
+      validateSignaturePublicKey().then(res => {
         if (res.data.code === 200) {
           if (!res.data.data) {
             this.getSignaturePublicKey();

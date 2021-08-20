@@ -51,6 +51,9 @@ const auth = {
         }
       })
     },
+    DeleteSignatureKey({commit}) {
+      commit('SET_SIGNATURE_INFO', null);
+    },
     // 登出
     LogOut({commit}) {
       return new Promise((resolve, reject) => {
