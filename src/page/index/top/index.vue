@@ -60,10 +60,10 @@
       </el-tooltip>
       <el-tooltip v-if="showFullScreen"
                   effect="dark"
-                  :content="isFullScren?$t('navbar.screenfullF'):$t('navbar.screenfull')"
+                  :content="isFullScreen?$t('navbar.fullScreenF'):$t('navbar.fullScreen')"
                   placement="bottom">
         <div class="top-bar__item">
-          <i :class="isFullScren?'icon-tuichuquanping':'icon-quanping'"
+          <i :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'"
              @click="handleScreen"></i>
         </div>
       </el-tooltip>
@@ -147,7 +147,7 @@ export default {
       this.$store.commit("SET_COLLAPSE");
     },
     setScreen() {
-      this.$store.commit("SET_FULLSCREN");
+      this.$store.commit("SET_FULLSCREEN");
     },
     logout() {
       this.$confirm(this.$t("logoutTip"), this.$t("tip"), {

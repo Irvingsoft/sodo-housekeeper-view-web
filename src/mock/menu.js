@@ -38,7 +38,7 @@ const top = [{
   }]
 export default ({mock}) => {
   if (!mock) return;
-  Mock.mock('/user/getTopMenu', 'get', () => {
+  Mock.mock('/userinfo/getTopMenu', 'get', () => {
     return {
       data: top
     }

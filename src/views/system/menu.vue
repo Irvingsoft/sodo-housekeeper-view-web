@@ -40,8 +40,6 @@
                        v-if="permission.menu_add"
                        @click="handleNew">新增
             </el-button>
-          </template>
-          <template slot="menuLeft">
             <el-button type="danger"
                        size="small"
                        icon="el-icon-delete"
@@ -105,6 +103,7 @@ export default {
           {
             label: "菜单名称",
             prop: "name",
+            width: 180,
             rules: [
               {
                 required: true,
@@ -116,6 +115,7 @@ export default {
           {
             label: "路由地址",
             prop: "path",
+            width: 200,
             rules: [
               {
                 required: true,
@@ -152,8 +152,9 @@ export default {
             ]
           },
           {
-            label: "菜单编号",
+            label: "菜单代码",
             prop: "code",
+            width: 150,
             rules: [
               {
                 required: true,
@@ -245,7 +246,25 @@ export default {
             span: 24,
             minRows: 6,
             hide: true
-          }
+          },
+          {
+            label: "创建时间",
+            prop: "createAt",
+            editDisplay: false,
+            addDisplay: false,
+            sortable: true,
+            width: 130,
+            align: "center",
+          },
+          {
+            label: "更新时间",
+            prop: "updateAt",
+            editDisplay: false,
+            addDisplay: false,
+            sortable: true,
+            width: 130,
+            align: "center",
+          },
         ]
       },
       data: [],
@@ -334,6 +353,14 @@ export default {
       });
     },
     rowUpdate(row, index, done, loading) {
+      if (row.menuId === row.parentId) {
+        this.$message({
+          type: "error",
+          message: "父菜单不能为本身!"
+        });
+        loading();
+        return;
+      }
       updateMenu(row).then(() => {
         done();
         this.onLoad();
@@ -362,10 +389,6 @@ export default {
             message: "操作成功!"
           });
         });
-    },
-    searchReset() {
-      this.menuRequest.content = "";
-      this.onLoad();
     },
     searchChange() {
       this.onLoad();

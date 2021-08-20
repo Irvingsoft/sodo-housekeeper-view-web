@@ -39,7 +39,7 @@ export default {
       column1: 'Error log',
       column2: 'Data display',
       column3: 'Privilege management',
-      column4: 'user management'
+      column4: 'userinfo management'
     },
     table: {
       rw: 'Work Tasks',
@@ -90,8 +90,8 @@ export default {
     lock: 'lock',
     bug: 'none bug',
     bugs: 'bug',
-    screenfullF: 'exit screenfull',
-    screenfull: 'screenfull',
+    fullScreenF: 'exit fullScreen',
+    fullScreen: 'fullScreen',
     language: 'language',
     theme: 'theme',
     color: 'color'

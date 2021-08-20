@@ -46,6 +46,6 @@ export default [{
       i18n: 'info'
     },
     component: () =>
-      import( /* webpackChunkName: "views" */ '@/views/user/info')
+      import( /* webpackChunkName: "views" */ '@/views/userinfo/info')
   }]
 }]

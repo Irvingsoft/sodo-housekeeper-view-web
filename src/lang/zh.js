@@ -89,8 +89,8 @@ export default {
     lock: '锁屏',
     bug: '没有错误日志',
     bugs: '条错误日志',
-    screenfullF: '退出全屏',
-    screenfull: '全屏',
+    fullScreenF: '退出全屏',
+    fullScreen: '全屏',
     language: '中英文',
     theme: '主题',
     color: '换色'

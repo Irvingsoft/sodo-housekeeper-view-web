@@ -355,7 +355,7 @@
                 res: 'data'
               },
               tip: '请上传 .xls,.xlsx 标准格式文件',
-              action: "/api/blade-user/import-user"
+              action: "/api/blade-userinfo/import-userinfo"
             },
             {
               label: '模板下载',
