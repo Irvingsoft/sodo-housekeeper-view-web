@@ -52,3 +52,17 @@ export const getMenu = (menuId) => {
     method: 'get',
   })
 }
+
+export const treeGrant = () => {
+  return request({
+    url: '/api/housekeeper/menu/tree/grant',
+    method: 'get',
+  })
+}
+
+export const listGrant = (roleId) => {
+  return request({
+    url: '/api/housekeeper/menu/list/grant/' + roleId,
+    method: 'get',
+  })
+}

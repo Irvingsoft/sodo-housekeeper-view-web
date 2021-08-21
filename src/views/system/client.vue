@@ -193,13 +193,13 @@ export default {
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -213,13 +213,13 @@ export default {
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -233,13 +233,13 @@ export default {
             sortable: true,
             width: 95,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -253,13 +253,13 @@ export default {
             sortable: true,
             width: 95,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,

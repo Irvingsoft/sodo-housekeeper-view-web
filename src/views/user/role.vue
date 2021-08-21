@@ -88,7 +88,8 @@
 <script>
   import {mapGetters} from "vuex";
   import {listOauthClientBaseUse} from "@/api/system/client";
-  import {deleteRole, insertRole, listRole, updateRole, tree, getRole, deleteRoleList} from "@/api/user/role";
+  import {deleteRole, insertRole, listRole, updateRole, tree, getRole, deleteRoleList, grant} from "@/api/user/role";
+  import {listGrant, treeGrant} from "@/api/system/menu";
 
   export default {
     data() {
@@ -97,8 +98,8 @@
         loading: true,
         box: false,
         props: {
-          label: "title",
-          value: "key"
+          label: "name",
+          value: "menuId"
         },
         list: [],
         defaultObj: [],
@@ -270,14 +271,16 @@
         this.$refs[this.roleRequest.clientId][0].rowAdd();
       },
       submit() {
-        const menuLIst = this.$refs.tree.getCheckedKeys();
-        grant(this.idsArray, menuLIst).then(() => {
+        let data = {};
+        data.roleIdList = this.selectionRoleIdList;
+        data.menuIdList = this.$refs.tree.getCheckedKeys();
+        grant(data).then(() => {
           this.box = false;
           this.$message({
             type: "success",
             message: "操作成功!"
           });
-          this.onLoad(this.page);
+          this.onLoad();
         });
       },
       rowSave(row, done, loading) {
@@ -332,7 +335,7 @@
             });
           });
       },
-      searchChange(params, done) {
+      searchChange() {
         this.onLoad();
       },
       selectionChange(list) {
@@ -344,10 +347,10 @@
           return;
         }
         this.defaultObj = [];
-        grantTree()
+        treeGrant()
           .then(res => {
             this.list = res.data.data;
-            return getRole(this.ids);
+            return listGrant(this.selectionRoleIdList);
           })
           .then(res => {
             this.defaultObj = res.data.data;

@@ -52,3 +52,25 @@ export const getRole = (roleId) => {
     method: 'get',
   })
 }
+
+export const treeGrant = () => {
+  return request({
+    url: '/api/housekeeper/role/tree/grant',
+    method: 'get',
+  })
+}
+
+export const listGrant = (userId) => {
+  return request({
+    url: '/api/housekeeper/role/list/grant/' + userId,
+    method: 'get',
+  })
+}
+
+export const grant = (data) => {
+  return request({
+    url: '/api/housekeeper/role/grant',
+    method: 'post',
+    data: data
+  })
+}

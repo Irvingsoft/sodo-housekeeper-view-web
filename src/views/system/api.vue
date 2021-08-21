@@ -223,7 +223,7 @@ export default {
           {
             label: "名称",
             prop: "name",
-            width: 150,
+            width: 180,
             rules: [{
               required: true,
               message: "请输入接口名称",
@@ -268,7 +268,7 @@ export default {
           {
             label: "路径",
             prop: "path",
-            width: 180,
+            width: 210,
             rules: [{
               required: true,
               message: "请输入接口路径",
@@ -285,18 +285,24 @@ export default {
             dicData: []
           },
           {
+            label: "接口代码",
+            prop: "code",
+            width: 150,
+            span: 24,
+          },
+          {
             label: "启用",
             prop: "inUse",
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -310,13 +316,13 @@ export default {
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -330,13 +336,13 @@ export default {
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -350,13 +356,13 @@ export default {
             sortable: true,
             width: 70,
             align: "center",
-            type: "radio",
+            type: 'switch',
             dicData: [{
-              label: '是',
-              value: true
-            }, {
               label: '否',
               value: false
+            }, {
+              label: '是',
+              value: true
             }],
             rules: [{
               required: true,
@@ -423,11 +429,6 @@ export default {
             sortable: true,
             width: 95,
             align: "center",
-          },
-          {
-            label: "接口代码",
-            prop: "code",
-            span: 24,
           },
           {
             label: "客户端",
