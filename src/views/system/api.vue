@@ -93,6 +93,7 @@
                :page="data"
                @row-del="rowDel"
                v-model="form"
+               ref="crud"
                :permission="permissionList"
                @row-update="rowUpdate"
                @row-save="rowSave"
@@ -297,6 +298,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -317,6 +319,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -337,6 +340,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -357,6 +361,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -542,17 +547,15 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          return deleteOauthApi(row.apiId);
-        })
-        .then(() => {
-          this.onLoad();
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
+      }).then(() => {
+        return deleteOauthApi(row.apiId);
+      }).then(() => {
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
         });
+      });
     },
     foldStatusChange(fold) {
       this.status.fold = fold;
@@ -579,18 +582,18 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          return deleteOauthApiList(this.selectionApiIdList);
-        })
-        .then(() => {
-          this.onLoad();
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-          this.$refs.crud.toggleSelection();
+      }).then(() => {
+        return deleteOauthApiList(this.selectionApiIdList);
+      }).then(() => {
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
         });
+        this.$refs.crud.toggleSelection();
+      }).catch(() => {
+        this.$refs.crud.toggleSelection();
+      });
     },
     beforeOpen(done, type) {
       this.findObject(this.option.column, "service").dicData = this.serviceList;

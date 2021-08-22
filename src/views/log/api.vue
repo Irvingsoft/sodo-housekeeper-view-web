@@ -168,8 +168,10 @@ import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {getLogApiInfoDetail, pageLogApiBaseDetail} from "@/api/log/api";
 import {listOauthApiBaseUseByClient} from "@/api/system/api";
+import Test from "@/views/test";
 
 export default {
+  components: {Test},
   data() {
     return {
       status: {
@@ -289,6 +291,7 @@ export default {
           {
             label: "请求体",
             prop: "requestBody",
+            type: "textarea",
             hide: true,
             span: 24,
           },
@@ -311,6 +314,7 @@ export default {
           {
             label: "响应体",
             prop: "responseBody",
+            type: "textarea",
             hide: true,
             span: 24,
           },
@@ -402,6 +406,8 @@ export default {
       if (["edit", "view"].includes(type)) {
         getLogApiInfoDetail(this.form.id).then(res => {
           this.form = res.data.data;
+          this.form.requestBody = JSON.stringify(JSON.parse(this.form.requestBody), null, 8);
+          this.form.responseBody = JSON.stringify(JSON.parse(this.form.responseBody), null, 8);
         });
       }
       done();

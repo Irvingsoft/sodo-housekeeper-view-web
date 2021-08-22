@@ -212,12 +212,6 @@ export default {
             span: 24,
           },
           {
-            label: "请求体",
-            prop: "requestBody",
-            hide: true,
-            span: 24,
-          },
-          {
             label: "类名",
             prop: "className",
             hide: true
@@ -258,6 +252,7 @@ export default {
           {
             label: "堆栈跟踪",
             prop: "stackTrace",
+            type: "textarea",
             hide: true,
             span: 24,
           },

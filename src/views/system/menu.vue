@@ -48,7 +48,6 @@
                        @click="handleDelete">删 除
             </el-button>
           </template>
-          <!--      // TODO    v-if="userInfo.authority.includes('admin')"-->
           <template slot-scope="{row}" slot="menu">
             <el-button
               type="text"
@@ -68,7 +67,7 @@
 </template>
 
 <script>
-import {listMenu, tree, insertMenu, deleteMenu, updateMenu, getMenu, deleteMenuList} from "@/api/system/menu";
+import {listMenu, treeMenu, insertMenu, deleteMenu, updateMenu, getMenu, deleteMenuList} from "@/api/system/menu";
 import {mapGetters} from "vuex";
 import iconList from "@/config/iconList";
 import {listOauthClientBaseUse} from "@/api/system/client";
@@ -307,7 +306,7 @@ export default {
       })
     },
     tree() {
-      tree(this.menuRequest.clientId).then(res => {
+      treeMenu(this.menuRequest.clientId).then(res => {
         this.findObject(this.option.column, "parentId").dicData = res.data.data;
       })
     },
@@ -405,18 +404,18 @@ export default {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
-      })
-        .then(() => {
-          return deleteMenuList(this.selectionMenuIdList);
-        })
-        .then(() => {
-          this.onLoad();
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-          this.$refs.crud.toggleSelection();
+      }).then(() => {
+        return deleteMenuList(this.selectionMenuIdList);
+      }).then(() => {
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
         });
+        this.$refs[this.menuRequest.clientId][0].toggleSelection();
+      }).catch(() => {
+        this.$refs[this.menuRequest.clientId][0].toggleSelection();
+      });
     },
     beforeOpen(done, type) {
       if (["edit", "view"].includes(type)) {

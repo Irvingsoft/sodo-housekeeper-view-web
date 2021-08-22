@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-const TokenKey = 'x-access-token'
+const TokenKey = 'sodo-access-token'
 
 export function getToken() {
     return Cookies.get(TokenKey)

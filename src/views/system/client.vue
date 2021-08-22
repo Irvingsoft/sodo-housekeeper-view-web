@@ -194,6 +194,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -214,6 +215,7 @@ export default {
             width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -228,32 +230,13 @@ export default {
             }]
           },
           {
-            label: "Captcha",
-            prop: "captcha",
-            sortable: true,
-            width: 95,
-            align: "center",
-            type: 'switch',
-            dicData: [{
-              label: '否',
-              value: false
-            }, {
-              label: '是',
-              value: true
-            }],
-            rules: [{
-              required: true,
-              message: "请选择是否开启图形验证码",
-              trigger: "blur"
-            }]
-          },
-          {
             label: "签名",
             prop: "signature",
             sortable: true,
-            width: 95,
+            width: 70,
             align: "center",
             type: 'switch',
+            value: false,
             dicData: [{
               label: '否',
               value: false
@@ -264,6 +247,27 @@ export default {
             rules: [{
               required: true,
               message: "请选择是否开启接口签名",
+              trigger: "blur"
+            }]
+          },
+          {
+            label: "Captcha",
+            prop: "captcha",
+            sortable: true,
+            width: 95,
+            align: "center",
+            type: 'switch',
+            value: false,
+            dicData: [{
+              label: '否',
+              value: false
+            }, {
+              label: '是',
+              value: true
+            }],
+            rules: [{
+              required: true,
+              message: "请选择是否开启图形验证码",
               trigger: "blur"
             }]
           },

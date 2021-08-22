@@ -1,6 +1,6 @@
 import request from '@/router/axios';
 
-export const tree = (clientId) => {
+export const treeMenu = (clientId) => {
   return request({
     url: '/api/housekeeper/menu/tree/' + clientId,
     method: 'get',
@@ -62,7 +62,7 @@ export const treeGrant = () => {
 
 export const listGrant = (roleId) => {
   return request({
-    url: '/api/housekeeper/menu/list/grant/' + roleId,
+    url: '/api/housekeeper/menu/list/' + roleId,
     method: 'get',
   })
 }

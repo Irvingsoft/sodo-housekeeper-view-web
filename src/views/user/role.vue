@@ -67,7 +67,8 @@
     </el-tabs>
     <el-dialog title="角色配置"
                :visible.sync="box"
-               width="20%">
+               width="20%"
+               :before-close="cancel">
       <el-tree :data="list"
                show-checkbox
                node-key="id"
@@ -77,7 +78,7 @@
       </el-tree>
       <span slot="footer"
             class="dialog-footer">
-        <el-button @click="box = false">取 消</el-button>
+        <el-button @click="cancel">取 消</el-button>
         <el-button type="primary"
                    @click="submit">确 定</el-button>
       </span>
@@ -86,309 +87,307 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import {listOauthClientBaseUse} from "@/api/system/client";
-  import {deleteRole, insertRole, listRole, updateRole, tree, getRole, deleteRoleList, grant} from "@/api/user/role";
-  import {listGrant, treeGrant} from "@/api/system/menu";
+import {mapGetters} from "vuex";
+import {listOauthClientBaseUse} from "@/api/system/client";
+import {deleteRole, insertRole, listRole, updateRole, treeRole, getRole, deleteRoleList, grant} from "@/api/user/role";
+import {listGrant, treeMenu} from "@/api/system/menu";
 
-  export default {
-    data() {
+export default {
+  data() {
+    return {
+      form: {},
+      loading: true,
+      box: false,
+      props: {
+        label: "name",
+        value: "menuId"
+      },
+      list: [],
+      defaultObj: [],
+      selectionList: [],
+      roleRequest: {
+        clientId: "",
+        content: "",
+      },
+      option: {
+        searchShow: true,
+        searchMenuSpan: 6,
+        tip: false,
+        tree: true,
+        border: true,
+        index: true,
+        selection: true,
+        viewBtn: true,
+        addBtn: false,
+        menuWidth: 300,
+        column: [
+          {
+            label: "角色名称",
+            prop: "name",
+            width: 180,
+            rules: [
+              {
+                required: true,
+                message: "请输入角色名称",
+                trigger: "blur"
+              }
+            ]
+          },
+          {
+            label: "角色代码",
+            prop: "code",
+            width: 150,
+            rules: [
+              {
+                required: true,
+                message: "请输入角色别名",
+                trigger: "blur"
+              }
+            ]
+          },
+          {
+            label: "角色描述",
+            prop: "description",
+            width: 180,
+          },
+          {
+            label: "上级角色",
+            prop: "parentId",
+            type: "tree",
+            hide: true,
+            clearable: true,
+            props: {
+              label: "name",
+              value: "roleId"
+            },
+            dicData: [],
+          },
+          {
+            label: "角色排序",
+            prop: "sort",
+            type: "number",
+            rules: [
+              {
+                required: true,
+                message: "请输入角色排序",
+                trigger: "blur"
+              }
+            ]
+          },
+          {
+            label: "创建时间",
+            prop: "createAt",
+            editDisplay: false,
+            addDisplay: false,
+            sortable: true,
+            width: 130,
+            align: "center",
+          },
+          {
+            label: "更新时间",
+            prop: "updateAt",
+            editDisplay: false,
+            addDisplay: false,
+            sortable: true,
+            width: 130,
+            align: "center",
+          },
+        ]
+      },
+      data: [],
+      clientList: [],
+    };
+  },
+  computed: {
+    ...mapGetters(["permission"]),
+    permissionList() {
       return {
-        form: {},
-        loading: true,
-        box: false,
-        props: {
-          label: "name",
-          value: "menuId"
-        },
-        list: [],
-        defaultObj: [],
-        selectionList: [],
-        roleRequest: {
-          clientId: "",
-          content: "",
-        },
-        option: {
-          searchShow: true,
-          searchMenuSpan: 6,
-          tip: false,
-          tree: true,
-          border: true,
-          index: true,
-          selection: true,
-          viewBtn: true,
-          addBtn: false,
-          column: [
-            {
-              label: "角色名称",
-              prop: "name",
-              width: 180,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入角色名称",
-                  trigger: "blur"
-                }
-              ]
-            },
-            {
-              label: "角色代码",
-              prop: "code",
-              width: 150,
-              rules: [
-                {
-                  required: true,
-                  message: "请输入角色别名",
-                  trigger: "blur"
-                }
-              ]
-            },
-            {
-              label: "角色描述",
-              prop: "description",
-              width: 180,
-            },
-            {
-              label: "上级角色",
-              prop: "parentId",
-              type: "tree",
-              hide: true,
-              clearable: true,
-              props: {
-                label: "name",
-                value: "roleId"
-              },
-              dicData: [],
-            },
-            {
-              label: "角色排序",
-              prop: "sort",
-              type: "number",
-              rules: [
-                {
-                  required: true,
-                  message: "请输入角色排序",
-                  trigger: "blur"
-                }
-              ]
-            },
-            {
-              label: "创建时间",
-              prop: "createAt",
-              editDisplay: false,
-              addDisplay: false,
-              sortable: true,
-              width: 130,
-              align: "center",
-            },
-            {
-              label: "更新时间",
-              prop: "updateAt",
-              editDisplay: false,
-              addDisplay: false,
-              sortable: true,
-              width: 130,
-              align: "center",
-            },
-          ]
-        },
-        data: [],
-        clientList: [],
+        addBtn: this.vaildData(this.permission.role_add, false),
+        viewBtn: this.vaildData(this.permission.role_view, false),
+        delBtn: this.vaildData(this.permission.role_delete, false),
+        editBtn: this.vaildData(this.permission.role_edit, false)
       };
     },
-    computed: {
-      ...mapGetters(["permission"]),
-      permissionList() {
-        return {
-          addBtn: this.vaildData(this.permission.role_add, false),
-          viewBtn: this.vaildData(this.permission.role_view, false),
-          delBtn: this.vaildData(this.permission.role_delete, false),
-          editBtn: this.vaildData(this.permission.role_edit, false)
-        };
-      },
-      selectionRoleIdList() {
-        let roleIdList = [];
-        this.selectionList.forEach(role => roleIdList.push(role.roleId))
-        return roleIdList;
-      },
-      idsArray() {
-        let ids = [];
-        this.selectionList.forEach(ele => {
-          ids.push(ele.id);
-        });
-        return ids;
-      }
+    selectionRoleIdList() {
+      let roleIdList = [];
+      this.selectionList.forEach(role => roleIdList.push(role.roleId))
+      return roleIdList;
     },
-    created() {
-      this.listOauthClientBaseUse();
+  },
+  created() {
+    this.listOauthClientBaseUse();
+  },
+  methods: {
+    onLoad() {
+      this.loading = true;
+      listRole(this.roleRequest).then(res => {
+        this.data = res.data.data;
+        this.loading = false;
+        this.treeRole();
+      })
     },
-    methods: {
-      onLoad() {
-        this.loading = true;
-        listRole(this.roleRequest).then(res => {
-          this.data = res.data.data;
-          this.loading = false;
-          this.tree();
-        })
-      },
-      listOauthClientBaseUse() {
-        listOauthClientBaseUse().then(res => {
-          this.clientList = res.data.data;
-          this.roleRequest.clientId = this.clientList[0].clientId
-          this.onLoad();
-        })
-      },
-      tree() {
-        tree(this.roleRequest.clientId).then(res => {
-          this.findObject(this.option.column, "parentId").dicData = res.data.data;
-        })
-      },
-      handleSwitch(tab, event) {
-        this.roleRequest.clientId = tab.name;
-        this.roleRequest.content = "";
+    listOauthClientBaseUse() {
+      listOauthClientBaseUse().then(res => {
+        this.clientList = res.data.data;
+        this.roleRequest.clientId = this.clientList[0].clientId
         this.onLoad();
-      },
-      handleAdd(row) {
-        this.$refs[this.roleRequest.clientId][0].value.parentId = row.roleId;
-        this.$refs[this.roleRequest.clientId][0].option.column.filter(item => {
-          if (item.prop === "parentId") {
-            item.value = row.roleId;
-            item.clearable = false;
-            item.addDisabled = true;
-          }
-        });
-        this.$refs[this.roleRequest.clientId][0].rowAdd();
-      },
-      handleNew() {
-        this.form = {};
-        this.$refs[this.roleRequest.clientId][0].option.column.filter(item => {
-          item.value = "";
-          if (item.prop === "parentId") {
-            item.clearable = true;
-            item.addDisabled = false;
-          }
-        });
-        this.$refs[this.roleRequest.clientId][0].rowAdd();
-      },
-      submit() {
-        let data = {};
-        data.roleIdList = this.selectionRoleIdList;
-        data.menuIdList = this.$refs.tree.getCheckedKeys();
-        grant(data).then(() => {
-          this.box = false;
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-          this.onLoad();
-        });
-      },
-      rowSave(row, done, loading) {
-        row.clientId = this.roleRequest.clientId;
-        insertRole(row).then(() => {
-          done();
-          this.onLoad();
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-        }, error => {
-          window.console.log(error);
-          loading();
-        });
-      },
-      rowUpdate(row, index, done, loading) {
-        if (row.roleId === row.parentId) {
-          this.$message({
-            type: "error",
-            message: "父角色不能为本身!"
-          });
-          loading();
-          return;
+      })
+    },
+    treeRole() {
+      treeRole(this.roleRequest.clientId).then(res => {
+        this.findObject(this.option.column, "parentId").dicData = res.data.data;
+      })
+    },
+    handleSwitch(tab, event) {
+      this.roleRequest.clientId = tab.name;
+      this.roleRequest.content = "";
+      this.onLoad();
+    },
+    handleAdd(row) {
+      this.$refs[this.roleRequest.clientId][0].value.parentId = row.roleId;
+      this.$refs[this.roleRequest.clientId][0].option.column.filter(item => {
+        if (item.prop === "parentId") {
+          item.value = row.roleId;
+          item.clearable = false;
+          item.addDisabled = true;
         }
-        updateRole(row).then(() => {
-          done();
-          this.onLoad(this.page);
-          this.$message({
-            type: "success",
-            message: "操作成功!"
-          });
-        }, error => {
-          window.console.log(error);
-          loading();
+      });
+      this.$refs[this.roleRequest.clientId][0].rowAdd();
+    },
+    handleNew() {
+      this.form = {};
+      this.$refs[this.roleRequest.clientId][0].option.column.filter(item => {
+        item.value = "";
+        if (item.prop === "parentId") {
+          item.clearable = true;
+          item.addDisabled = false;
+        }
+      });
+      this.$refs[this.roleRequest.clientId][0].rowAdd();
+    },
+    submit() {
+      let data = {};
+      data.roleIdList = this.selectionRoleIdList;
+      data.menuIdList = this.$refs.tree.getCheckedKeys();
+      grant(data).then(() => {
+        this.box = false;
+        this.$message({
+          type: "success",
+          message: "操作成功!"
         });
-      },
-      rowDel(row) {
-        this.$confirm("确定将选择数据删除?", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            return deleteRole(row.roleId);
-          })
-          .then(() => {
-            this.onLoad(this.page);
-            this.$message({
-              type: "success",
-              message: "操作成功!"
-            });
-          });
-      },
-      searchChange() {
         this.onLoad();
-      },
-      selectionChange(list) {
-        this.selectionList = list;
-      },
-      handleRole() {
-        if (this.selectionList.length !== 1) {
-          this.$message.warning("只能选择一条数据");
-          return;
-        }
-        this.defaultObj = [];
-        treeGrant()
-          .then(res => {
-            this.list = res.data.data;
-            return listGrant(this.selectionRoleIdList);
-          })
-          .then(res => {
-            this.defaultObj = res.data.data;
-            this.box = true;
-          });
-      },
-      handleDelete() {
-        if (this.selectionList.length === 0) {
-          this.$message.warning("请选择至少一条数据");
-          return;
-        }
-        this.$confirm("确定将选择数据删除?", {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-          type: "warning"
-        })
-          .then(() => {
-            return deleteRoleList(this.selectionRoleIdList);
-          })
-          .then(() => {
-            this.onLoad(this.page);
-            this.$message({
-              type: "success",
-              message: "操作成功!"
-            });
-            this.$refs.crud.toggleSelection();
-          });
-      },
-      beforeOpen(done, type) {
-        if (["edit", "view"].includes(type)) {
-          getRole(this.form.roleId).then(res => {
-            this.form = res.data.data;
-          });
-        }
+      });
+    },
+    cancel() {
+      this.box = false;
+      this.$refs[this.roleRequest.clientId][0].toggleSelection();
+    },
+    rowSave(row, done, loading) {
+      row.clientId = this.roleRequest.clientId;
+      insertRole(row).then(() => {
         done();
-      },
-    }
-  };
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
+        });
+      }, error => {
+        window.console.log(error);
+        loading();
+      });
+    },
+    rowUpdate(row, index, done, loading) {
+      if (row.roleId === row.parentId) {
+        this.$message({
+          type: "error",
+          message: "父角色不能为本身!"
+        });
+        loading();
+        return;
+      }
+      updateRole(row).then(() => {
+        done();
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
+        });
+      }, error => {
+        window.console.log(error);
+        loading();
+      });
+    },
+    rowDel(row) {
+      this.$confirm("确定将选择数据删除?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          return deleteRole(row.roleId);
+        })
+        .then(() => {
+          this.onLoad();
+          this.$message({
+            type: "success",
+            message: "操作成功!"
+          });
+        });
+    },
+    searchChange() {
+      this.onLoad();
+    },
+    selectionChange(list) {
+      this.selectionList = list;
+    },
+    handleRole() {
+      if (this.selectionList.length !== 1) {
+        this.$message.warning("只能选择一条数据");
+        return;
+      }
+      this.defaultObj = [];
+      treeMenu(this.roleRequest.clientId)
+        .then(res => {
+          this.list = res.data.data;
+          return listGrant(this.selectionRoleIdList);
+        })
+        .then(res => {
+          this.defaultObj = res.data.data;
+          this.box = true;
+        });
+    },
+    handleDelete() {
+      if (this.selectionList.length === 0) {
+        this.$message.warning("请选择至少一条数据");
+        return;
+      }
+      this.$confirm("确定将选择数据删除?", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      }).then(() => {
+        return deleteRoleList(this.selectionRoleIdList);
+      }).then(() => {
+        this.onLoad();
+        this.$message({
+          type: "success",
+          message: "操作成功!"
+        });
+        this.$refs[this.roleRequest.clientId][0].toggleSelection();
+      }).catch(() => {
+        this.$refs[this.roleRequest.clientId][0].toggleSelection();
+      });
+    },
+    beforeOpen(done, type) {
+      if (["edit", "view"].includes(type)) {
+        getRole(this.form.roleId).then(res => {
+          this.form = res.data.data;
+        });
+      }
+      done();
+    },
+  }
+};
 </script>
 
 <style>
