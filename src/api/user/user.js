@@ -15,6 +15,14 @@ export const deleteUser = (id) => {
   })
 }
 
+export const deleteUserList = (data) => {
+  return request({
+    url: '/api/housekeeper/user',
+    method: 'delete',
+    data: data
+  })
+}
+
 export const updateUser = (data) => {
   return request({
     url: '/api/housekeeper/user',

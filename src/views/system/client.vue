@@ -109,6 +109,36 @@
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
+      <template slot="concurrentLogin" slot-scope="{row}">
+        <svg v-if="row.concurrentLogin" class="icon" aria-hidden="true">
+          <use xlink:href="#icon-true"></use>
+        </svg>
+        <svg v-else class="icon" aria-hidden="true">
+          <use xlink:href="#icon-false"></use>
+        </svg>
+      </template>
+      <template slot="shareToken" slot-scope="{row}">
+        <svg v-if="row.shareToken" class="icon" aria-hidden="true">
+          <use xlink:href="#icon-true"></use>
+        </svg>
+        <svg v-else class="icon" aria-hidden="true">
+          <use xlink:href="#icon-false"></use>
+        </svg>
+      </template>
+      <template slot="userStatus" slot-scope="{row}">
+        <el-tag type="success" effect="dark" v-if="row.userStatus === 0">
+          正常
+        </el-tag>
+        <el-tag type="warning" effect="dark" v-else-if="row.userStatus === 1">
+          审核
+        </el-tag>
+        <el-tag type="error" effect="dark" v-else-if="row.userStatus === 2">
+          冻结
+        </el-tag>
+        <el-tag type="info" effect="dark" v-else-if="row.userStatus === -1">
+          注销
+        </el-tag>
+      </template>
     </avue-crud>
   </basic-container>
 </template>
@@ -123,6 +153,7 @@ import {
 } from "@/api/system/client";
 import {mapGetters} from "vuex";
 import {listOauthApiBaseUse} from "@/api/system/api";
+import userStatus from "@/const/userStatus"
 
 export default {
   data() {
@@ -251,6 +282,48 @@ export default {
             }]
           },
           {
+            label: "并发登录",
+            prop: "concurrentLogin",
+            sortable: true,
+            width: 95,
+            align: "center",
+            type: 'switch',
+            value: false,
+            dicData: [{
+              label: '否',
+              value: false
+            }, {
+              label: '是',
+              value: true
+            }],
+            rules: [{
+              required: true,
+              message: "请选择是否开启图形验证码",
+              trigger: "blur"
+            }]
+          },
+          {
+            label: "共享令牌",
+            prop: "shareToken",
+            sortable: true,
+            width: 95,
+            align: "center",
+            type: 'switch',
+            value: false,
+            dicData: [{
+              label: '否',
+              value: false
+            }, {
+              label: '是',
+              value: true
+            }],
+            rules: [{
+              required: true,
+              message: "请选择是否开启图形验证码",
+              trigger: "blur"
+            }]
+          },
+          {
             label: "Captcha",
             prop: "captcha",
             sortable: true,
@@ -278,19 +351,7 @@ export default {
             width: 105,
             align: "center",
             type: "radio",
-            dicData: [{
-              label: '正常',
-              value: 0
-            }, {
-              label: '审核',
-              value: 1
-            }, {
-              label: '冻结',
-              value: 2
-            }, {
-              label: '注销',
-              value: -1
-            }],
+            dicData: userStatus,
             rules: [{
               required: true,
               message: "请选择是否开启图形验证码",

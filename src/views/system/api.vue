@@ -195,6 +195,7 @@ export default {
       func,
       form: {},
       requestMethodList: requestMethod,
+      serviceList: service,
       loading: true,
       pageRequest: {
         pageNum: 1,
@@ -208,7 +209,6 @@ export default {
         log: "",
         requestLimit: "",
       },
-      serviceList: service,
       selectionList: [],
       option: {
         height: 'auto',
@@ -238,28 +238,7 @@ export default {
             width: 85,
             align: "center",
             type: "select",
-            dicData: [
-              {
-                label: "GET",
-                value: "GET"
-              },
-              {
-                label: "POST",
-                value: "POST"
-              },
-              {
-                label: "PUT",
-                value: "PUT"
-              },
-              {
-                label: "PATCH",
-                value: "PATCH"
-              },
-              {
-                label: "DELETE",
-                value: "DELETE"
-              }
-            ],
+            dicData: [],
             rules: [{
               required: true,
               message: "请输入接口请求方法",
@@ -597,6 +576,7 @@ export default {
     },
     beforeOpen(done, type) {
       this.findObject(this.option.column, "service").dicData = this.serviceList;
+      this.findObject(this.option.column, "method").dicData = this.requestMethodList;
       if (["edit", "view"].includes(type)) {
         getOauthApiInfoDetail(this.form.apiId).then(res => {
           this.form = res.data.data;

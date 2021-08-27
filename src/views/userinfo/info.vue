@@ -54,6 +54,13 @@ export default {
           row: true,
           prop: 'avatarUrl'
         }, {
+          label: '姓名',
+          span: 12,
+          row: true,
+          size: 10,
+          prop: 'name',
+          rules: [{required: true, message: "请输入昵称", trigger: "blur"}],
+        }, {
           label: '昵称',
           span: 12,
           row: true,
@@ -159,11 +166,7 @@ export default {
     getUserInfo() {
       getUserInfo().then(res => {
         let user = res.data.data;
-        this.userInfoForm = {
-          avatarUrl: user.avatarUrl,
-          nickname: user.nickname,
-          gender: user.gender,
-        }
+        this.userInfoForm = user;
         this.$store.commit('SET_USER_INFO', user);
       });
     },

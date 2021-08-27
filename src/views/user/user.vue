@@ -68,6 +68,20 @@
                        @click="handleExport">导出
             </el-button>
           </template>
+          <template slot="status" slot-scope="{row}">
+            <el-tag type="success" effect="dark" v-if="row.status === 0">
+              正常
+            </el-tag>
+            <el-tag type="warning" effect="dark" v-else-if="row.status === 1">
+              审核
+            </el-tag>
+            <el-tag type="error" effect="dark" v-else-if="row.status === 2">
+              冻结
+            </el-tag>
+            <el-tag type="info" effect="dark" v-else-if="row.status === -1">
+              注销
+            </el-tag>
+          </template>
         </avue-crud>
       </el-tab-pane>
     </el-tabs>
@@ -75,7 +89,6 @@
                append-to-body
                :visible.sync="roleBox"
                width="345px">
-
       <el-tree :data="roleGrantList"
                show-checkbox
                default-expand-all
@@ -84,7 +97,6 @@
                :default-checked-keys="roleTreeObj"
                :props="props">
       </el-tree>
-
       <span slot="footer" class="dialog-footer">
             <el-button @click="roleBox = false">取 消</el-button>
             <el-button type="primary"
@@ -108,8 +120,6 @@
 
 <script>
 import {
-  getList,
-  getUser,
   remove,
   update,
   add,
@@ -117,9 +127,19 @@ import {
 } from "@/api/system/user";
 import {mapGetters} from "vuex";
 import {getToken} from '@/util/auth';
-import {listRole, treeRole} from "@/api/user/role";
+import {treeRole} from "@/api/user/role";
 import {listOauthClientBaseUse} from "@/api/system/client";
-import {getUserInfoDetail, grant, pageUserBaseDetail} from "@/api/user/user";
+import {
+  deleteUser,
+  deleteUserList,
+  getUserInfoDetail,
+  grant,
+  insertUser,
+  pageUserBaseDetail,
+  updateUser
+} from "@/api/user/user";
+import gender from "@/const/gender";
+import userStatus from "@/const/userStatus";
 
 export default {
   data() {
@@ -130,18 +150,8 @@ export default {
         callback();
       }
     };
-    const validatePass2 = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('请再次输入密码'));
-      } else if (value !== this.form.password) {
-        callback(new Error('两次输入密码不一致!'));
-      } else {
-        callback();
-      }
-    };
     return {
       form: {},
-      search: {},
       roleBox: false,
       excelBox: false,
       loading: true,
@@ -173,29 +183,77 @@ export default {
             label: "ID",
             prop: "userId",
             addDisplay: false,
-            editDisplay: false
-          },
-          {
-            label: "OpenID",
-            prop: "openId",
+            editDisplay: false,
+            width: 250
           },
           {
             label: "账号",
             prop: "username",
+            editDisabled: true,
             rules: [{
               required: true,
               message: "请输入账号",
               trigger: "blur"
             }],
+            width: 100
+          },
+          {
+            label: "OpenID",
+            prop: "openId",
+            hide: true,
+            addDisplay: false,
+            editDisplay: false,
+          },
+          {
+            label: '密码',
+            prop: 'password',
+            hide: true,
+            editDisplay: false,
+            viewDisplay: false,
+            rules: [{required: true, validator: validatePass, trigger: 'blur'}]
+          },
+          {
+            label: "用户姓名",
+            prop: "name",
+            rules: [{
+              required: true,
+              message: "请输入用户姓名",
+              trigger: "blur"
+            }]
           },
           {
             label: "昵称",
             prop: "nickname",
+          },
+          {
+            label: "状态",
+            prop: "status",
+            sortable: true,
+            width: 70,
+            align: "center",
+            type: "radio",
+            dicData: userStatus,
+          },
+          {
+            label: "电话",
+            prop: "phone",
             rules: [{
               required: true,
               message: "请输入用户昵称",
               trigger: "blur"
-            }]
+            }],
+            width: 100
+          },
+          {
+            label: "邮箱",
+            prop: "email",
+            overHidden: true,
+            rules: [{
+              required: true,
+              message: "请输入用户昵称",
+              trigger: "blur"
+            }],
+            width: 100
           },
           {
             label: "所属角色",
@@ -213,72 +271,23 @@ export default {
               required: true,
               message: "请选择所属角色",
               trigger: "click"
-            }]
+            }],
+            overHidden: true,
+            width: 150,
           },
           {
             label: "性别",
             prop: "gender",
             type: "select",
-            dicData: [
-              {
-                label: "男",
-                value: 1
-              },
-              {
-                label: "女",
-                value: 2
-              },
-              {
-                label: "未知",
-                value: 0
-              }
-            ],
+            align: "center",
+            dicData: gender,
+            width: 50,
           },
           {
             label: "描述",
             prop: "description",
             span: 24
           },
-          {
-            label: "电话",
-            prop: "phone",
-          },
-          {
-            label: "邮箱",
-            prop: "email",
-            overHidden: true
-          },
-          {
-            label: '密码',
-            prop: 'password',
-            hide: true,
-            editDisplay: false,
-            viewDisplay: false,
-            rules: [{required: true, validator: validatePass, trigger: 'blur'}]
-          },
-          {
-            label: '确认密码',
-            prop: 'password2',
-            hide: true,
-            editDisplay: false,
-            viewDisplay: false,
-            rules: [{required: true, validator: validatePass2, trigger: 'blur'}]
-          },
-          {
-            label: "用户姓名",
-            prop: "realName",
-            rules: [{
-              required: true,
-              message: "请输入用户姓名",
-              trigger: "blur"
-            }]
-          },
-          {
-            label: "账号状态",
-            prop: "status",
-            hide: true,
-            display: false
-          }
         ]
       },
       data: [],
@@ -320,13 +329,6 @@ export default {
         delBtn: this.vaildData(this.permission.user_delete, false),
         editBtn: this.vaildData(this.permission.user_edit, false)
       };
-    },
-    ids() {
-      let ids = [];
-      this.selectionList.forEach(ele => {
-        ids.push(ele.id);
-      });
-      return ids.join(",");
     },
     selectionUserIdList() {
       let userIdList = [];
@@ -380,12 +382,10 @@ export default {
       });
     },
     rowSave(row, done, loading) {
-      row.deptId = row.deptId.join(",");
-      row.roleId = row.roleId.join(",");
-      row.postId = row.postId.join(",");
-      add(row).then(() => {
+      row.clientId = this.userRequest.clientId;
+      insertUser(row).then(() => {
         done();
-        this.onLoad(this.page);
+        this.onLoad();
         this.$message({
           type: "success",
           message: "操作成功!"
@@ -396,12 +396,9 @@ export default {
       });
     },
     rowUpdate(row, index, done, loading) {
-      row.deptId = row.deptId.join(",");
-      row.roleId = row.roleId.join(",");
-      row.postId = row.postId.join(",");
-      update(row).then(() => {
+      updateUser(row).then(() => {
         done();
-        this.onLoad(this.page);
+        this.onLoad();
         this.$message({
           type: "success",
           message: "操作成功!"
@@ -418,10 +415,10 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(row.id);
+          return deleteUser(row.userId);
         })
         .then(() => {
-          this.onLoad(this.page);
+          this.onLoad();
           this.$message({
             type: "success",
             message: "操作成功!"
@@ -452,7 +449,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return remove(this.ids);
+          return deleteUserList(this.selectionUserIdList);
         })
         .then(() => {
           this.onLoad(this.page);
@@ -474,7 +471,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return resetPassword(this.ids);
+          return resetPassword(this.selectionUserIdList);
         })
         .then(() => {
           this.$message({
@@ -513,7 +510,7 @@ export default {
         cancelButtonText: "取消",
         type: "warning"
       }).then(() => {
-        window.open(`/api/blade-user/export-user?blade-auth=${getToken()}&account=${this.search.account}&realName=${this.search.realName}`);
+        window.open(`/api/blade-user/export-user?blade-auth=${getToken()}`);
       });
     },
     handleTemplate() {
