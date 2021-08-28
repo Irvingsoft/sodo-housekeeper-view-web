@@ -519,6 +519,7 @@ export default {
     beforeOpen(done, type) {
       if (["edit", "view"].includes(type)) {
         getUserInfoDetail(this.form.userId).then(res => {
+          // TODO 属性清空
           this.form = res.data.data;
         });
       }
