@@ -10,11 +10,11 @@ import store from '@/store/';
 import router from '@/router/router'
 import {getSignature, serialize, uuid} from '@/util/util'
 import {getToken} from '@/util/auth'
-import {Message} from 'element-ui'
 import website from '@/config/website';
 import NProgress from 'nprogress' // progress bar
 import 'nprogress/nprogress.css' // progress bar style
 import auth from "@/store/modules/auth";
+import {message} from "../../public/util/resetMessage";
 
 axios.defaults.timeout = 10000;
 //返回其他状态吗
@@ -61,18 +61,19 @@ axios.interceptors.response.use(res => {
   NProgress.done();
   const status = res.data.code || res.status || 200
   const statusWhiteList = website.statusWhiteList || [];
-  const message = res.data.detail || res.data.description || "服务器走丢了，正在紧急找回！";
+  const messageContent = res.data.detail || res.data.description || "服务器走丢了，正在紧急找回！";
   //如果在白名单里则自行catch逻辑处理
   if (statusWhiteList.includes(status)) return Promise.reject(res);
   //如果是401则跳转到登录页面
   if (status === 401 || status === 402) store.dispatch('FedLogOut').then(() => router.push({path: '/login'}));
   // 如果请求为非200否者默认统一处理
   if (status !== 200) {
-    Message({
-      message: message,
-      type: 'error'
+    message({
+      message: messageContent,
+      type: 'error',
+      showClose: true
     })
-    return Promise.reject(new Error(message))
+    return Promise.reject(new Error(messageContent))
   }
   return res;
 }, error => {

@@ -56,7 +56,7 @@
         <el-col :span="8">
           <div class="login-code">
             <img alt="图形验证码" :src="authForm.captchaImage.content" class="login-code-img"
-                 @click="refreshCode();refreshPublicKey()"/>
+                 @click="refreshCode();"/>
           </div>
         </el-col>
       </el-row>
@@ -127,9 +127,6 @@ export default {
   },
   created() {
     this.refreshCode();
-    this.refreshPublicKey();
-  },
-  mounted() {
   },
   computed: {
     ...mapGetters(["tagWel"])
@@ -138,8 +135,8 @@ export default {
   methods: {
     refreshCode() {
       getCaptcha().then(res => {
-        // this.loginForm.key = data.key;
         this.authForm.captchaImage = res.data.data;
+        this.refreshPublicKey();
       })
     },
     refreshPublicKey() {
@@ -174,7 +171,6 @@ export default {
             });
           } else {
             this.refreshCode();
-            this.refreshPublicKey();
           }
         }
       });

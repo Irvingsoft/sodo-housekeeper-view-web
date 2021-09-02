@@ -47,8 +47,11 @@
                        plain
                        @click="handleDelete">删 除
             </el-button>
-            <el-button size="small"
-                       icon="el-icon-delete"
+            <el-button type="info"
+                       size="small"
+                       icon="el-icon-user"
+                       plain
+                       v-if="permission.role_delete"
                        @click="handleRole"
                        plain>权限设置
             </el-button>
@@ -110,8 +113,6 @@ export default {
         content: "",
       },
       option: {
-        searchShow: true,
-        searchMenuSpan: 6,
         tip: false,
         tree: true,
         border: true,
@@ -120,9 +121,10 @@ export default {
         viewBtn: true,
         addBtn: false,
         menuWidth: 300,
+        calcHeight: 210,
         column: [
           {
-            label: "角色名称",
+            label: "名称",
             prop: "name",
             width: 180,
             rules: [
@@ -134,7 +136,7 @@ export default {
             ]
           },
           {
-            label: "角色代码",
+            label: "代码",
             prop: "code",
             width: 150,
             rules: [
@@ -146,7 +148,7 @@ export default {
             ]
           },
           {
-            label: "角色描述",
+            label: "描述",
             prop: "description",
             width: 180,
           },
@@ -163,7 +165,7 @@ export default {
             dicData: [],
           },
           {
-            label: "角色排序",
+            label: "排序",
             prop: "sort",
             type: "number",
             rules: [

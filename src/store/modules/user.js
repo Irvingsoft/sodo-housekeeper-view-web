@@ -9,17 +9,17 @@ import {
 
 
 function addPath(ele, first) {
-  const menu = website.menu;
-  const propsConfig = menu.props;
-  const propsDefault = {
+  let menu = website.menu;
+  let propsConfig = menu.props;
+  let propsDefault = {
     label: propsConfig.label || 'name',
     path: propsConfig.path || 'path',
     icon: propsConfig.icon || 'icon',
     children: propsConfig.children || 'children'
   };
-  const icon = ele[propsDefault.icon];
+  let icon = ele[propsDefault.icon];
   ele[propsDefault.icon] = validatenull(icon) ? menu.iconDefault : icon;
-  const isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
+  let isChild = ele[propsDefault.children] && ele[propsDefault.children].length !== 0;
   if (!isChild) ele[propsDefault.children] = [];
   if (!isChild && first && !isURL(ele[propsDefault.path])) {
     ele[propsDefault.path] = ele[propsDefault.path] + '/index'
@@ -31,7 +31,7 @@ function addPath(ele, first) {
 
 }
 
-const user = {
+let user = {
   state: {
     userInfo: getStore({name: 'userInfo'}) || [],
     permission: getStore({name: 'permission'}) || {},
@@ -53,7 +53,7 @@ const user = {
     GetTopMenu() {
       return new Promise(resolve => {
         top().then((res) => {
-          const data = res.data.data || []
+          let data = res.data.data || []
           resolve(data)
         })
       })
@@ -62,7 +62,7 @@ const user = {
     GetRoute({commit, dispatch}) {
       return new Promise(resolve => {
         route().then((res) => {
-          const data = res.data.data
+          let data = res.data.data
           let menu = deepClone(data);
           menu.forEach(ele => {
             addPath(ele, true);
@@ -77,7 +77,7 @@ const user = {
     GetButton({commit}) {
       return new Promise((resolve) => {
         button().then(res => {
-          const data = res.data.data;
+          let data = res.data.data;
           commit('SET_PERMISSION', data);
           resolve(data);
         })
@@ -122,15 +122,14 @@ const user = {
       function getCode(list) {
         list.forEach(ele => {
           if (typeof (ele) === 'object') {
-            const children = ele.children;
-            const code = ele.code;
+            let children = ele.children;
+            let code = ele.code;
             if (children && children.length !== 0) {
               getCode(children)
             } else {
               result.push(code);
             }
           }
-
         })
       }
 
