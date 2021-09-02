@@ -1,12 +1,12 @@
 <template>
   <basic-container>
-    <avue-crud :option="option"
-               :table-loading="loading"
-               :data="data"
-               ref="crud"
+    <avue-crud ref="crud"
                v-model="form"
+               :data="data"
+               :option="option"
                :page.sync="page"
                :permission="permissionList"
+               :table-loading="loading"
                @row-del="rowDel"
                @search-change="searchChange"
                @search-reset="searchReset"
@@ -16,30 +16,30 @@
                @refresh-change="refreshChange"
                @on-load="onLoad">
       <template slot="menuLeft">
-        <el-button type="danger"
-                   size="small"
-                   icon="el-icon-delete"
+        <el-button icon="el-icon-delete"
                    plain
+                   size="small"
+                   type="danger"
                    @click="handleDelete">删 除
         </el-button>
       </template>
-      <template slot-scope="scope" slot="menu">
+      <template slot="menu" slot-scope="scope">
         <el-button
-          type="text"
           icon="el-icon-edit-outline"
           size="small"
+          type="text"
           @click.stop="handleDesign(scope.row.name)"
         >设计
         </el-button>
         <el-button
-          type="text"
           icon="el-icon-view"
           size="small"
+          type="text"
           @click.stop="handlePreview(scope.row.name)"
         >预览
         </el-button>
       </template>
-      <template slot-scope="{row}" slot="name">
+      <template slot="name" slot-scope="{row}">
         <el-tag style="cursor:pointer" @click="handlePreview(row.name)">{{ row.name }}</el-tag>
       </template>
     </avue-crud>

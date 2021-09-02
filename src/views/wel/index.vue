@@ -3,37 +3,37 @@
     <basic-container>
       <third-register></third-register>
       <p style="text-align: center;">
-        <img src="https://img.shields.io/badge/Release-V3.0.3-green.svg" alt="Downloads"/>
-        <img src="https://img.shields.io/badge/JDK-1.8+-green.svg" alt="Build Status"/>
-        <img src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg" alt="Coverage Status"/>
-        <img src="https://img.shields.io/badge/Spring%20Boot-2.4.4.RELEASE-blue.svg" alt="Downloads"/>
-        <a target="_blank" href="https://bladex.vip">
-          <img src="https://img.shields.io/badge/Saber%20Author-Small%20Chill-ff69b4.svg" alt="Downloads"/>
+        <img alt="Downloads" src="https://img.shields.io/badge/Release-V3.0.3-green.svg"/>
+        <img alt="Build Status" src="https://img.shields.io/badge/JDK-1.8+-green.svg"/>
+        <img alt="Coverage Status" src="https://img.shields.io/badge/Spring%20Cloud-2020-blue.svg"/>
+        <img alt="Downloads" src="https://img.shields.io/badge/Spring%20Boot-2.4.4.RELEASE-blue.svg"/>
+        <a href="https://bladex.vip" target="_blank">
+          <img alt="Downloads" src="https://img.shields.io/badge/Saber%20Author-Small%20Chill-ff69b4.svg"/>
         </a>
-        <a target="_blank" href="https://bladex.vip">
-          <img src="https://img.shields.io/badge/Copyright%20-@BladeX-%23ff3f59.svg" alt="Downloads"/>
+        <a href="https://bladex.vip" target="_blank">
+          <img alt="Downloads" src="https://img.shields.io/badge/Copyright%20-@BladeX-%23ff3f59.svg"/>
         </a>
       </p>
     </basic-container>
     <el-col :span="16">
       <basic-container>
         <el-collapse v-model="activeNames" @change="handleChange">
-          <el-collapse-item title="欢迎使用Saber" name="1">
+          <el-collapse-item name="1" title="欢迎使用Saber">
             <div>1.Saber是SpringBlade前端UI系统</div>
             <div>2.对现有的avue2.0、element-ui库进行二次封装</div>
             <div>3.100%兼容原生element-ui库</div>
             <div>4.基于json驱动的模块配置，打造最好用的vuejs中后台脚手架</div>
             <div>5.使用Saber可以大幅度提升开发效率，不再为重复工作发愁</div>
           </el-collapse-item>
-          <el-collapse-item title="什么是BladeX" name="2">
+          <el-collapse-item name="2" title="什么是BladeX">
             <div>1.BladeX是一款精心设计的微服务架构，提供 SpringCloud 全套解决方案</div>
             <div>2.开源中国首批完美集成 SpringCloud Alibaba 系列组件的微服务架构</div>
             <div>3.基于稳定生产的商业项目升级优化而来，更加贴近企业级的需求</div>
             <div>4.追求企业开发更加高效，部署更加方便，生产更加稳定</div>
             <div>5.GVP-码云最有价值开源项目</div>
-            <div>6.BladeX授权地址:<a target="_blank" href="https://bladex.vip/#/vip">点击授权</a></div>
+            <div>6.BladeX授权地址:<a href="https://bladex.vip/#/vip" target="_blank">点击授权</a></div>
           </el-collapse-item>
-          <el-collapse-item title="为何需要BladeX" name="3">
+          <el-collapse-item name="3" title="为何需要BladeX">
             <div>1.经历过较长的线上生产，积累了很多企业痛点的解决方案</div>
             <div>2.一套代码兼容MySql、Oracle、PostgreSQL，适应企业各种不同场景的需求</div>
             <div>3.集成了很多企业急切所需的例如多租户、Oauth2授权认证、工作流、分布式事务等等功能</div>
@@ -43,7 +43,7 @@
             <div>7.同时提供SpringCloud版本和SpringBoot版本，两个版本的api可以与Sword和Saber无缝对接，为小型项目至大型项目保驾护航</div>
             <div>8.授权购买即永久，源码没有混淆，完全开放，后续升级完全免费。企业只需花很少的钱即可获得一整套成熟的解决方案，你还在等什么？</div>
           </el-collapse-item>
-          <el-collapse-item title="拥有的核心功能" name="4">
+          <el-collapse-item name="4" title="拥有的核心功能">
             <div>1.前后端分离-采用前后端分离模式，前端提供两套架构，Sword基于React，Saber基于Vue</div>
             <div>2. 分布式单体式后端架构-提供两套后端架构，基于SpringCloud的分布式架构以及基于SpringBoot的单体式架构</div>
             <div>3.API完全兼容-两套后端架构与两套前端架构，共四套架构可以任意组合，所有API完全兼容</div>
@@ -70,7 +70,7 @@
             <div>24.Seata分布式事务-定制集成Seata，支持分布式事务，无代码侵入，不失灵活与简洁</div>
             <div>25.未完待续...</div>
           </el-collapse-item>
-          <el-collapse-item title="软件定制开发合作" name="5">
+          <el-collapse-item name="5" title="软件定制开发合作">
             <div>1.接BladeX系列架构的定制服务</div>
             <div>2.接3个月以内工期的react、vue、springboot、springcloud、app、小程序等软件定制服务</div>
             <div>3.有意向请联系唯一指定QQ:1272154962</div>
@@ -103,21 +103,21 @@
             <span>获取文档</span>
             <el-divider direction="vertical"/>
             <span class="tag-group">
-                <el-tag type="success" style="cursor: pointer"
-                        onclick="window.open('https://sns.bladex.vip/note/view/1.html')">免费版</el-tag>
+                <el-tag onclick="window.open('https://sns.bladex.vip/note/view/1.html')" style="cursor: pointer"
+                        type="success">免费版</el-tag>
                 <el-divider direction="vertical"/>
-                <el-tag type="danger" style="cursor: pointer"
-                        onclick="window.open('https://www.kancloud.cn/@smallchill')">收费版</el-tag>
+                <el-tag onclick="window.open('https://www.kancloud.cn/@smallchill')" style="cursor: pointer"
+                        type="danger">收费版</el-tag>
               </span>
             <el-divider content-position="right"><i class="el-icon-star-off"/></el-divider>
             <span>获取源码</span>
             <el-divider direction="vertical"/>
             <span class="tag-group">
-                <el-tag type="success" effect="dark" style="cursor: pointer"
-                        onclick="window.open('https://gitee.com/smallc/SpringBlade')">开源版</el-tag>
+                <el-tag effect="dark" onclick="window.open('https://gitee.com/smallc/SpringBlade')" style="cursor: pointer"
+                        type="success">开源版</el-tag>
                 <el-divider direction="vertical"/>
-                <el-tag type="danger" effect="dark" style="cursor: pointer"
-                        onclick="window.open('https://bladex.vip/#/vip')">商业版</el-tag>
+                <el-tag effect="dark" onclick="window.open('https://bladex.vip/#/vip')" style="cursor: pointer"
+                        type="danger">商业版</el-tag>
               </span>
           </div>
         </basic-container>
@@ -125,7 +125,7 @@
       <el-row>
         <basic-container>
           <el-collapse v-model="logActiveNames" @change="handleChange">
-            <el-collapse-item title="3.0.3发布 新增kuboard-k8s脚本一键部署方案" name="25">
+            <el-collapse-item name="25" title="3.0.3发布 新增kuboard-k8s脚本一键部署方案">
               <div>1.新增blade-develop的dockerfile</div>
               <div>2.新增blade-develop推送docker配置</div>
               <div>3.新增saber的dockerfile</div>
@@ -134,7 +134,7 @@
               <div>6.优化pom配置适配新版部署方案</div>
               <div>7.优化swagger加载逻辑默认开启knife4j</div>
             </el-collapse-item>
-            <el-collapse-item title="3.0.2.发布 支持Nacos2.0长链接特性" name="24">
+            <el-collapse-item name="24" title="3.0.2.发布 支持Nacos2.0长链接特性">
               <div>1.升级 SpringBoot 至 2.4.4</div>
               <div>2.升级 SpringCloud 至 2020.0.2</div>
               <div>3.升级 AlibabaCloud 至 2.2.5.RELEASE</div>
@@ -148,7 +148,7 @@
               <div>11.修复Feign请求头传递丢失的问题</div>
               <div>12.修复用户管理导出查询功能失效的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="3.0.1.发布 新增Swagger独立网关，优化代码生成" name="23">
+            <el-collapse-item name="23" title="3.0.1.发布 新增Swagger独立网关，优化代码生成">
               <div>1.升级 SpringBoot 至 2.4.2</div>
               <div>2.升级 SpringCloud 至 2020.0.1</div>
               <div>3.升级 Mybatis-Plus 至 3.4.2</div>
@@ -161,7 +161,7 @@
               <div>10.优化Saber个人中心实现以适配最新API</div>
               <div>11.修复Saber菜单图标选择失效的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="3.0.0.发布 架构升级适配SpringCloud2020" name="22">
+            <el-collapse-item name="22" title="3.0.0.发布 架构升级适配SpringCloud2020">
               <div>1.升级 SpringBoot 至 2.4.1</div>
               <div>2.升级 SpringCloud 至 2020.0.0</div>
               <div>3.升级 SpringBootAdmin 至 2.3.1</div>
@@ -180,7 +180,7 @@
               <div>16.优化Gateway全局异常处理器</div>
               <div>17.优化部署脚本</div>
             </el-collapse-item>
-            <el-collapse-item title="2.8.0发布 增加在线报表模块" name="21">
+            <el-collapse-item name="21" title="2.8.0发布 增加在线报表模块">
               <div>1.升级 SpringBoot 至 2.2.11.RELEASE</div>
               <div>2.升级 SpringCloud 至 Hoxton.SR8</div>
               <div>3.升级 AlibabaCloud 至 2.2.3.RELEASE</div>
@@ -198,7 +198,7 @@
               <div>15.优化架构，适配最新版本API</div>
               <div>16.优化部署脚本</div>
             </el-collapse-item>
-            <el-collapse-item title="2.7.3发布 增强多租户功能" name="20">
+            <el-collapse-item name="20" title="2.7.3发布 增强多租户功能">
               <div>1.升级至 SpringCloud Hoxton.SR8</div>
               <div>2.升级至 Mybatis-Plus 3.4.0</div>
               <div>3.重构Mybatis-Plus封装适配最新版</div>
@@ -207,7 +207,7 @@
               <div>6.优化日志模块分页排序</div>
               <div>7.关闭日志模块外置api放行</div>
             </el-collapse-item>
-            <el-collapse-item title="2.7.2发布 集成JustAuth支持第三方登录" name="19">
+            <el-collapse-item name="19" title="2.7.2发布 集成JustAuth支持第三方登录">
               <div>1.升级至 SpringCloud Hoxton.SR7</div>
               <div>2.升级至 SpringBoot 2.2.9.RELEASE</div>
               <div>3.升级至 Seata 1.3.0</div>
@@ -220,7 +220,7 @@
               <div>10.修复菜单列表API报空指针的问题</div>
               <div>11.修复角色配置数据量较大导致失败的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.7.1发布 增加行政区划管理，支持seata1.2" name="18">
+            <el-collapse-item name="18" title="2.7.1发布 增加行政区划管理，支持seata1.2">
               <div>1.升级至 SpringCloud Hoxton.SR5</div>
               <div>2.升级至 SpringBoot 2.2.7.RELEASE</div>
               <div>3.升级至 Seata 1.2.0</div>
@@ -234,7 +234,7 @@
               <div>11.优化代码生成模板，支持最新版Saber结构</div>
               <div>12.修复Log模块在多线程、异步场景下报错的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.7.0发布 内核全面升级，增加岗位管理，用户导入导出" name="17">
+            <el-collapse-item name="17" title="2.7.0发布 内核全面升级，增加岗位管理，用户导入导出">
               <div>1.升级至 SpringCloud Hoxton.SR3</div>
               <div>2.升级至 SpringBoot 2.2.6.RELEASE</div>
               <div>3.升级至 Avue 2.5.0</div>
@@ -246,7 +246,7 @@
               <div>9.优化鉴权逻辑，支持header以及parameter两种方式</div>
               <div>10.优化代码生成模板以支持最新版API</div>
             </el-collapse-item>
-            <el-collapse-item title="2.6.2发布 升级支持seata1.1 支持阿里云oss" name="16">
+            <el-collapse-item name="16" title="2.6.2发布 升级支持seata1.1 支持阿里云oss">
               <div>1.升级SpringBoot 2.2.5.RELEASE</div>
               <div>2.升级SpringCloud Hoxton.SR2</div>
               <div>3.升级Seata 1.1.0</div>
@@ -254,7 +254,7 @@
               <div>5.优化BladeFeignTargeter的加载逻辑</div>
               <div>6.优化系统配置</div>
             </el-collapse-item>
-            <el-collapse-item title="2.6.1发布 增加登陆验证码 支持seata1.0" name="15">
+            <el-collapse-item name="15" title="2.6.1发布 增加登陆验证码 支持seata1.0">
               <div>1.升级SpringBoot 2.2.4.RELEASE</div>
               <div>2.升级Alibaba Cloud 2.2.0.RELEASE</div>
               <div>3.升级Mybatis-Plus 3.3.1</div>
@@ -264,7 +264,7 @@
               <div>7.增加Condition类getQueryWrapper自定义排除参数的入口</div>
               <div>8.优化Seata封装，完美支持1.0.0版本</div>
             </el-collapse-item>
-            <el-collapse-item title="2.6.0发布 升级Hoxton.SR1 适配最新架构" name="14">
+            <el-collapse-item name="14" title="2.6.0发布 升级Hoxton.SR1 适配最新架构">
               <div>1.升级SpringCloud Hoxton.SR1</div>
               <div>2.升级SpringBoot 2.2.2.RELEASE</div>
               <div>3.升级Alibaba Cloud 2.1.1.RELEASE</div>
@@ -275,7 +275,7 @@
               <div>8.修复blade-resource无法进行docker打包的问题</div>
               <div>9.修复blade-demo没有配置LauncherService导致启动失败的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.5.4发布 增加多数据源示例工程" name="13">
+            <el-collapse-item name="13" title="2.5.4发布 增加多数据源示例工程">
               <div>1.增加示例工程，增加多种常见场景的解决方案</div>
               <div>2.增加不同包名运行的示例</div>
               <div>3.增加多数据源调用运行的示例</div>
@@ -284,39 +284,39 @@
               <div>6.修复Condition类没有过滤分页字段的问题</div>
               <div>7.拆分CommonConstant出LauncherConstant</div>
             </el-collapse-item>
-            <el-collapse-item title="2.5.3发布 集成分布式链路追踪" name="12">
+            <el-collapse-item name="12" title="2.5.3发布 集成分布式链路追踪">
               <div>1.封装集成zipkin，支持分布式链路追踪</div>
               <div>2.seata升级至0.9.0，解决部分分布式事务遇到的bug</div>
               <div>3.springboot版本升级至2.1.9</div>
             </el-collapse-item>
-            <el-collapse-item title="2.5.2发布 增加个人中心" name="11">
+            <el-collapse-item name="11" title="2.5.2发布 增加个人中心">
               <div>1.增加个人中心，支持用户信息自定义修改</div>
               <div>2.增加网关鉴权配置示例</div>
               <div>3.token的SIGN_KEY修改为一致</div>
               <div>4.admin模块增加对seata服务的过滤</div>
               <div>5.blade-tool增加部分工具类方法</div>
             </el-collapse-item>
-            <el-collapse-item title="2.5.1发布 增加动态网关鉴权" name="10">
+            <el-collapse-item name="10" title="2.5.1发布 增加动态网关鉴权">
               <div>1.增加网关动态鉴权</div>
               <div>2.secure安全模块token校验默认关闭，交由网关处理</div>
               <div>3.boot版本开启secure token校验功能</div>
               <div>4.优化blade-gateway代码逻辑</div>
               <div>5.修复blade-resource无法启动的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.5.0发布 集成seata支持分布式事务" name="9">
+            <el-collapse-item name="9" title="2.5.0发布 集成seata支持分布式事务">
               <div>1.封装集成seata，支持分布式事务</div>
               <div>2.重写blade-core-cloud模块，增强cloud场景支持</div>
               <div>3.增加hystrix自动fallback功能</div>
               <div>4.升级springboot至2.1.8.RELEASE</div>
               <div>5.升级springcloud至Greenwich.SR3</div>
             </el-collapse-item>
-            <el-collapse-item title="2.4.1发布 代码生成增加多数据源，强化代码生成功能" name="8">
+            <el-collapse-item name="8" title="2.4.1发布 代码生成增加多数据源，强化代码生成功能">
               <div>1.升级SpringBoot至2.1.7</div>
               <div>2.代码生成增加多数据源配置</div>
               <div>3.增强代码生成功能，支持可选基础业务、包装器配置</div>
               <div>4.优化代码生成模板</div>
             </el-collapse-item>
-            <el-collapse-item title="2.4.0发布 升级AlibabaCloud毕业版本" name="7">
+            <el-collapse-item name="7" title="2.4.0发布 升级AlibabaCloud毕业版本">
               <div>1.升级AlibabaCloud毕业版本</div>
               <div>2.升级支持Naocs 1.1.0、Sentinel 1.6.3</div>
               <div>3.租户系统的tenantCode统一更改为tenantId</div>
@@ -324,7 +324,7 @@
               <div>5.优化mybatis-plus新版配置</div>
               <div>6.修复排序字段sql注入问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.3.3发布 重构令牌逻辑, 增强令牌功能" name="6">
+            <el-collapse-item name="6" title="2.3.3发布 重构令牌逻辑, 增强令牌功能">
               <div>1.重构令牌发放逻辑，可自定义令牌类型，增强可拓展性</div>
               <div>2.增加动态配置token过期时间、令牌续期功能</div>
               <div>3.增加GateWay动态聚合文档功能，简化配置</div>
@@ -336,7 +336,7 @@
               <div>9.修复排序字段可能导致的sql注入问题</div>
               <div>10.修复部分缓存清除失效的问题</div>
             </el-collapse-item>
-            <el-collapse-item title="2.3.2发布 增加 OSS 封装及单元测试封装" name="5">
+            <el-collapse-item name="5" title="2.3.2发布 增加 OSS 封装及单元测试封装">
               <div>1.增加七牛云oss-starter</div>
               <div>2.增加blade-resource模块，对外提供服务，支持分布式下的oss场景</div>
               <div>3.LauncherService增加排序功能</div>
@@ -344,7 +344,7 @@
               <div>5.增加指定启动参数的单元测试demo</div>
               <div>6.优化docker脚本配置</div>
             </el-collapse-item>
-            <el-collapse-item title="2.3.1发布 升级业务架构" name="4">
+            <el-collapse-item name="4" title="2.3.1发布 升级业务架构">
               <div>1.升级 SpringBoot 2.1.5</div>
               <div>2.前端框架Saber升级 element-ui 2.8.2</div>
               <div>3.Saber业务代码升级</div>
@@ -354,7 +354,7 @@
               <div>7.BaseEntity放开主键限制，子类可自定义主键类型</div>
               <div>8.XssFilter增加放行配置，可配置放行微信api接口</div>
             </el-collapse-item>
-            <el-collapse-item title="2.3.0发布 升级SpringCloud Greenwich与SpringBoot" name="3">
+            <el-collapse-item name="3" title="2.3.0发布 升级SpringCloud Greenwich与SpringBoot">
               <div>1.升级 SpringCloud Greenwich</div>
               <div>2.升级 SpringCloud Alibaba 组件版本为0.9.0.RELEASE，支持最新版本的nacos与sentinel</div>
               <div>3.升级 SpringBoot 2.1.4</div>
@@ -365,14 +365,14 @@
               <div>8.修复请求日志打印插件部分格式空指针的问题</div>
               <div>9.降低nacos心跳日志等级，关闭心跳日志显示</div>
             </el-collapse-item>
-            <el-collapse-item title="2.2.0发布 升级为多终端令牌认证系统" name="2">
+            <el-collapse-item name="2" title="2.2.0发布 升级为多终端令牌认证系统">
               <div>1.增加多终端令牌认证系统</div>
               <div>2.增加多租户开关</div>
               <div>3.修复部分模块没有筛选已删除的问题</div>
               <div>4.调整角色分配会越权的问题</div>
               <div>5.优化部署脚本</div>
             </el-collapse-item>
-            <el-collapse-item title="2.1.0发布 升级为SaaS多租户系统" name="1">
+            <el-collapse-item name="1" title="2.1.0发布 升级为SaaS多租户系统">
               <div>1.升级为SaaS多租户系统</div>
               <div>2.优化代码生成逻辑</div>
               <div>3.代码生成增加菜单sql</div>
@@ -380,7 +380,7 @@
               <div>5.优化部署脚本，增加前端部署实例</div>
               <div>6.增加父子角色过滤，使得角色无法越权配置</div>
             </el-collapse-item>
-            <el-collapse-item title="2.0.0发布 全面升级为SpringCloud微服务架构" name="0">
+            <el-collapse-item name="0" title="2.0.0发布 全面升级为SpringCloud微服务架构">
               <div>1.SpringBlade 2.0 是由一个商业级项目升级优化而来的SpringCloud微服务架构，采用Java8 API重构了业务代码，完全遵循阿里巴巴编码规范</div>
               <div>2.采用Spring Boot 2 、Spring Cloud Greenwich 、Mybatis 等核心技术，用于快速搭建企业级的微服务系统平台</div>
               <div>3.SpringBlade 致力于创造新颖的开发模式，将开发中遇到的痛点、生产中所踩的坑整理归纳，并将解决方案都融合到框架中</div>
@@ -393,36 +393,36 @@
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
+import {mapGetters} from "vuex";
 
-  export default {
-    name: "wel",
-    data() {
-      return {
-        activeNames: ['1', '2', '3', '5'],
-        logActiveNames: ['25']
-      };
-    },
-    computed: {
-      ...mapGetters(["userInfo"]),
-    },
-    created() {
-    },
-    methods: {
-      handleChange(val) {
-        console.log(val);
-      }
+export default {
+  name: "wel",
+  data() {
+    return {
+      activeNames: ['1', '2', '3', '5'],
+      logActiveNames: ['25']
+    };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
+  created() {
+  },
+  methods: {
+    handleChange(val) {
+      console.log(val);
     }
-  };
+  }
+};
 </script>
 
 <style>
-  .el-divider--horizontal {
-    margin: 12px 0 !important;
-  }
+.el-divider--horizontal {
+  margin: 12px 0 !important;
+}
 
-  .el-font-size {
-    font-size: 14px;
-  }
+.el-font-size {
+  font-size: 14px;
+}
 </style>
 

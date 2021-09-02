@@ -4,12 +4,12 @@
              mode="horizontal"
              text-color="#333">
       <template v-for="(item,index) in items">
-        <el-menu-item :index="item.parentId+''"
-                      @click.native="openMenu(item)"
-                      :key="index">
+        <el-menu-item :key="index"
+                      :index="item.parentId+''"
+                      @click.native="openMenu(item)">
           <template slot="title">
             <i :class="item.icon"></i>
-            <span>{{generateTitle(item)}}</span>
+            <span>{{ generateTitle(item) }}</span>
           </template>
         </el-menu-item>
       </template>
@@ -18,7 +18,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   name: "top-menu",
   data() {

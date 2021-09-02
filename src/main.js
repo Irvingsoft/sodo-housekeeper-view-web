@@ -8,11 +8,8 @@ import './error'; // 日志
 import store from './store';
 import {loadStyle} from './util/util'
 import * as urls from '@/config/env';
+import {iconfontUrl, iconfontVersion} from '@/config/env';
 import Element from 'element-ui';
-import {
-  iconfontUrl,
-  iconfontVersion
-} from '@/config/env';
 import i18n from './lang' // Internationalization
 import './styles/common.scss';
 import './iconfont'

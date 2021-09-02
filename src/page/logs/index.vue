@@ -2,31 +2,35 @@
   <avue-crud :data="logsList"
              :option="option">
     <template slot="menuLeft">
-      <el-button type="primary"
+      <el-button icon="el-icon-upload"
                  size="small"
-                 icon="el-icon-upload"
-                 @click="send">上传服务器</el-button>
-      <el-button type="danger"
+                 type="primary"
+                 @click="send">上传服务器
+      </el-button>
+      <el-button icon="el-icon-delete"
                  size="small"
-                 icon="el-icon-delete"
-                 @click="clear">清空本地日志</el-button>
+                 type="danger"
+                 @click="clear">清空本地日志
+      </el-button>
     </template>
-    <template slot-scope="scope"
-              slot="type">
-      <el-tag type="danger"
-              size="small">{{scope.label}}</el-tag>
+    <template slot="type"
+              slot-scope="scope">
+      <el-tag size="small"
+              type="danger">{{ scope.label }}
+      </el-tag>
     </template>
-    <template slot-scope="props"
-              slot="expand">
+    <template slot="expand"
+              slot-scope="props">
       <pre class="code">
-        {{props.row.stack}}
+        {{ props.row.stack }}
       </pre>
     </template>
   </avue-crud>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   name: "errLogs",
   data() {
@@ -79,8 +83,10 @@ export default {
       }
     };
   },
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   computed: {
     ...mapGetters(["logsList"])
   },
@@ -101,7 +107,8 @@ export default {
             });
           });
         })
-        .catch(() => {});
+        .catch(() => {
+        });
     },
     clear() {
       this.$confirm("确定清空本地日志记录?", "提示", {
@@ -118,7 +125,8 @@ export default {
             message: "清空成功!"
           });
         })
-        .catch(() => {});
+        .catch(() => {
+        });
     }
   }
 };

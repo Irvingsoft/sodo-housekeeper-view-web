@@ -2,12 +2,12 @@
   <basic-container>
     <el-form :inline="true" label-width="60px">
       <el-row>
-        <el-col :xs="24" :sm="12" :md="5">
+        <el-col :md="5" :sm="12" :xs="24">
           <el-form-item label="关键字">
-            <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
+            <el-input v-model="pageRequest.content" clearable placeholder="请输入关键字"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="5">
+        <el-col :md="5" :sm="12" :xs="24">
           <el-form-item label="客户端">
             <el-select v-model="pageRequest.clientId" placeholder="请选择客户端">
               <el-option label="全部" value=""></el-option>
@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="5">
+        <el-col :md="5" :sm="12" :xs="24">
           <el-form-item label="方法">
             <el-select v-model="pageRequest.method" placeholder="请选择方法">
               <el-option label="全部" value=""></el-option>
@@ -24,7 +24,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="12" :md="5">
+        <el-col :md="5" :sm="12" :xs="24">
           <el-form-item label="服务">
             <el-select v-model="pageRequest.service" placeholder="请选择服务">
               <el-option label="全部" value=""></el-option>
@@ -32,7 +32,7 @@
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :xs="24" :sm="24" :md="4">
+        <el-col :md="4" :sm="24" :xs="24">
           <el-col :span="20">
             <el-form-item>
               <el-button type="primary" @click="searchChange">查询</el-button>
@@ -48,8 +48,8 @@
       </el-row>
       <el-collapse-transition>
         <el-row v-if="!status.fold">
-          <el-col :xs="24" :sm="12" :md="5">
-            <el-form-item label="启用" class="foldItemFirst">
+          <el-col :md="5" :sm="12" :xs="24">
+            <el-form-item class="foldItemFirst" label="启用">
               <el-radio-group v-model="pageRequest.inUse">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -57,8 +57,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="5">
-            <el-form-item label="认证" class="foldItem">
+          <el-col :md="5" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="认证">
               <el-radio-group v-model="pageRequest.auth">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -66,8 +66,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="5">
-            <el-form-item label="日志" class="foldItem">
+          <el-col :md="5" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="日志">
               <el-radio-group v-model="pageRequest.log">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -75,8 +75,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="5">
-            <el-form-item label="限流" class="foldItem">
+          <el-col :md="5" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="限流">
               <el-radio-group v-model="pageRequest.requestLimit">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -87,28 +87,28 @@
         </el-row>
       </el-collapse-transition>
     </el-form>
-    <avue-crud :option="option"
-               :table-loading="loading"
-               :data="data.records"
-               :page="data"
-               @row-del="rowDel"
+    <avue-crud ref="crud"
                v-model="form"
-               ref="crud"
+               :before-open="beforeOpen"
+               :data="data.records"
+               :option="option"
+               :page="data"
                :permission="permissionList"
+               :table-loading="loading"
+               @row-del="rowDel"
                @row-update="rowUpdate"
                @row-save="rowSave"
-               :before-open="beforeOpen"
                @selection-change="selectionChange"
                @current-change="currentChange"
                @size-change="sizeChange"
                @on-load="onLoad"
                @refresh-change="onLoad">
       <template slot="menuLeft">
-        <el-button type="danger"
-                   size="small"
+        <el-button v-if="permission.api_delete"
                    icon="el-icon-delete"
                    plain
-                   v-if="permission.api_delete"
+                   size="small"
+                   type="danger"
                    @click="handleDelete">删 除
         </el-button>
       </template>
@@ -123,34 +123,34 @@
         </el-tag>
       </template>
       <template slot="inUse" slot-scope="{row}">
-        <svg v-if="row.inUse" class="icon" aria-hidden="true">
+        <svg v-if="row.inUse" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="auth" slot-scope="{row}">
-        <svg v-if="row.auth" class="icon" aria-hidden="true">
+        <svg v-if="row.auth" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="log" slot-scope="{row}">
-        <svg v-if="row.log" class="icon" aria-hidden="true">
+        <svg v-if="row.log" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="requestLimit" slot-scope="{row}">
-        <svg v-if="row.requestLimit" class="icon" aria-hidden="true">
+        <svg v-if="row.requestLimit" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
@@ -164,7 +164,8 @@ import service from "@/const/service"
 import {listOauthClientBaseUse} from "@/api/system/client";
 import {mapGetters} from "vuex";
 import {
-  deleteOauthApiList, deleteOauthApi,
+  deleteOauthApi,
+  deleteOauthApiList,
   getOauthApiInfoDetail,
   insertOauthApi,
   pageOauthApiInfo,

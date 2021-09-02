@@ -1,13 +1,13 @@
 <template>
   <div class="lock-container">
     <div class="lock-form animated bounceInDown">
-      <div class="animated"
-           :class="{'shake':passwdError,'bounceOut':pass}">
-        <h3 class="title">{{userInfo.username}}</h3>
-        <el-input placeholder="请输入登录密码"
-                  type="password"
+      <div :class="{'shake':passwdError,'bounceOut':pass}"
+           class="animated">
+        <h3 class="title">{{ userInfo.username }}</h3>
+        <el-input v-model="passwd"
                   class="input-with-select animated"
-                  v-model="passwd"
+                  placeholder="请输入登录密码"
+                  type="password"
                   @keyup.enter.native="handleLogin">
           <el-button slot="append"
                      icon="icon-bofangqi-suoping"
@@ -22,7 +22,8 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
+
 export default {
   name: "lock",
   data() {
@@ -32,8 +33,10 @@ export default {
       pass: false
     };
   },
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   computed: {
     ...mapState({
       userInfo: state => state.user.userInfo
@@ -49,7 +52,7 @@ export default {
         type: "warning"
       }).then(() => {
         this.$store.dispatch("LogOut").then(() => {
-          this.$router.push({ path: "/login" });
+          this.$router.push({path: "/login"});
         });
       });
     },
@@ -70,7 +73,7 @@ export default {
       setTimeout(() => {
         this.$store.commit("CLEAR_LOCK");
         this.$router.push({
-          path: this.$router.$avueRouter.getPath({ src: this.tag.value })
+          path: this.$router.$avueRouter.getPath({src: this.tag.value})
         });
       }, 1000);
     }
@@ -86,11 +89,13 @@ export default {
   align-items: center;
   justify-content: center;
   position: relative;
+
   .title {
     margin-bottom: 8px;
     color: #333;
   }
 }
+
 .lock-container::before {
   z-index: -999;
   content: "";
@@ -102,6 +107,7 @@ export default {
   background-image: url("/img/bg/login.png");
   background-size: cover;
 }
+
 .lock-form {
   width: 300px;
 }

@@ -1,7 +1,7 @@
 import {getStore, setStore} from "@/util/store";
 import {removeToken, setToken} from "@/util/auth";
 import {getEncryptor} from "@/util/util";
-import {authorize, authenticate, insertSignatureKey, logout} from "@/api/auth";
+import {authenticate, authorize, insertSignatureKey, logout} from "@/api/auth";
 
 const auth = {
   state: {

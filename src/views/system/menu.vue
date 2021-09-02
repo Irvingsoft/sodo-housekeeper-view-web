@@ -3,61 +3,61 @@
     <el-tabs v-model="menuRequest.clientId" @tab-click="handleSwitch">
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
-          <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
+          <el-tooltip :content="client.description" class="item" effect="dark" placement="top">
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <el-form :inline="true" label-width="60px">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item label="关键字">
-                <el-input v-model="menuRequest.content" placeholder="请输入关键字" clearable></el-input>
+                <el-input v-model="menuRequest.content" clearable placeholder="请输入关键字"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item>
                 <el-button type="primary" @click="searchChange">查询</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <avue-crud :option="option"
-                   :table-loading="loading"
-                   :data="data"
-                   :ref="client.clientId"
+        <avue-crud :ref="client.clientId"
                    v-model="form"
-                   :permission="permissionList"
                    :before-open="beforeOpen"
+                   :data="data"
+                   :option="option"
+                   :permission="permissionList"
+                   :table-loading="loading"
                    @row-del="rowDel"
                    @row-update="rowUpdate"
                    @row-save="rowSave"
                    @selection-change="selectionChange"
                    @refresh-change="onLoad">
           <template slot="menuLeft">
-            <el-button type="primary"
-                       size="small"
+            <el-button v-if="permission.menu_add"
                        icon="el-icon-plus"
-                       v-if="permission.menu_add"
+                       size="small"
+                       type="primary"
                        @click="handleNew">新增
             </el-button>
-            <el-button type="danger"
-                       size="small"
+            <el-button v-if="permission.menu_delete"
                        icon="el-icon-delete"
-                       v-if="permission.menu_delete"
                        plain
+                       size="small"
+                       type="danger"
                        @click="handleDelete">删 除
             </el-button>
           </template>
-          <template slot-scope="{row}" slot="menu">
+          <template slot="menu" slot-scope="{row}">
             <el-button
-              type="text"
               icon="el-icon-circle-plus-outline"
               size="small"
+              type="text"
               @click.stop="handleAdd(row)">
               新增子项
             </el-button>
           </template>
-          <template slot-scope="{row}" slot="icon">
+          <template slot="icon" slot-scope="{row}">
             <i :class="row.icon"></i>
           </template>
         </avue-crud>
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import {listMenu, treeMenu, insertMenu, deleteMenu, updateMenu, getMenu, deleteMenuList} from "@/api/system/menu";
+import {deleteMenu, deleteMenuList, getMenu, insertMenu, listMenu, treeMenu, updateMenu} from "@/api/system/menu";
 import {mapGetters} from "vuex";
 import iconList from "@/config/iconList";
 import {listOauthClientBaseUse} from "@/api/system/client";

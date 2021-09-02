@@ -3,42 +3,42 @@
     <el-tabs v-model="oauthIpRequest.clientId" @tab-click="handleSwitch">
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
-          <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
+          <el-tooltip :content="client.description" class="item" effect="dark" placement="top">
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <el-form :inline="true" label-width="60px">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="6" :sm="12" :xs="24">
               <el-form-item label="关键字">
-                <el-input v-model="oauthIpRequest.content" placeholder="请输入关键字" clearable></el-input>
+                <el-input v-model="oauthIpRequest.content" clearable placeholder="请输入关键字"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="6" :sm="12" :xs="24">
               <el-form-item>
                 <el-button type="primary" @click="searchChange">查询</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <avue-crud :option="option"
-                   :table-loading="loading"
-                   :data="data.records"
-                   :page="data"
-                   :ref="client.clientId"
+        <avue-crud :ref="client.clientId"
                    v-model="form"
+                   :data="data.records"
+                   :option="option"
+                   :page="data"
                    :permission="permissionList"
+                   :table-loading="loading"
                    @row-del="rowDel"
                    @row-update="rowUpdate"
                    @row-save="rowSave"
                    @selection-change="selectionChange"
                    @refresh-change="onLoad">
           <template slot="menuLeft">
-            <el-button type="danger"
-                       size="small"
+            <el-button v-if="permission.role_delete"
                        icon="el-icon-delete"
-                       v-if="permission.role_delete"
                        plain
+                       size="small"
+                       type="danger"
                        @click="handleDelete">删 除
             </el-button>
           </template>
@@ -51,14 +51,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
-import {
-  deleteOauthIp,
-  deleteOauthIpList,
-  getOauthIpInfo,
-  insertOauthIp,
-  pageOauthIpInfo,
-  updateOauthIp
-} from "@/api/ip/ip";
+import {deleteOauthIp, deleteOauthIpList, insertOauthIp, pageOauthIpInfo, updateOauthIp} from "@/api/ip/ip";
 
 export default {
   data() {

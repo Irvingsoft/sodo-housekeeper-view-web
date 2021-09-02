@@ -3,15 +3,15 @@
     <basic-container>
       <el-tabs v-model="activeName" @tab-click="handleTabClick">
         <el-tab-pane label="个人信息" name="userInfo">
-          <avue-form class="form"
+          <avue-form v-model="userInfoForm"
                      :option="userInfo"
-                     v-model="userInfoForm"
+                     class="form"
                      @submit="submitUserInfo"></avue-form>
         </el-tab-pane>
         <el-tab-pane label="修改密码" name="password">
-          <avue-form class="form"
+          <avue-form v-model="passwordForm"
                      :option="password"
-                     v-model="passwordForm"
+                     class="form"
                      @submit="submitPassword"></avue-form>
         </el-tab-pane>
       </el-tabs>

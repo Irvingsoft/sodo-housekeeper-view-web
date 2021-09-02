@@ -2,46 +2,47 @@
   <div class="menu-wrapper">
     <template v-for="item in menu">
       <el-menu-item v-if="validatenull(item[childrenKey]) && vaildRoles(item)"
-                    :index="item[pathKey]"
-                    @click="open(item)"
                     :key="item[labelKey]"
-                    :class="{'is-active':vaildAvtive(item)}">
+                    :class="{'is-active':vaildAvtive(item)}"
+                    :index="item[pathKey]"
+                    @click="open(item)">
         <i :class="item[iconKey]"></i>
         <span slot="title"
-              :alt="item[pathKey]">{{generateTitle(item)}}</span>
+              :alt="item[pathKey]">{{ generateTitle(item) }}</span>
       </el-menu-item>
       <el-submenu v-else-if="!validatenull(item[childrenKey])&&vaildRoles(item)"
-                  :index="item[pathKey]"
-                  :key="item[labelKey]">
+                  :key="item[labelKey]"
+                  :index="item[pathKey]">
         <template slot="title">
           <i :class="item[iconKey]"></i>
           <span slot="title"
-                :class="{'el-menu--display':collapse && first}">{{generateTitle(item)}}</span>
+                :class="{'el-menu--display':collapse && first}">{{ generateTitle(item) }}</span>
         </template>
         <template v-for="(child,cindex) in item[childrenKey]">
-          <el-menu-item :index="child[pathKey],cindex"
-                        @click="open(child)"
+          <el-menu-item v-if="validatenull(child[childrenKey])"
+                        :key="child[labelKey]"
                         :class="{'is-active':vaildAvtive(child)}"
-                        v-if="validatenull(child[childrenKey])"
-                        :key="child[labelKey]">
+                        :index="child[pathKey],cindex"
+                        @click="open(child)">
             <i :class="child[iconKey]"></i>
-            <span slot="title">{{generateTitle(child)}}</span>
+            <span slot="title">{{ generateTitle(child) }}</span>
           </el-menu-item>
           <sidebar-item v-else
-                        :menu="[child]"
                         :key="cindex"
+                        :collapse="collapse"
+                        :menu="[child]"
                         :props="props"
-                        :screen="screen"
-                        :collapse="collapse"></sidebar-item>
+                        :screen="screen"></sidebar-item>
         </template>
       </el-submenu>
     </template>
   </div>
 </template>
 <script>
-import { mapGetters } from "vuex";
-import { validatenull } from "@/util/validate";
+import {mapGetters} from "vuex";
+import {validatenull} from "@/util/validate";
 import config from "./config.js";
+
 export default {
   name: "sidebarItem",
   data() {
@@ -70,8 +71,10 @@ export default {
       type: Boolean
     }
   },
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   computed: {
     ...mapGetters(["roles"]),
     labelKey() {

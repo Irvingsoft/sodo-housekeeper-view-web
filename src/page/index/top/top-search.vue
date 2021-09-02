@@ -1,9 +1,9 @@
 <template>
-  <el-autocomplete class="top-search"
-                   popper-class="my-autocomplete"
-                   v-model="value"
+  <el-autocomplete v-model="value"
                    :fetch-suggestions="querySearch"
                    :placeholder="$t('search')"
+                   class="top-search"
+                   popper-class="my-autocomplete"
                    @select="handleSelect">
 
     <template slot-scope="{ item }">
@@ -16,7 +16,8 @@
 
 <script>
 import config from "../sidebar/config.js";
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   data() {
     return {
@@ -102,17 +103,20 @@ export default {
   li {
     line-height: normal;
     padding: 7px;
+
     .icon {
       margin-right: 5px;
       display: inline-block;
       vertical-align: middle;
     }
+
     .name {
       display: inline-block;
       text-overflow: ellipsis;
       overflow: hidden;
       vertical-align: middle;
     }
+
     .addr {
       padding-top: 5px;
       width: 100%;

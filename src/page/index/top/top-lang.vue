@@ -4,22 +4,27 @@
     <i class="icon-zhongyingwen"></i>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="language==='zh'"
-                        command="zh">中文</el-dropdown-item>
+                        command="zh">中文
+      </el-dropdown-item>
       <el-dropdown-item :disabled="language==='en'"
-                        command="en">English</el-dropdown-item>
+                        command="en">English
+      </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import {mapGetters} from "vuex";
+
 export default {
   name: "top-lang",
   data() {
     return {};
   },
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   computed: {
     ...mapGetters(["language", "tag"])
   },

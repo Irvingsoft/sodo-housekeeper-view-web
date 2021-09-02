@@ -2,16 +2,16 @@
   <span>
     <i class="icon-suoping"
        @click="handleLock"></i>
-    <el-dialog title="设置锁屏密码"
-               :visible.sync="box"
-               width="30%"
-               append-to-body>
-      <el-form :model="form"
-               ref="form"
+    <el-dialog :visible.sync="box"
+               append-to-body
+               title="设置锁屏密码"
+               width="30%">
+      <el-form ref="form"
+               :model="form"
                label-width="80px">
-        <el-form-item label="锁屏密码"
-                      prop="passwd"
-                      :rules="[{ required: true, message: '锁屏密码不能为空'}]">
+        <el-form-item :rules="[{ required: true, message: '锁屏密码不能为空'}]"
+                      label="锁屏密码"
+                      prop="passwd">
           <el-input v-model="form.passwd"
                     placeholder="请输入锁屏密码"></el-input>
         </el-form-item>
@@ -26,8 +26,9 @@
 </template>
 
 <script>
-import { validatenull } from "@/util/validate";
-import { mapGetters } from "vuex";
+import {validatenull} from "@/util/validate";
+import {mapGetters} from "vuex";
+
 export default {
   name: "top-lock",
   data() {
@@ -38,8 +39,10 @@ export default {
       }
     };
   },
-  created() {},
-  mounted() {},
+  created() {
+  },
+  mounted() {
+  },
   computed: {
     ...mapGetters(["lockPasswd"])
   },
@@ -60,7 +63,7 @@ export default {
       }
       this.$store.commit("SET_LOCK");
       setTimeout(() => {
-        this.$router.push({ path: "/lock" });
+        this.$router.push({path: "/lock"});
       }, 100);
     }
   },

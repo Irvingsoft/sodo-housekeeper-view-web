@@ -3,108 +3,108 @@
     <el-tabs v-model="userRequest.clientId" @tab-click="handleSwitch">
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
-          <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
+          <el-tooltip :content="client.description" class="item" effect="dark" placement="top">
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <el-form :inline="true" label-width="60px">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item label="关键字">
-                <el-input v-model="userRequest.content" placeholder="请输入关键字" clearable></el-input>
+                <el-input v-model="userRequest.content" clearable placeholder="请输入关键字"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item>
                 <el-button type="primary" @click="searchChange">查询</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <avue-crud :option="option"
-                   :table-loading="loading"
-                   :data="data.records"
-                   :page="data"
-                   :ref="client.clientId"
+        <avue-crud :ref="client.clientId"
                    v-model="form"
-                   :permission="permissionList"
                    :before-open="beforeOpen"
+                   :data="data.records"
+                   :option="option"
+                   :page="data"
+                   :permission="permissionList"
+                   :table-loading="loading"
                    @row-del="rowDel"
                    @row-update="rowUpdate"
                    @row-save="rowSave"
                    @selection-change="selectionChange"
                    @refresh-change="onLoad">
           <template slot="menuLeft">
-            <el-button type="danger"
-                       size="small"
+            <el-button v-if="permission.user_delete"
                        icon="el-icon-delete"
                        plain
-                       v-if="permission.user_delete"
+                       size="small"
+                       type="danger"
                        @click="handleDelete">删 除
             </el-button>
-            <el-button type="info"
-                       size="small"
+            <el-button icon="el-icon-user"
                        plain
-                       icon="el-icon-user"
+                       size="small"
+                       type="info"
                        @click="handleGrant">角色配置
             </el-button>
-            <el-button type="primary"
-                       size="small"
-                       plain
-                       v-if="permission.user_reset"
+            <el-button v-if="permission.user_reset"
                        icon="el-icon-refresh"
+                       plain
+                       size="small"
+                       type="primary"
                        @click="handleReset">密码重置
             </el-button>
-            <el-button type="success"
-                       size="small"
+            <el-button icon="el-icon-upload2"
                        plain
-                       icon="el-icon-upload2"
+                       size="small"
+                       type="success"
                        @click="handleImport">导入
             </el-button>
-            <el-button type="warning"
-                       size="small"
+            <el-button icon="el-icon-download"
                        plain
-                       icon="el-icon-download"
+                       size="small"
+                       type="warning"
                        @click="handleExport">导出
             </el-button>
           </template>
-          <template slot-scope="{row}" slot="menu">
+          <template slot="menu" slot-scope="{row}">
             <el-button
-              type="text"
               icon="el-icon-s-promotion"
               size="small"
+              type="text"
               @click.stop="logout(row)">
               下线
             </el-button>
           </template>
           <template slot="status" slot-scope="{row}">
-            <el-tag type="success" effect="dark" v-if="row.status === 0">
+            <el-tag v-if="row.status === 0" effect="dark" type="success">
               正常
             </el-tag>
-            <el-tag type="warning" effect="dark" v-else-if="row.status === 1">
+            <el-tag v-else-if="row.status === 1" effect="dark" type="warning">
               审核
             </el-tag>
-            <el-tag type="error" effect="dark" v-else-if="row.status === 2">
+            <el-tag v-else-if="row.status === 2" effect="dark" type="error">
               冻结
             </el-tag>
-            <el-tag type="info" effect="dark" v-else-if="row.status === -1">
+            <el-tag v-else-if="row.status === -1" effect="dark" type="info">
               注销
             </el-tag>
           </template>
         </avue-crud>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog title="用户角色配置"
+    <el-dialog :visible.sync="roleBox"
                append-to-body
-               :visible.sync="roleBox"
+               title="用户角色配置"
                width="345px">
-      <el-tree :data="roleGrantList"
-               show-checkbox
+      <el-tree ref="treeRole"
+               :data="roleGrantList"
+               :default-checked-keys="roleTreeObj"
+               :props="props"
                default-expand-all
                node-key="id"
-               ref="treeRole"
-               :default-checked-keys="roleTreeObj"
-               :props="props">
+               show-checkbox>
       </el-tree>
       <span slot="footer" class="dialog-footer">
             <el-button @click="roleBox = false">取 消</el-button>
@@ -112,11 +112,11 @@
                        @click="submitRole">确 定</el-button>
         </span>
     </el-dialog>
-    <el-dialog title="用户数据导入"
+    <el-dialog :visible.sync="excelBox"
                append-to-body
-               :visible.sync="excelBox"
+               title="用户数据导入"
                width="555px">
-      <avue-form :option="excelOption" v-model="excelForm" :upload-after="uploadAfter">
+      <avue-form v-model="excelForm" :option="excelOption" :upload-after="uploadAfter">
         <template slot="excelTemplate">
           <el-button type="primary" @click="handleTemplate()">
             点击下载<i class="el-icon-download el-icon--right"></i>
@@ -128,12 +128,7 @@
 </template>
 
 <script>
-import {
-  remove,
-  update,
-  add,
-  resetPassword
-} from "@/api/system/user";
+import {resetPassword} from "@/api/system/user";
 import {mapGetters} from "vuex";
 import {getToken} from '@/util/auth';
 import {treeRole} from "@/api/user/role";
@@ -143,7 +138,8 @@ import {
   deleteUserList,
   getUserInfoDetail,
   grant,
-  insertUser, logout,
+  insertUser,
+  logout,
   pageUserBaseDetail,
   updateUser
 } from "@/api/user/user";

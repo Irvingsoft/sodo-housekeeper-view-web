@@ -5,7 +5,7 @@
 <script>
 export default {
   name: 'authredirect',
-  created () {
+  created() {
     window.close()
     const params = this.$route.query
     const state = params.state

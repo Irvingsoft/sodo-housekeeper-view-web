@@ -3,18 +3,18 @@
     <el-tabs v-model="logRequest.clientId" @tab-click="handleSwitch">
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
-          <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
+          <el-tooltip :content="client.description" class="item" effect="dark" placement="top">
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <el-form :inline="true" label-width="60px">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item label="关键字">
-                <el-input v-model="logRequest.content" placeholder="请输入关键字" clearable></el-input>
+                <el-input v-model="logRequest.content" clearable placeholder="请输入关键字"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item label="服务">
                 <el-select v-model="logRequest.serviceId" placeholder="请选择服务">
                   <el-option label="全部" value=""></el-option>
@@ -22,7 +22,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="5" :sm="12" :xs="24">
               <el-form-item label="方法">
                 <el-select v-model="logRequest.requestMethod" placeholder="请选择方法">
                   <el-option label="全部" value=""></el-option>
@@ -31,7 +31,7 @@
                 </el-select>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="4" :offset="5">
+            <el-col :md="4" :offset="5" :sm="12" :xs="24">
               <el-col :span="20">
                 <el-form-item>
                   <el-button type="primary" @click="searchChange">查询</el-button>
@@ -47,41 +47,41 @@
           </el-row>
           <el-collapse-transition>
             <el-row v-if="!status.fold" :inline="true">
-              <el-col :xs="24" :sm="12" :md="5">
+              <el-col :md="5" :sm="12" :xs="24">
                 <el-form-item label="用户 ID">
-                  <el-input v-model="logRequest.userId" placeholder="请输入用户 ID" clearable></el-input>
+                  <el-input v-model="logRequest.userId" clearable placeholder="请输入用户 ID"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :xs="24" :sm="12" :md="5">
+              <el-col :md="5" :sm="12" :xs="24">
                 <el-form-item label="请求 ID">
-                  <el-input v-model="logRequest.requestId" placeholder="请输入请求 ID" clearable></el-input>
+                  <el-input v-model="logRequest.requestId" clearable placeholder="请输入请求 ID"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :xs="24" :sm="24" :md="9">
+              <el-col :md="9" :sm="24" :xs="24">
                 <el-form-item>
                   <template #label>
                     时间
                   </template>
                   <el-date-picker
                     v-model="logRequest.createInterval"
-                    value-format="yyyy-MM-dd HH:mm:ss"
-                    type="datetimerange"
+                    end-placeholder="结束日期"
                     range-separator="至"
                     start-placeholder="开始日期"
-                    end-placeholder="结束日期">
+                    type="datetimerange"
+                    value-format="yyyy-MM-dd HH:mm:ss">
                   </el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
           </el-collapse-transition>
         </el-form>
-        <avue-crud :option="option"
-                   :data="data.records"
-                   ref="crud"
+        <avue-crud ref="crud"
                    v-model="form"
-                   :permission="permissionList"
                    :before-open="beforeOpen"
+                   :data="data.records"
+                   :option="option"
                    :page="data"
+                   :permission="permissionList"
                    @current-change="currentChange"
                    @size-change="sizeChange"
                    @refresh-change="onLoad">
@@ -90,13 +90,13 @@
               {{ row.env }}
             </el-tag>
           </template>
-          <template slot="requestMethod" slot-scope="{row}" v-if="row.requestMethod !== undefined">
+          <template v-if="row.requestMethod !== undefined" slot="requestMethod" slot-scope="{row}">
             <el-tag type="success">
               {{ row.requestMethod }}
             </el-tag>
           </template>
           <template slot="message" slot-scope="{row}">
-            <avue-text-ellipsis :text="row.message" :height="40" :width="280">
+            <avue-text-ellipsis :height="40" :text="row.message" :width="280">
               <small slot="more">...</small>
             </avue-text-ellipsis>
           </template>

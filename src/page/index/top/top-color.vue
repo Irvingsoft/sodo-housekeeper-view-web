@@ -1,13 +1,14 @@
 <template>
-  <el-color-picker size="mini"
-                   style="padding-top:18px;"
+  <el-color-picker v-model="themeVal"
                    class="theme-picker"
                    popper-class="theme-picker-dropdown"
-                   v-model="themeVal"></el-color-picker>
+                   size="mini"
+                   style="padding-top:18px;"></el-color-picker>
 </template>
 
 <script>
 import color from "@/mixins/color";
+
 export default {
   name: "topColor",
   mixins: [color()],

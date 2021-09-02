@@ -5,14 +5,15 @@
   width: 100%;
   height: 100%;
   margin: 0 auto;
-  background: url("http://www.17sucai.com/preview/242158/2015-01-10/%E7%99%BB%E5%BD%95/images/cloud.jpg")
-    0 bottom repeat-x #049ec4;
+  background: url("http://www.17sucai.com/preview/242158/2015-01-10/%E7%99%BB%E5%BD%95/images/cloud.jpg") 0 bottom repeat-x #049ec4;
   animation: animate-cloud 20s linear infinite;
 }
+
 .login-weaper {
   margin: 0 auto;
   width: 1000px;
   box-shadow: -4px 5px 10px rgba(0, 0, 0, 0.4);
+
   .el-input-group__append {
     border: none;
   }
@@ -25,6 +26,7 @@
   align-items: center;
   display: flex;
 }
+
 .login-left {
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
@@ -36,9 +38,11 @@
   width: 50%;
   position: relative;
 }
+
 .login-left .img {
   width: 140px;
 }
+
 .login-time {
   position: absolute;
   left: 25px;
@@ -50,6 +54,7 @@
   font-size: 18px;
   overflow: hidden;
 }
+
 .login-left .title {
   margin-top: 60px;
   text-align: center;
@@ -69,17 +74,21 @@
   float: left;
   box-sizing: border-box;
 }
+
 .login-main {
   margin: 0 auto;
   width: 65%;
   box-sizing: border-box;
 }
+
 .login-main > h3 {
   margin-bottom: 20px;
 }
+
 .login-main > p {
   color: #76838f;
 }
+
 .login-title {
   color: #333;
   margin-bottom: 40px;
@@ -88,16 +97,19 @@
   text-align: center;
   letter-spacing: 4px;
 }
+
 .login-menu {
   margin-top: 40px;
   width: 100%;
   text-align: center;
+
   a {
     color: #999;
     font-size: 12px;
     margin: 0px 8px;
   }
 }
+
 .login-submit {
   width: 100%;
   height: 45px;
@@ -112,17 +124,22 @@
   font-family: "neo";
   transition: 0.25s;
 }
+
 .login-form {
   margin: 10px 0;
+
   i {
     color: #333;
   }
+
   .el-form-item__content {
     width: 100%;
   }
+
   .el-form-item {
     margin-bottom: 12px;
   }
+
   .el-input {
     input {
       padding-bottom: 10px;
@@ -133,6 +150,7 @@
       color: #333;
       border-bottom: 1px solid rgb(235, 237, 242);
     }
+
     .el-input__prefix {
       i {
         padding: 0 5px;
@@ -141,12 +159,14 @@
     }
   }
 }
+
 .login-code {
   display: flex;
   align-items: center;
   justify-content: space-around;
   margin: 0 0 0 10px;
 }
+
 .login-code-img {
   margin-top: 2px;
   width: 100px;
@@ -160,5 +180,5 @@
   line-height: 38px;
   text-indent: 5px;
   text-align: center;
-  cursor:pointer!important;
+  cursor: pointer !important;
 }

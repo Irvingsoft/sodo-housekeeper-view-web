@@ -3,64 +3,64 @@
     <el-tabs v-model="roleRequest.clientId" @tab-click="handleSwitch">
       <el-tab-pane v-for="client in clientList" :name="client.clientId" class="tab-pane">
         <template #label>
-          <el-tooltip class="item" effect="dark" :content="client.description" placement="top">
+          <el-tooltip :content="client.description" class="item" effect="dark" placement="top">
             <span>{{ client.name }}</span>
           </el-tooltip>
         </template>
         <el-form :inline="true" label-width="60px">
           <el-row>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="6" :sm="12" :xs="24">
               <el-form-item label="关键字">
-                <el-input v-model="roleRequest.content" placeholder="请输入关键字" clearable></el-input>
+                <el-input v-model="roleRequest.content" clearable placeholder="请输入关键字"></el-input>
               </el-form-item>
             </el-col>
-            <el-col :xs="24" :sm="12" :md="5">
+            <el-col :md="6" :sm="12" :xs="24">
               <el-form-item>
                 <el-button type="primary" @click="searchChange">查询</el-button>
               </el-form-item>
             </el-col>
           </el-row>
         </el-form>
-        <avue-crud :option="option"
-                   :table-loading="loading"
-                   :data="data"
-                   :ref="client.clientId"
+        <avue-crud :ref="client.clientId"
                    v-model="form"
-                   :permission="permissionList"
                    :before-open="beforeOpen"
+                   :data="data"
+                   :option="option"
+                   :permission="permissionList"
+                   :table-loading="loading"
                    @row-del="rowDel"
                    @row-update="rowUpdate"
                    @row-save="rowSave"
                    @selection-change="selectionChange"
                    @refresh-change="onLoad">
           <template slot="menuLeft">
-            <el-button type="primary"
-                       size="small"
+            <el-button v-if="permission.role_add"
                        icon="el-icon-plus"
-                       v-if="permission.role_add"
+                       size="small"
+                       type="primary"
                        @click="handleNew">新增
             </el-button>
-            <el-button type="danger"
-                       size="small"
+            <el-button v-if="permission.role_delete"
                        icon="el-icon-delete"
-                       v-if="permission.role_delete"
                        plain
+                       size="small"
+                       type="danger"
                        @click="handleDelete">删 除
             </el-button>
-            <el-button type="info"
-                       size="small"
+            <el-button v-if="permission.role_delete"
                        icon="el-icon-user"
                        plain
-                       v-if="permission.role_delete"
-                       @click="handleRole"
-                       plain>权限设置
+                       plain
+                       size="small"
+                       type="info"
+                       @click="handleRole">权限设置
             </el-button>
           </template>
-          <template slot-scope="{row}" slot="menu">
+          <template slot="menu" slot-scope="{row}">
             <el-button
-              type="text"
               icon="el-icon-circle-plus-outline"
               size="small"
+              type="text"
               @click.stop="handleAdd(row)">
               新增子项
             </el-button>
@@ -68,16 +68,16 @@
         </avue-crud>
       </el-tab-pane>
     </el-tabs>
-    <el-dialog title="角色配置"
+    <el-dialog :before-close="cancel"
                :visible.sync="box"
-               width="20%"
-               :before-close="cancel">
-      <el-tree :data="list"
-               show-checkbox
-               node-key="id"
-               ref="tree"
+               title="角色配置"
+               width="20%">
+      <el-tree ref="tree"
+               :data="list"
                :default-checked-keys="defaultObj"
-               :props="props">
+               :props="props"
+               node-key="id"
+               show-checkbox>
       </el-tree>
       <span slot="footer"
             class="dialog-footer">
@@ -92,7 +92,7 @@
 <script>
 import {mapGetters} from "vuex";
 import {listOauthClientBaseUse} from "@/api/system/client";
-import {deleteRole, insertRole, listRole, updateRole, treeRole, getRole, deleteRoleList, grant} from "@/api/user/role";
+import {deleteRole, deleteRoleList, getRole, grant, insertRole, listRole, treeRole, updateRole} from "@/api/user/role";
 import {listGrant, treeMenu} from "@/api/system/menu";
 
 export default {

@@ -1,28 +1,28 @@
 <template>
   <div class="social-container">
     <div @click="handleClick('github')">
-      <span class="container" :style="{backgroundColor:'#61676D'}">
-        <i icon-class="github" class="iconfont icongithub"></i>
+      <span :style="{backgroundColor:'#61676D'}" class="container">
+        <i class="iconfont icongithub" icon-class="github"></i>
       </span>
-      <p class="title">{{$t('login.github')}}</p>
+      <p class="title">{{ $t('login.github') }}</p>
     </div>
     <div @click="handleClick('gitee')">
-      <span class="container" :style="{backgroundColor:'#c35152'}">
-        <i icon-class="gitee" class="iconfont icongitee2"></i>
+      <span :style="{backgroundColor:'#c35152'}" class="container">
+        <i class="iconfont icongitee2" icon-class="gitee"></i>
       </span>
-      <p class="title">{{$t('login.gitee')}}</p>
+      <p class="title">{{ $t('login.gitee') }}</p>
     </div>
     <div @click="handleClick('wechat_open')">
-      <span class="container" :style="{backgroundColor:'#8dc349'}">
-        <i icon-class="wechat" class="iconfont icon-weixin"/>
+      <span :style="{backgroundColor:'#8dc349'}" class="container">
+        <i class="iconfont icon-weixin" icon-class="wechat"/>
       </span>
-      <p class="title">{{$t('login.wechat')}}</p>
+      <p class="title">{{ $t('login.wechat') }}</p>
     </div>
     <div @click="handleClick('qq')">
-      <span class="container" :style="{backgroundColor:'#6ba2d6'}">
-        <i icon-class="qq" class="iconfont icon-qq"/>
+      <span :style="{backgroundColor:'#6ba2d6'}" class="container">
+        <i class="iconfont icon-qq" icon-class="qq"/>
       </span>
-      <p class="title">{{$t('login.qq')}}</p>
+      <p class="title">{{ $t('login.qq') }}</p>
     </div>
   </div>
 </template>
@@ -40,7 +40,7 @@ export default {
 };
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
 .social-container {
   margin: 20px 0;
   display: flex;
@@ -51,6 +51,7 @@ export default {
     color: #fff;
     font-size: 30px;
   }
+
   .container {
     $height: 50px;
     cursor: pointer;
@@ -62,6 +63,7 @@ export default {
     border-radius: 4px;
     margin-bottom: 10px;
   }
+
   .title {
     text-align: center;
   }

@@ -1,39 +1,41 @@
 <template>
-  <div class="avue-tags"
-       v-if="showTag">
+  <div v-if="showTag"
+       class="avue-tags">
     <!-- tag盒子 -->
     <div v-if="contextmenuFlag"
-         class="avue-tags__contentmenu"
-         :style="{left:contentmenuX+'px',top:contentmenuY+'px'}">
+         :style="{left:contentmenuX+'px',top:contentmenuY+'px'}"
+         class="avue-tags__contentmenu">
       <div class="item"
-           @click="closeOthersTags">{{$t('tagsView.closeOthers')}}</div>
+           @click="closeOthersTags">{{ $t('tagsView.closeOthers') }}
+      </div>
       <div class="item"
-           @click="closeAllTags">{{$t('tagsView.closeAll')}}</div>
+           @click="closeAllTags">{{ $t('tagsView.closeAll') }}
+      </div>
     </div>
-    <div class="avue-tags__box"
-         :class="{'avue-tags__box--close':!website.isFirstPage}">
+    <div :class="{'avue-tags__box--close':!website.isFirstPage}"
+         class="avue-tags__box">
       <el-tabs v-model="active"
-               type="card"
-               @contextmenu.native="handleContextmenu"
                :closable="tagLen!==1"
-               @tab-click="openTag"
-               @edit="menuTag">
-        <el-tab-pane :key="item.value"
-                     v-for="item in tagList"
+               type="card"
+               @edit="menuTag"
+               @contextmenu.native="handleContextmenu"
+               @tab-click="openTag">
+        <el-tab-pane v-for="item in tagList"
+                     :key="item.value"
                      :label="generateTitle(item)"
                      :name="item.value">
         </el-tab-pane>
 
       </el-tabs>
       <el-dropdown class="avue-tags__menu">
-        <el-button type="primary"
-                   size="mini">
-          {{$t('tagsView.menu')}}
+        <el-button size="mini"
+                   type="primary">
+          {{ $t('tagsView.menu') }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click.native="closeOthersTags">{{$t('tagsView.closeOthers')}}</el-dropdown-item>
-          <el-dropdown-item @click.native="closeAllTags">{{$t('tagsView.closeAll')}}</el-dropdown-item>
+          <el-dropdown-item @click.native="closeOthersTags">{{ $t('tagsView.closeOthers') }}</el-dropdown-item>
+          <el-dropdown-item @click.native="closeAllTags">{{ $t('tagsView.closeAll') }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -41,7 +43,8 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
+import {mapGetters, mapState} from "vuex";
+
 export default {
   name: "tags",
   data() {
@@ -52,7 +55,8 @@ export default {
       contextmenuFlag: false
     };
   },
-  created() {},
+  created() {
+  },
   mounted() {
     this.setActive();
   },
@@ -110,7 +114,7 @@ export default {
     },
     menuTag(value, action) {
       if (action === "remove") {
-        let { tag, key } = this.findTag(value);
+        let {tag, key} = this.findTag(value);
         this.$store.commit("DEL_TAG", tag);
         if (tag.value === this.tag.value) {
           tag = this.tagList[key === 0 ? key : key - 1]; //如果关闭本标签让前推一个
@@ -146,7 +150,7 @@ export default {
           key = index;
         }
       });
-      return { tag: tag, key: key };
+      return {tag: tag, key: key};
     },
     closeAllTags() {
       this.contextmenuFlag = false;

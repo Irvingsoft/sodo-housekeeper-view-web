@@ -1,71 +1,71 @@
 <template>
-  <el-form class="login-form"
-           status-icon
-           :rules="authRules"
-           ref="loginForm"
+  <el-form ref="loginForm"
            :model="authForm"
-           label-width="0">
+           :rules="authRules"
+           class="login-form"
+           label-width="0"
+           status-icon>
     <el-form-item v-if="tenantMode" prop="tenantId">
-      <el-input size="small"
-                @keyup.enter.native="handleLogin"
-                v-model="authForm.tenantId"
+      <el-input v-model="authForm.tenantId"
+                :placeholder="$t('login.tenantId')"
                 auto-complete="off"
-                :placeholder="$t('login.tenantId')">
+                size="small"
+                @keyup.enter.native="handleLogin">
         <i slot="prefix"
            class="icon-quanxian"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="username">
-      <el-input size="small"
-                clearable
-                @keyup.enter.native="handleLogin"
-                v-model="authForm.username"
+      <el-input v-model="authForm.username"
+                :placeholder="$t('login.username')"
                 auto-complete="off"
-                :placeholder="$t('login.username')">
+                clearable
+                size="small"
+                @keyup.enter.native="handleLogin">
         <i slot="prefix"
            class="icon-yonghu"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
-      <el-input size="small"
-                clearable
-                @keyup.enter.native="handleLogin"
+      <el-input v-model="authForm.password"
+                :placeholder="$t('login.password')"
                 :type="passwordType"
-                v-model="authForm.password"
                 auto-complete="off"
-                :placeholder="$t('login.password')">
+                clearable
+                size="small"
+                @keyup.enter.native="handleLogin">
         <i slot="prefix"
            class="icon-mima"></i>
-        <i class="el-icon-view el-input__icon"
-           slot="suffix"
+        <i slot="suffix"
+           class="el-icon-view el-input__icon"
            @click="showPassword"></i>
       </el-input>
     </el-form-item>
     <el-form-item v-if="captchaMode" prop="captcha">
       <el-row :span="24">
         <el-col :span="16">
-          <el-input size="small"
-                    clearable
-                    @keyup.enter.native="handleLogin"
-                    v-model="authForm.captcha"
+          <el-input v-model="authForm.captcha"
+                    :placeholder="$t('login.captcha')"
                     auto-complete="off"
-                    :placeholder="$t('login.captcha')">
+                    clearable
+                    size="small"
+                    @keyup.enter.native="handleLogin">
             <i slot="prefix" class="icon-yanzhengma"/>
           </el-input>
         </el-col>
         <el-col :span="8">
           <div class="login-code">
-            <img alt="图形验证码" :src="authForm.captchaImage.content" class="login-code-img"
+            <img :src="authForm.captchaImage.content" alt="图形验证码" class="login-code-img"
                  @click="refreshCode();"/>
           </div>
         </el-col>
       </el-row>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary"
+      <el-button class="login-submit"
                  size="small"
-                 @click.native.prevent="handleLogin"
-                 class="login-submit">{{ $t('login.submit') }}
+                 type="primary"
+                 @click.native.prevent="handleLogin">{{ $t('login.submit') }}
       </el-button>
     </el-form-item>
   </el-form>

@@ -5,6 +5,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   .img {
     margin-right: 80px;
     height: 360px;
@@ -14,6 +15,7 @@
     background-position: 50% 50%;
     background-size: contain;
   }
+
   .content {
     h1 {
       color: #434e59;
@@ -22,6 +24,7 @@
       line-height: 72px;
       margin-bottom: 24px;
     }
+
     .desc {
       color: rgba(0, 0, 0, 0.45);
       font-size: 20px;

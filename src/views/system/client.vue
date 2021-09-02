@@ -2,13 +2,13 @@
   <basic-container>
     <el-form :inline="true" label-width="60px">
       <el-row>
-        <el-col :xs="24" :sm="12" :md="6">
+        <el-col :md="6" :sm="12" :xs="24">
           <el-form-item label="关键字">
-            <el-input v-model="pageRequest.content" placeholder="请输入关键字" clearable></el-input>
+            <el-input v-model="pageRequest.content" clearable placeholder="请输入关键字"></el-input>
           </el-form-item>
         </el-col>
-        <el-col :xs="0" :sm="12" :md="12">&nbsp;</el-col>
-        <el-col :xs="24" :sm="12" :md="6">
+        <el-col :md="12" :sm="12" :xs="0">&nbsp;</el-col>
+        <el-col :md="6" :sm="12" :xs="24">
           <el-col :span="20">
             <el-form-item>
               <el-button type="primary" @click="searchChange">查询</el-button>
@@ -24,8 +24,8 @@
       </el-row>
       <el-collapse-transition>
         <el-row v-if="!status.fold">
-          <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item label="启用" class="foldItemFirst">
+          <el-col :md="6" :sm="12" :xs="24">
+            <el-form-item class="foldItemFirst" label="启用">
               <el-radio-group v-model="pageRequest.inUse">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -33,8 +33,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item label="注册" class="foldItem">
+          <el-col :md="6" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="注册">
               <el-radio-group v-model="pageRequest.register">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -42,8 +42,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item label="Captcha" class="foldItem" label-width="60px">
+          <el-col :md="6" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="Captcha" label-width="60px">
               <el-radio-group v-model="pageRequest.captcha">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -51,8 +51,8 @@
               </el-radio-group>
             </el-form-item>
           </el-col>
-          <el-col :xs="24" :sm="12" :md="6">
-            <el-form-item label="签名" class="foldItem" label-width="60px">
+          <el-col :md="6" :sm="12" :xs="24">
+            <el-form-item class="foldItem" label="签名" label-width="60px">
               <el-radio-group v-model="pageRequest.signature">
                 <el-radio label="">全部</el-radio>
                 <el-radio :label="true">是</el-radio>
@@ -63,79 +63,79 @@
         </el-row>
       </el-collapse-transition>
     </el-form>
-    <avue-crud :option="option"
-               :table-loading="loading"
+    <avue-crud v-model="form"
+               :before-open="beforeOpen"
                :data="data.records"
+               :option="option"
                :page="data"
-               @row-del="rowDel"
-               v-model="form"
                :permission="permissionList"
+               :table-loading="loading"
+               @row-del="rowDel"
                @row-update="rowUpdate"
                @row-save="rowSave"
-               :before-open="beforeOpen"
                @current-change="currentChange"
                @size-change="sizeChange"
                @on-load="onLoad"
                @refresh-change="onLoad">
       <template slot="inUse" slot-scope="{row}">
-        <svg v-if="row.inUse" class="icon" aria-hidden="true">
+        <svg v-if="row.inUse" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="register" slot-scope="{row}">
-        <svg v-if="row.register" class="icon" aria-hidden="true">
+        <svg v-if="row.register" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="captcha" slot-scope="{row}">
-        <svg v-if="row.captcha" class="icon" aria-hidden="true">
+        <svg v-if="row.captcha" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="signature" slot-scope="{row}">
-        <svg v-if="row.signature" class="icon" aria-hidden="true">
+        <svg v-if="row.signature" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="concurrentLogin" slot-scope="{row}">
-        <svg v-if="row.concurrentLogin" class="icon" aria-hidden="true">
+        <svg v-if="row.concurrentLogin" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="shareToken" slot-scope="{row}">
-        <svg v-if="row.shareToken" class="icon" aria-hidden="true">
+        <svg v-if="row.shareToken" aria-hidden="true" class="icon">
           <use xlink:href="#icon-true"></use>
         </svg>
-        <svg v-else class="icon" aria-hidden="true">
+        <svg v-else aria-hidden="true" class="icon">
           <use xlink:href="#icon-false"></use>
         </svg>
       </template>
       <template slot="userStatus" slot-scope="{row}">
-        <el-tag type="success" effect="dark" v-if="row.userStatus === 0">
+        <el-tag v-if="row.userStatus === 0" effect="dark" type="success">
           正常
         </el-tag>
-        <el-tag type="warning" effect="dark" v-else-if="row.userStatus === 1">
+        <el-tag v-else-if="row.userStatus === 1" effect="dark" type="warning">
           审核
         </el-tag>
-        <el-tag type="error" effect="dark" v-else-if="row.userStatus === 2">
+        <el-tag v-else-if="row.userStatus === 2" effect="dark" type="error">
           冻结
         </el-tag>
-        <el-tag type="info" effect="dark" v-else-if="row.userStatus === -1">
+        <el-tag v-else-if="row.userStatus === -1" effect="dark" type="info">
           注销
         </el-tag>
       </template>
@@ -145,11 +145,11 @@
 
 <script>
 import {
-  pageOauthClientInfo,
+  deleteOauthClient,
   getOauthClientInfoDetail,
   insertOauthClient,
-  updateOauthClient,
-  deleteOauthClient
+  pageOauthClientInfo,
+  updateOauthClient
 } from "@/api/system/client";
 import {mapGetters} from "vuex";
 import {listOauthApiBaseUse} from "@/api/system/api";

@@ -5,17 +5,17 @@
     <div class="login-weaper animated bounceInDown">
       <div class="login-left">
         <div class="login-time">
-          {{time}}
+          {{ time }}
         </div>
-        <img class="img"
-             src="/img/logo.png"
-             alt="">
+        <img alt=""
+             class="img"
+             src="/img/logo.png">
         <p class="title">{{ $t('login.info') }}</p>
       </div>
       <div class="login-border">
         <div class="login-main">
           <h4 class="login-title">
-            {{ $t('login.title') }}{{website.title}}
+            {{ $t('login.title') }}{{ website.title }}
             <top-lang></top-lang>
           </h4>
           <userLogin v-if="activeName==='user'"></userLogin>
@@ -36,12 +36,13 @@
 import userLogin from "./userlogin";
 import codeLogin from "./codelogin";
 import thirdLogin from "./thirdlogin";
-import { mapGetters } from "vuex";
-import { dateFormat } from "@/util/date";
-import { validatenull } from "@/util/validate";
+import {mapGetters} from "vuex";
+import {dateFormat} from "@/util/date";
+import {validatenull} from "@/util/validate";
 import topLang from "@/page/index/top/top-lang";
 import topColor from "@/page/index/top/top-color";
 import {getQueryString, getTopUrl} from "@/util/util";
+
 export default {
   name: "login",
   components: {

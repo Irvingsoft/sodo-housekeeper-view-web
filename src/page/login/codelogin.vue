@@ -1,48 +1,50 @@
 <template>
-  <el-form class="login-form"
-           status-icon
-           :rules="loginRules"
-           ref="loginForm"
+  <el-form ref="loginForm"
            :model="loginForm"
-           label-width="0">
+           :rules="loginRules"
+           class="login-form"
+           label-width="0"
+           status-icon>
     <el-form-item prop="phone">
-      <el-input size="small"
-                @keyup.enter.native="handleLogin"
-                v-model="loginForm.phone"
+      <el-input v-model="loginForm.phone"
+                :placeholder="$t('login.phone')"
                 auto-complete="off"
-                :placeholder="$t('login.phone')">
+                size="small"
+                @keyup.enter.native="handleLogin">
         <i slot="prefix"
            class="icon-shouji"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="code">
-      <el-input size="small"
-                @keyup.enter.native="handleLogin"
-                v-model="loginForm.code"
+      <el-input v-model="loginForm.code"
+                :placeholder="$t('login.code')"
                 auto-complete="off"
-                :placeholder="$t('login.code')">
+                size="small"
+                @keyup.enter.native="handleLogin">
         <i slot="prefix"
            class="icon-yanzhengma"
            style="margin-top:6px;"></i>
         <template slot="append">
-          <span @click="handleSend"
+          <span :class="[{display:msgKey}]"
                 class="msg-text"
-                :class="[{display:msgKey}]">{{msgText}}</span>
+                @click="handleSend">{{ msgText }}</span>
         </template>
       </el-input>
     </el-form-item>
     <el-form-item>
-      <el-button size="small"
+      <el-button class="login-submit"
+                 size="small"
                  type="primary"
-                 @click.native.prevent="handleLogin"
-                 class="login-submit">{{$t('login.submit')}}</el-button>
+                 @click.native.prevent="handleLogin">{{ $t('login.submit') }}
+      </el-button>
     </el-form-item>
   </el-form>
 </template>
 
 <script>
-import { isvalidatemobile } from "@/util/validate";
-import { mapGetters } from "vuex";
+import {isvalidatemobile} from "@/util/validate";
+import {mapGetters} from "vuex";
+
 export default {
   name: "codelogin",
   data() {
@@ -69,8 +71,8 @@ export default {
         code: ""
       },
       loginRules: {
-        phone: [{ required: true, trigger: "blur", validator: validatePhone }],
-        code: [{ required: true, trigger: "blur", validator: validateCode }]
+        phone: [{required: true, trigger: "blur", validator: validatePhone}],
+        code: [{required: true, trigger: "blur", validator: validateCode}]
       }
     };
   },
@@ -78,7 +80,8 @@ export default {
     this.msgText = this.config.MSGINIT;
     this.msgTime = this.config.MSGTIME;
   },
-  mounted() {},
+  mounted() {
+  },
   computed: {
     ...mapGetters(["tagWel"]),
     config() {
@@ -110,7 +113,7 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.$store.dispatch("LoginByPhone", this.loginForm).then(() => {
-            this.$router.push({ path: this.tagWel.value });
+            this.$router.push({path: this.tagWel.value});
           });
         }
       });
@@ -127,6 +130,7 @@ export default {
   text-align: center;
   cursor: pointer;
 }
+
 .msg-text.display {
   color: #ccc;
 }

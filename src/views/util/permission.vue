@@ -3,21 +3,21 @@
     <basic-container>
       <h3>表格权限控制</h3>
       <avue-crud ref="crud"
-                 :permission="permission"
-                 :option="option"
                  :data="data"
+                 :option="option"
+                 :permission="permission"
                  @expand-change="expandChange">
         <template slot="expand"
                   slot-scope="scope">
-          {{scope}}
+          {{ scope }}
         </template>
       </avue-crud>
     </basic-container>
     <basic-container>
       权限开关
-      <el-switch :active-value="false"
+      <el-switch v-model="text"
+                 :active-value="false"
                  :inactive-value="true"
-                 v-model="text"
                  active-color="#13ce66"
                  inactive-color="#ff4949">
       </el-switch>
@@ -29,54 +29,54 @@
 </template>
 
 <script>
-  export default {
-    data() {
-      return {
-        text: false,
-        permission: {},
-        option: {
-          expand: true,
-          column: [
-            {
-              label: "姓名",
-              prop: "name"
-            },
-            {
-              label: "年龄",
-              prop: "sex"
-            }
-          ]
-        },
-        data: [
+export default {
+  data() {
+    return {
+      text: false,
+      permission: {},
+      option: {
+        expand: true,
+        column: [
           {
-            id: 1,
-            name: "张三",
-            sex: 12
+            label: "姓名",
+            prop: "name"
           },
           {
-            id: 2,
-            name: "李四",
-            sex: 20
+            label: "年龄",
+            prop: "sex"
           }
         ]
-      };
-    },
-    watch: {
-      text() {
-        if (this.text === true) {
-          this.permission = {
-            delBtn: false,
-            addBtn: false
-          };
-        } else {
-          this.permission = {
-            delBtn: true,
-            addBtn: true
-          };
+      },
+      data: [
+        {
+          id: 1,
+          name: "张三",
+          sex: 12
+        },
+        {
+          id: 2,
+          name: "李四",
+          sex: 20
         }
+      ]
+    };
+  },
+  watch: {
+    text() {
+      if (this.text === true) {
+        this.permission = {
+          delBtn: false,
+          addBtn: false
+        };
+      } else {
+        this.permission = {
+          delBtn: true,
+          addBtn: true
+        };
       }
     }
-  };
+  }
+};
 </script>
 
 <style>

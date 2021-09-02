@@ -1,12 +1,12 @@
 <template>
-  <el-dialog title="账号注册"
-             append-to-body
-             :visible.sync="accountBox"
-             :close-on-click-modal="false"
+  <el-dialog :close-on-click-modal="false"
              :close-on-press-escape="false"
              :show-close="false"
+             :visible.sync="accountBox"
+             append-to-body
+             title="账号注册"
              width="20%">
-    <el-form :model="form" ref="form" label-width="80px">
+    <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="租户编号">
         <el-input v-model="form.tenantId" placeholder="请输入租户编号"></el-input>
       </el-form-item>
@@ -24,78 +24,77 @@
       </el-form-item>
     </el-form>
     <span slot="footer" class="dialog-footer">
-              <el-button type="primary" :loading="loading" @click="handleRegister">确 定</el-button>
+              <el-button :loading="loading" type="primary" @click="handleRegister">确 定</el-button>
             </span>
   </el-dialog>
 </template>
 
 <script>
-  import {mapGetters} from "vuex";
-  import {validatenull} from "@/util/validate";
-  import {registerGuest} from "@/api/user";
+import {mapGetters} from "vuex";
+import {registerGuest} from "@/api/user";
 
-  export default {
-    name: "thirdRegister",
-    data() {
-      return {
-        form: {
-          tenantId: '',
-          name: '',
-          account: '',
-          password: '',
-          password2: '',
-        },
-        loading: false,
-        accountBox: false,
-      };
-    },
-    computed: {
-      ...mapGetters(["userInfo"]),
-    },
-    created() {
-
-    },
-    mounted() {
-      // 若未登录则弹出框进行绑定
-
-    },
-    methods: {
-      handleRegister() {
-        if (this.form.tenantId === '') {
-          this.$message.warning("请先输入租户编号");
-          return;
-        }
-        if (this.form.account === '') {
-          this.$message.warning("请先输入账号名称");
-          return;
-        }
-        if (this.form.password === '' || this.form.password2 === '') {
-          this.$message.warning("请先输入密码");
-          return;
-        }
-        if (this.form.password !== this.form.password2) {
-          this.$message.warning("两次密码输入不一致");
-          return;
-        }
-        this.loading = true;
-        registerGuest(this.form, this.userInfo.oauthId).then(res => {
-          this.loading = false;
-          const data = res.data;
-          if (data.success) {
-            this.accountBox = false;
-            this.$alert("注册申请已提交,请耐心等待管理员通过!", '注册提示').then(() => {
-              this.$store.dispatch("LogOut").then(() => {
-                this.$router.push({path: "/login"});
-              });
-            })
-          } else {
-            this.$message.error(data.msg || '提交失败');
-          }
-        }, error => {
-          window.console.log(error);
-          this.loading = false;
-        });
+export default {
+  name: "thirdRegister",
+  data() {
+    return {
+      form: {
+        tenantId: '',
+        name: '',
+        account: '',
+        password: '',
+        password2: '',
       },
+      loading: false,
+      accountBox: false,
+    };
+  },
+  computed: {
+    ...mapGetters(["userInfo"]),
+  },
+  created() {
+
+  },
+  mounted() {
+    // 若未登录则弹出框进行绑定
+
+  },
+  methods: {
+    handleRegister() {
+      if (this.form.tenantId === '') {
+        this.$message.warning("请先输入租户编号");
+        return;
+      }
+      if (this.form.account === '') {
+        this.$message.warning("请先输入账号名称");
+        return;
+      }
+      if (this.form.password === '' || this.form.password2 === '') {
+        this.$message.warning("请先输入密码");
+        return;
+      }
+      if (this.form.password !== this.form.password2) {
+        this.$message.warning("两次密码输入不一致");
+        return;
+      }
+      this.loading = true;
+      registerGuest(this.form, this.userInfo.oauthId).then(res => {
+        this.loading = false;
+        const data = res.data;
+        if (data.success) {
+          this.accountBox = false;
+          this.$alert("注册申请已提交,请耐心等待管理员通过!", '注册提示').then(() => {
+            this.$store.dispatch("LogOut").then(() => {
+              this.$router.push({path: "/login"});
+            });
+          })
+        } else {
+          this.$message.error(data.msg || '提交失败');
+        }
+      }, error => {
+        window.console.log(error);
+        this.loading = false;
+      });
     },
-  };
+  },
+};
 </script>

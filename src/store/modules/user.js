@@ -1,11 +1,8 @@
-import {setStore, getStore} from '@/util/store'
+import {getStore, setStore} from '@/util/store'
 import {isURL, validatenull} from '@/util/validate'
 import {deepClone} from '@/util/util'
 import website from '@/config/website'
-import {
-  getUserInfo,
-  top, route, button, getUser
-} from '@/api/user'
+import {button, getUser, route, top} from '@/api/user'
 
 
 function addPath(ele, first) {

@@ -1,96 +1,97 @@
 <template>
   <div class="avue-top">
     <div class="top-bar__left">
-      <div class="avue-breadcrumb"
+      <div v-if="showCollapse"
            :class="[{ 'avue-breadcrumb--active': isCollapse }]"
-           v-if="showCollapse">
+           class="avue-breadcrumb">
         <i class="icon-navicon"
            @click="setCollapse"></i>
       </div>
     </div>
     <div class="top-bar__title">
-      <div class="top-bar__item top-bar__item--show"
-           v-if="showMenu">
+      <div v-if="showMenu"
+           class="top-bar__item top-bar__item--show">
         <top-menu></top-menu>
       </div>
-      <span class="top-bar__item"
-            v-if="showSearch">
+      <span v-if="showSearch"
+            class="top-bar__item">
         <top-search></top-search>
       </span>
     </div>
     <div class="top-bar__right">
       <el-tooltip v-if="showColor"
-                  effect="dark"
                   :content="$t('navbar.color')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item">
           <top-color></top-color>
         </div>
       </el-tooltip>
       <el-tooltip v-if="showDebug"
-                  effect="dark"
                   :content="logsFlag?$t('navbar.bug'):logsLen+$t('navbar.bugs')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item">
           <top-logs></top-logs>
         </div>
       </el-tooltip>
       <el-tooltip v-if="showLock"
-                  effect="dark"
                   :content="$t('navbar.lock')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item">
           <top-lock></top-lock>
         </div>
       </el-tooltip>
       <el-tooltip v-if="showTheme"
-                  effect="dark"
                   :content="$t('navbar.theme')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item top-bar__item--show">
           <top-theme></top-theme>
         </div>
       </el-tooltip>
-      <el-tooltip effect="dark"
-                  :content="$t('navbar.language')"
+      <el-tooltip :content="$t('navbar.language')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item top-bar__item--show">
           <top-lang></top-lang>
         </div>
       </el-tooltip>
       <el-tooltip v-if="showFullScreen"
-                  effect="dark"
                   :content="isFullScreen?$t('navbar.fullScreenF'):$t('navbar.fullScreen')"
+                  effect="dark"
                   placement="bottom">
         <div class="top-bar__item">
           <i :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'"
              @click="handleScreen"></i>
         </div>
       </el-tooltip>
-      <img class="top-bar__img"
-           :src="userInfo.avatarUrl">
+      <img :src="userInfo.avatarUrl"
+           class="top-bar__img">
       <el-dropdown>
         <span class="el-dropdown-link">
-          {{userInfo.nickname}}
+          {{ userInfo.nickname }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>
-            <router-link to="/">{{$t('navbar.dashboard')}}</router-link>
+            <router-link to="/">{{ $t('navbar.dashboard') }}</router-link>
           </el-dropdown-item>
           <el-dropdown-item>
-            <router-link to="/info/index">{{$t('navbar.userinfo')}}</router-link>
+            <router-link to="/info/index">{{ $t('navbar.userinfo') }}</router-link>
           </el-dropdown-item>
-          <el-dropdown-item @click.native="logout"
-                            divided>{{$t('navbar.logOut')}}</el-dropdown-item>
+          <el-dropdown-item divided
+                            @click.native="logout">{{ $t('navbar.logOut') }}
+          </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
   </div>
 </template>
 <script>
-import { mapGetters, mapState } from "vuex";
-import { fullscreenToggel, listenfullscreen } from "@/util/util";
+import {mapGetters, mapState} from "vuex";
+import {fullscreenToggel, listenfullscreen} from "@/util/util";
 import topLock from "./top-lock";
 import topMenu from "./top-menu";
 import topSearch from "./top-search";
@@ -98,6 +99,7 @@ import topTheme from "./top-theme";
 import topLogs from "./top-logs";
 import topColor from "./top-color";
 import topLang from "./top-lang";
+
 export default {
   components: {
     topLock,
@@ -113,7 +115,8 @@ export default {
     return {};
   },
   filters: {},
-  created() {},
+  created() {
+  },
   mounted() {
     listenfullscreen(this.setScreen);
   },
@@ -156,7 +159,7 @@ export default {
         type: "warning"
       }).then(() => {
         this.$store.dispatch("LogOut").then(() => {
-          this.$router.push({ path: "/login" });
+          this.$router.push({path: "/login"});
         });
       });
     }
