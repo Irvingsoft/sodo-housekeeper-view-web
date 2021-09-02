@@ -68,6 +68,15 @@
                        @click="handleExport">导出
             </el-button>
           </template>
+          <template slot-scope="{row}" slot="menu">
+            <el-button
+              type="text"
+              icon="el-icon-s-promotion"
+              size="small"
+              @click.stop="logout(row)">
+              下线
+            </el-button>
+          </template>
           <template slot="status" slot-scope="{row}">
             <el-tag type="success" effect="dark" v-if="row.status === 0">
               正常
@@ -134,12 +143,13 @@ import {
   deleteUserList,
   getUserInfoDetail,
   grant,
-  insertUser,
+  insertUser, logout,
   pageUserBaseDetail,
   updateUser
 } from "@/api/user/user";
 import gender from "@/const/gender";
 import userStatus from "@/const/userStatus";
+import func from "@/util/func";
 
 export default {
   data() {
@@ -171,13 +181,12 @@ export default {
       option: {
         height: 'auto',
         calcHeight: 210,
-        searchShow: true,
-        searchMenuSpan: 6,
         tip: false,
         border: true,
         index: true,
         selection: true,
         viewBtn: true,
+        menuWidth: 300,
         column: [
           {
             label: "ID",
@@ -195,7 +204,7 @@ export default {
               message: "请输入账号",
               trigger: "blur"
             }],
-            width: 100
+            width: 120
           },
           {
             label: "OpenID",
@@ -286,6 +295,7 @@ export default {
           {
             label: "描述",
             prop: "description",
+            width: 100,
             span: 24
           },
         ]
@@ -493,6 +503,23 @@ export default {
       treeRole(this.userRequest.clientId).then(res => {
         this.roleGrantList = res.data.data;
         this.roleBox = true;
+      });
+    },
+    logout(user) {
+      let content = func.isEmpty(user.username) ? user.openId : user.username;
+      this.$confirm("确定下线账号 " + content + " ？", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          return logout(user.userId);
+        }).then(() => {
+        this.$message({
+          type: "success",
+          message: "操作成功!"
+        });
+        this.$refs.crud.toggleSelection();
       });
     },
     handleImport() {

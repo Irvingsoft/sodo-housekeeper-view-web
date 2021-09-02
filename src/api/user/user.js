@@ -53,3 +53,10 @@ export const getUserInfoDetail = (id) => {
     method: 'get',
   })
 }
+
+export const logout = (userId) => {
+  return request({
+    url: '/api/housekeeper/user/logout/' + userId,
+    method: 'get'
+  })
+}
