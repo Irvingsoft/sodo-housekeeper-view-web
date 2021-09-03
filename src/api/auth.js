@@ -59,6 +59,6 @@ export const validateSignaturePublicKey = () => request({
 });
 
 export const logout = () => request({
-  url: '/api/user/logout',
+  url: '/api/auth/authenticate/logout',
   method: 'get'
 })

@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import {add, getDept, getDeptTree, getList, remove, update} from "@/api/system/dept";
+import {add, getDept, getDeptTree, getList, remove, update} from "@/api/user/dept";
 import {mapGetters} from "vuex";
 import website from '@/config/website';
 

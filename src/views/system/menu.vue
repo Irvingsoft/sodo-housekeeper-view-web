@@ -142,13 +142,6 @@ export default {
             align: "center",
             slot: true,
             iconList: iconList,
-            rules: [
-              {
-                required: true,
-                message: "请输入菜单图标",
-                trigger: "click"
-              }
-            ]
           },
           {
             label: "菜单代码",

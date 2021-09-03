@@ -4,7 +4,7 @@
       <div v-if="showCollapse"
            :class="[{ 'avue-breadcrumb--active': isCollapse }]"
            class="avue-breadcrumb">
-        <i class="icon-navicon"
+        <i class="iconfont icon-navicon"
            @click="setCollapse"></i>
       </div>
     </div>
@@ -63,7 +63,7 @@
                   effect="dark"
                   placement="bottom">
         <div class="top-bar__item">
-          <i :class="isFullScreen?'icon-tuichuquanping':'icon-quanping'"
+          <i :class="isFullScreen?'iconfont icon-tuichuquanping':'iconfont icon-quanping'"
              @click="handleScreen"></i>
         </div>
       </el-tooltip>

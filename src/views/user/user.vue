@@ -128,7 +128,6 @@
 </template>
 
 <script>
-import {resetPassword} from "@/api/system/user";
 import {mapGetters} from "vuex";
 import {getToken} from '@/util/auth';
 import {treeRole} from "@/api/user/role";
@@ -477,7 +476,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          return resetPassword(this.selectionUserIdList);
+          // return resetPassword(this.selectionUserIdList);
         })
         .then(() => {
           this.$message({

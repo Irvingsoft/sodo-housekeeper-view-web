@@ -1,6 +1,6 @@
 <template>
   <span>
-    <i class="icon-suoping"
+    <i class="iconfont icon-suoping"
        @click="handleLock"></i>
     <el-dialog :visible.sync="box"
                append-to-body

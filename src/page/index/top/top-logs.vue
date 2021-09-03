@@ -2,7 +2,7 @@
   <span @click="logsFlag?'':handleOpen()">
     <el-badge :max="99"
               :value="logsFlag?'':logsLen">
-      <i class="icon-rizhi1"></i>
+      <i class="iconfont icon-rizhi1"></i>
     </el-badge>
     <el-dialog :visible.sync="box"
                append-to-body
