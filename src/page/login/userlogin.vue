@@ -12,7 +12,7 @@
                 size="small"
                 @keyup.enter.native="handleLogin">
         <i slot="prefix"
-           class="icon-quanxian"></i>
+           class="iconfont icon-quanxian"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="username">
@@ -23,7 +23,7 @@
                 size="small"
                 @keyup.enter.native="handleLogin">
         <i slot="prefix"
-           class="icon-yonghu"></i>
+           class="iconfont icon-yonghu"></i>
       </el-input>
     </el-form-item>
     <el-form-item prop="password">
@@ -35,7 +35,7 @@
                 size="small"
                 @keyup.enter.native="handleLogin">
         <i slot="prefix"
-           class="icon-mima"></i>
+           class="iconfont icon-mima"></i>
         <i slot="suffix"
            class="el-icon-view el-input__icon"
            @click="showPassword"></i>
@@ -50,7 +50,7 @@
                     clearable
                     size="small"
                     @keyup.enter.native="handleLogin">
-            <i slot="prefix" class="icon-yanzhengma"/>
+            <i slot="prefix" class="iconfont icon-yanzhengma"/>
           </el-input>
         </el-col>
         <el-col :span="8">
