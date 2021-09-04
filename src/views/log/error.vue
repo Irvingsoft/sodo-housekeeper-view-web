@@ -151,6 +151,7 @@ export default {
         delBtn: false,
         menuWidth: 120,
         dialogType: 'drawer',
+        dialogWidth: '80%',
         column: [
           {
             label: "服务 ID",
@@ -253,6 +254,7 @@ export default {
             label: "堆栈跟踪",
             prop: "stackTrace",
             type: "textarea",
+            height: "auto",
             hide: true,
             span: 24,
           },

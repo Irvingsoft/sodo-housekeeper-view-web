@@ -77,6 +77,14 @@
               下线
             </el-button>
           </template>
+          <template slot="online" slot-scope="{row}">
+            <el-tag v-if="row.online" effect="dark" type="success">
+              在线
+            </el-tag>
+            <el-tag v-else effect="dark" type="warning">
+              离线
+            </el-tag>
+          </template>
           <template slot="status" slot-scope="{row}">
             <el-tag v-if="row.status === 0" effect="dark" type="success">
               正常
@@ -230,11 +238,29 @@ export default {
             prop: "nickname",
           },
           {
+            label: "在线",
+            prop: "online",
+            type: "radio",
+            sortable: true,
+            width: 70,
+            addDisplay: false,
+            editDisplay: false,
+            dicData: [
+              {
+                label: "否",
+                value: false
+              },
+              {
+                label: "是",
+                value: true
+              },
+            ]
+          },
+          {
             label: "状态",
             prop: "status",
             sortable: true,
             width: 70,
-            align: "center",
             type: "radio",
             dicData: userStatus,
           },

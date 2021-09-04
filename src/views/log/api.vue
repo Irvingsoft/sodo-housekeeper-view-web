@@ -212,6 +212,7 @@ export default {
         delBtn: false,
         menuWidth: 120,
         dialogType: 'drawer',
+        dialogWidth: '80%',
         column: [
           {
             label: "服务 ID",
