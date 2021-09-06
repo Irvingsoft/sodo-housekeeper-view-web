@@ -1,11 +1,15 @@
-FROM nginx:stable-alpine-perl
+FROM node:lts-alpine as build-stage
+WORKDIR /app
+COPY package*.json ./
+RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
+RUN cnpm install
+COPY . .
+RUN npm run build
 
-RUN rm -f /etc/nginx/nginx.conf \
-    && rm -f /etc/nginx/conf.d/default.conf
-COPY docker/nginx.k8s.conf /etc/nginx/nginx.conf
+# production stage
+FROM nginx:latest as production-stage
+COPY docker/default.conf /etc/nginx/nginx.conf
+COPY --from=build-stage ./dist /usr/share/nginx/html
 
 EXPOSE 80
-
-COPY ./dist /usr/share/nginx/html
-
-ENTRYPOINT ["nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
