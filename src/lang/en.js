@@ -1,5 +1,5 @@
 export default {
-  title: 'Avue is a framework',
+  title: 'SODO Housekeeper',
   tip: 'tip',
   logoutTip: 'Exit the system, do you want to continue?',
   submitText: 'submit',
