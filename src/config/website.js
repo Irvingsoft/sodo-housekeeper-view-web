@@ -2,7 +2,7 @@
  * 全局配置文件
  */
 export default {
-  title: "saber",
+  title: "Housekeeper",
   indexTitle: 'Sodo HouseKeeper',
   clientId: '1', // 客户端id
   clientSecret: 'saber_secret', // 客户端密钥

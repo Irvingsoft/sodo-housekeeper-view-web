@@ -65,7 +65,7 @@ export default {
   },
   login: {
     title: '登录 ',
-    info: '企业级开发平台',
+    info: 'SODO 后台管理',
     tenantId: '请输入租户ID',
     username: '请输入账号',
     password: '请输入密码',

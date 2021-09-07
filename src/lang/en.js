@@ -65,7 +65,7 @@ export default {
   },
   login: {
     title: 'Login ',
-    info: 'Enterprise Development Platform',
+    info: 'SODO Housekeeper',
     tenantId: 'Please input tenantId',
     username: 'Please input username',
     password: 'Please input a password',
