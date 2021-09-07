@@ -1,11 +1,11 @@
 #!/usr/bin/env
-image_version=$(date + %Y%m%d%H%M%S)
-echo $image_version
+image_version=`date +%Y%m%d%H%M%S`;
+echo $image_version;
 # cd housekeeper
-git pull --rebase origin master
+git pull --rebase origin master;
 docker stop housekeeper || true;
 docker rm housekeeper || true;
-docker rmi --force $(docker images | grep housekeeper | awk '{print $3}');
+docker rmi --force $(docker images | grep housekeeper | awk '{print $3}') || true;
 docker build -t housekeeper:$image_version .;
 docker images;
 docker run -p 1888:80 -d --name housekeeper housekeeper:$image_version;
