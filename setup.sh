@@ -5,7 +5,7 @@ echo $image_version;
 git pull --rebase origin master;
 docker stop housekeeper || true;
 docker rm housekeeper || true;
-docker rmi --force $(docker images | grep housekeeper | awk '{print $3}') || true;
+# docker rmi --force $(docker images | grep housekeeper | awk '{print $3}') || true;
 docker build -t housekeeper:$image_version .;
 docker images;
 docker run -p 1888:80 -d --name housekeeper housekeeper:$image_version;
