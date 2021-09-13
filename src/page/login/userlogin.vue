@@ -93,7 +93,7 @@ export default {
         authCode: "",
         //账户类型
         authType: "BASIC",
-        grantType: "AUTHCODE",
+        grantType: "AUTH_CODE",
         //验证码的值
         captcha: "",
         captchaImage: {
