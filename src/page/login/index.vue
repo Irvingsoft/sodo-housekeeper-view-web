@@ -26,6 +26,9 @@
             <!--<a href="#" @click.stop="activeName='code'">{{ $t('login.phoneLogin') }}</a>-->
             <a href="#" @click.stop="activeName='third'">{{ $t('login.thirdLogin') }}</a>
           </div>
+          <div class="icp">
+            <a href="https://beian.miit.gov.cn/" target="_blank">鄂ICP备2020022855号-2</a>
+          </div>
         </div>
 
       </div>

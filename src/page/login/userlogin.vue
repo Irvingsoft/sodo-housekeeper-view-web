@@ -61,7 +61,7 @@
         </el-col>
       </el-row>
     </el-form-item>
-    <el-form-item>
+    <el-form-item style="margin-top: 40px">
       <el-button class="login-submit"
                  size="small"
                  type="primary"

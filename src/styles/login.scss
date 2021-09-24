@@ -110,6 +110,19 @@
   }
 }
 
+.icp {
+
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+
+  a {
+    color: #525252;
+    font-size: 12px;
+    margin: 0px 8px;
+  }
+}
+
 .login-submit {
   width: 100%;
   height: 45px;
@@ -120,7 +133,6 @@
   font-weight: 300;
   color: #409EFF;
   cursor: pointer;
-  margin-top: 30px;
   font-family: "neo";
   transition: 0.25s;
 }
