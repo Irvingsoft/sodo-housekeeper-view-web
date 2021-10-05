@@ -31,7 +31,7 @@ node {
             // Upload the image to Harbor.
             withCredentials([
                     usernamePassword(
-                        credentialsId: 'Harbor',
+                        credentialsId: "${harbor_auth}",
                         passwordVariable: 'password',
                         usernameVariable: 'username'
                     )
@@ -57,7 +57,7 @@ node {
                             sshTransfer(
                                 cleanRemote: false,
                                 excludes: '',
-                                execCommand: "/root/docker-deploy.sh $harbor_url $harbor_project_name $project_name $tag $port $port_in",
+                                execCommand: "/root/docker-deploy.sh $harbor_url $harbor_project_name $project_name $tag $port_out $port_in",
                                 execTimeout: 120000,
                                 flatten: false,
                                 makeEmptyDirs: false,
