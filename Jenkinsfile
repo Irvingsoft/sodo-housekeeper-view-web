@@ -44,7 +44,7 @@ node {
         }
         stage('Delete Images') {
             // Delete local images which had been uploaded to Harbor.
-            sh "docker images|grep none|awk ‘{print \$3}’|xargs docker rmi"
+            sh "docker rmi $(docker images | grep '^<none>' | awk '{print \$3}')"
             sh "docker rmi -f ${image_name}"
             sh "docker rmi -f ${harbor_url}/${harbor_project_name}/${image_name}"
         }
