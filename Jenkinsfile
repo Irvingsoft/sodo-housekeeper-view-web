@@ -19,6 +19,7 @@ node {
         stage('Npm Build') {
             sh 'node --version'
             sh 'npm --version'
+            sh 'npm install'
             sh 'npm run build'
         }
         stage('Docker Build') {
