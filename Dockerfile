@@ -4,6 +4,7 @@ COPY package*.json ./
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
 RUN cnpm install
 COPY . .
+RUN npm rebuild node-sass
 RUN npm run build
 
 # production stage
