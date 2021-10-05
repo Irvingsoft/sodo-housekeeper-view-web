@@ -8,7 +8,7 @@
         <img alt="SpringCloud" src="https://img.shields.io/badge/SpringCloud-Hoxton.SR9-green"/>
         <img alt="SpringBoot" src="https://img.shields.io/badge/SpringBoot-2.3.5.RELEASE-blue.svg"/>
         <a href="#" target="_blank">
-          <img alt="Sodo Author" src="https://img.shields.io/badge/Sodo%20Author-TimeChaser-ff69b4.svg"/>
+          <img alt="Sodo Author" src="https://img.shields.io/badge/Sodo%20Author-今晚打老虎-ff69b4.svg"/>
         </a>
         <a href="#" target="_blank">
           <img alt="Copyright" src="https://img.shields.io/badge/Copyright-Irvingsoft-%23ff3f59.svg"/>
