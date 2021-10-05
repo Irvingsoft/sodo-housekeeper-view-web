@@ -1,4 +1,4 @@
-FROM node:12 as build-stage
+FROM node:12-alpine as build-stage
 WORKDIR /app
 COPY package*.json ./
 RUN npm install -g cnpm --registry=https://registry.npm.taobao.org
