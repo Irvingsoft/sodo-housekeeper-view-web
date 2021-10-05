@@ -24,7 +24,7 @@ node {
             sh 'npm run build'
         }
         stage('Docker Build') {
-            sh "docker build ${image_name}"
+            sh "docker build -t ${image_name} ."
             sh "docker tag ${image_name} ${harbor_url}/${harbor_project_name}/${image_name}"
         }
         stage('Upload Image') {
