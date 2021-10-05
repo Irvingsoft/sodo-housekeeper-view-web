@@ -19,11 +19,12 @@ node {
         stage('Npm Build') {
             sh 'node --version'
             sh 'npm --version'
-            sh 'npm install'
+            sh 'npm install -g cnpm --registry=https://registry.npm.taobao.org'
+            sh 'cnpm install'
             sh 'npm run build'
         }
         stage('Docker Build') {
-            sh "docker build -t ${image_name}"
+            sh "docker build ${image_name}"
             sh "docker tag ${image_name} ${harbor_url}/${harbor_project_name}/${image_name}"
         }
         stage('Upload Image') {
