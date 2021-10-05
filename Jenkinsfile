@@ -16,13 +16,6 @@ node {
                 extensions: [],
                 userRemoteConfigs: [[credentialsId: "${git_auth}", url: "${project_url}"]]])
         }
-//         stage('Npm Build') {
-//             sh 'node --version'
-//             sh 'npm --version'
-//             sh 'npm --registry https://registry.npm.taobao.org install -y'
-//             sh 'npm install'
-//             sh 'npm run build'
-//         }
         stage('Docker Build') {
             sh "docker build -t ${image_name} ."
             sh "docker tag ${image_name} ${harbor_url}/${harbor_project_name}/${image_name}"
