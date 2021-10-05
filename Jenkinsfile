@@ -19,7 +19,7 @@ node {
         stage('Npm Build') {
             sh 'node --version'
             sh 'npm --version'
-            sh 'npm install -g cnpm --registry=https://registry.npm.taobao.org'
+            sh 'npm install -y cnpm --registry=https://registry.npm.taobao.org'
             sh 'cnpm install'
             sh 'npm run build'
         }
