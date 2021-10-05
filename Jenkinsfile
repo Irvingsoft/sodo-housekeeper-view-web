@@ -19,8 +19,8 @@ node {
         stage('Npm Build') {
             sh 'node --version'
             sh 'npm --version'
-            sh 'npm install -y cnpm --registry=https://registry.npm.taobao.org'
-            sh 'cnpm install'
+            sh 'npm --registry https://registry.npm.taobao.org install -y'
+            sh 'npm install'
             sh 'npm run build'
         }
         stage('Docker Build') {
