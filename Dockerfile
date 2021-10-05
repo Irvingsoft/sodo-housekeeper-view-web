@@ -6,7 +6,7 @@ RUN cnpm install
 COPY . .
 RUN cnpm install node-sass@4.14.1
 RUN cnpm run build
-
+RUN docker rmi $(docker images | grep "^<none>" | awk "{print $3}")
 # production stage
 FROM nginx:stable-alpine as production-stage
 COPY docker/default.conf /etc/nginx/nginx.conf
