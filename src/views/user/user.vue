@@ -231,11 +231,14 @@ export default {
               required: true,
               message: "请输入用户姓名",
               trigger: "blur"
-            }]
+            }],
+            width: 120
           },
           {
             label: "昵称",
             prop: "nickname",
+            width: 100,
+            overHidden: true
           },
           {
             label: "在线",
