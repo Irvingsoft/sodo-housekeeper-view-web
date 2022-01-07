@@ -18,5 +18,8 @@ export default [
   {
     label: "log",
     value: "log"
+  }, {
+    label: "file",
+    value: "file"
   }
 ]

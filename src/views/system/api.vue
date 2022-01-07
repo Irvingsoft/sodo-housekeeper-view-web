@@ -612,4 +612,8 @@ export default {
 .foldIcon {
   font-size: 18px;
 }
+
+.el-select-dropdown__wrap {
+  overflow: scroll;
+}
 </style>
