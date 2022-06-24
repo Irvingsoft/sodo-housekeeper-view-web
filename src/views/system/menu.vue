@@ -115,13 +115,7 @@ export default {
             label: "路由地址",
             prop: "path",
             width: 200,
-            rules: [
-              {
-                required: true,
-                message: "请输入路由地址",
-                trigger: "blur"
-              }
-            ]
+            rules: []
           },
           {
             label: "上级菜单",

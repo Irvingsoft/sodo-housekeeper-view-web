@@ -372,8 +372,14 @@ export default {
             },
           },
           {
+            label: "Referer",
+            prop: "referer",
+            width: 200,
+          },
+          {
             label: "回调地址",
             prop: "redirectUri",
+            width: 200,
           },
           {
             label: "备注",

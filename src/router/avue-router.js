@@ -45,9 +45,7 @@ RouterPlugin.install = function (vue, router, store, i18n) {
       const hasKey = this.$vue.$te('route.' + key)
       if (hasKey) {
         // $t :this method from vue-i18n, inject in @/lang/index.js
-        const translatedTitle = this.$vue.$t('route.' + key)
-
-        return translatedTitle
+        return this.$vue.$t('route.' + key)
       }
       return title
     },
